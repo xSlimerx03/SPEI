@@ -1,0 +1,8 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64" role="img" aria-labelledby="titulo-logo">
+  <title id="titulo-logo">BigBitByte</title>
+  <polygon points="32,4 58,18 32,32 6,18" fill="#F0F9FF" stroke="#3B82F6" stroke-width="2" stroke-linejoin="round"/>
+  <polygon points="6,18 32,32 32,60 6,46" fill="#3B82F6" stroke="#F0F9FF" stroke-width="1"/>
+  <polygon points="58,18 32,32 32,60 58,46" fill="#3B82F6" stroke="#F0F9FF" stroke-width="1"/>
+  <text x="13" y="49" font-family="Calibri, Carlito, sans-serif" font-size="20" font-weight="700" fill="#F0F9FF">B</text>
+  <text x="40" y="49" font-family="Calibri, Carlito, sans-serif" font-size="20" font-weight="700" fill="#F0F9FF">B</text>
+</svg>

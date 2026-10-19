@@ -1,0 +1,32 @@
+# ============================================================================
+# SPEI - Sistema de Préstamo de Equipo Institucional
+# ============================================================================
+# @module       Calidad
+# @file         phpstan.neon
+# @path         phpstan.neon
+# @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
+# @date         2026-10-18
+# @lastModified 2026-10-18
+# @version      v1.0.0
+# @license      Propietario - BigBitByte / Institución Educativa
+# @description  Análisis estático nivel 6 (MD Tabla 17, MP 3.1.3) con Larastan.
+#               Se eliminan checkMissingIterableValueType y
+#               checkGenericClassInNonGenericObjectType porque PHPStan 2.x ya
+#               no los admite (DT-005).
+# @see          docs/decisiones/BBB_DT_Registro_v1.0.md
+# ============================================================================
+
+includes:
+    - vendor/larastan/larastan/extension.neon
+
+parameters:
+    level: 6
+    # Los casts de Laravel están declarados en métodos, no en la propiedad $casts.
+    parseModelCastsMethod: true
+    paths:
+        - app
+        - database
+        - tests
+    excludePaths:
+        - vendor
+        - storage

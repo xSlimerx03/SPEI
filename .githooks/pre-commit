@@ -1,0 +1,25 @@
+#!/bin/sh
+# ============================================================================
+# SPEI - Sistema de Préstamo de Equipo Institucional
+# ============================================================================
+# @module       Calidad
+# @file         pre-commit
+# @path         .githooks/pre-commit
+# @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
+# @date         2026-10-18
+# @lastModified 2026-10-18
+# @version      v1.0.0
+# @license      Propietario - BigBitByte / Institución Educativa
+# @description  Valida el estilo antes de cada commit (MP 1.2.7.4) dentro del
+#               contenedor. Se activa con: git config core.hooksPath .githooks
+# ============================================================================
+
+echo "Validando estilo de código SPEI..."
+
+if ! docker compose exec -T app ./vendor/bin/pint --test > /dev/null 2>&1; then
+    echo "Error: el código PHP no cumple PSR-12. Ejecuta 'docker compose exec app ./vendor/bin/pint'."
+    exit 1
+fi
+
+echo "Estilo de código validado correctamente."
+exit 0

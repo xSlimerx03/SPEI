@@ -1,0 +1,19 @@
+# Todos los archivos de texto se almacenan con LF (MP 1.2.3.3)
+* text=auto eol=lf
+
+*.blade.php diff=html
+*.css diff=css
+*.html diff=html
+*.md diff=markdown
+*.php diff=php
+
+*.png binary
+*.jpg binary
+*.ico binary
+*.ttf binary
+*.docx binary
+*.pdf binary
+
+/.github export-ignore
+CHANGELOG.md export-ignore
+.styleci.yml export-ignore

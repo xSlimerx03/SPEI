@@ -1,0 +1,96 @@
+# ============================================================================
+# SPEI - Sistema de Préstamo de Equipo Institucional
+# ============================================================================
+# @module       Integración continua
+# @file         ci.yml
+# @path         .github/workflows/ci.yml
+# @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
+# @date         2026-10-18
+# @lastModified 2026-10-18
+# @version      v1.0.0
+# @license      Propietario - BigBitByte / Institución Educativa
+# @description  Pipeline del MD 10.3: dependencias con lockfiles, formato,
+#               análisis estático, pruebas, cobertura >= 80 % y construcción
+#               de la imagen al integrar en develop.
+# @see          Manual de Desarrollo v1.2, sección 10.3; DT-015, DT-026
+# ============================================================================
+
+name: CI SPEI
+
+on:
+  pull_request:
+    branches: [develop, main]
+  push:
+    branches: [develop, main]
+
+permissions:
+  contents: read
+
+jobs:
+  backend:
+    name: Backend Laravel
+    runs-on: ubuntu-24.04
+    services:
+      db:
+        image: mysql:8.4@sha256:24989179f58856db763f418010c1169fecc944e3ec1ea7e921572d83eb070f70
+        env:
+          MYSQL_DATABASE: spei_testing
+          MYSQL_USER: spei_user
+          MYSQL_PASSWORD: ci_password
+          MYSQL_ROOT_PASSWORD: ci_root_password
+        ports: ["3306:3306"]
+        options: >-
+          --health-cmd="mysqladmin ping -h localhost -u root -pci_root_password"
+          --health-interval=5s --health-timeout=5s --health-retries=20
+      redis:
+        image: redis:7.4-alpine@sha256:858f009f9709ce576febc734aa78b8f6d624b82571f9ddb6bda4377c833b3499
+        ports: ["6379:6379"]
+    env:
+      DB_HOST: 127.0.0.1
+      DB_PORT: 3306
+      DB_USERNAME: spei_user
+      DB_PASSWORD: ci_password
+      REDIS_HOST: 127.0.0.1
+      REDIS_PASSWORD: ""
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: "8.3"
+          extensions: pdo_mysql, redis, bcmath, intl, zip, pcntl
+          coverage: pcov
+          tools: composer:v2
+
+      - name: 1. Instalar dependencias desde composer.lock
+        run: composer install --no-interaction --prefer-dist --no-progress
+
+      - name: Permitir triggers en MySQL (DT-026)
+        run: mysql -h 127.0.0.1 -u root -pci_root_password -e "SET GLOBAL log_bin_trust_function_creators = 1;"
+
+      - name: Preparar entorno
+        run: |
+          cp .env.example .env
+          php artisan key:generate
+
+      - name: 2. Formato (Laravel Pint)
+        run: ./vendor/bin/pint --test
+
+      - name: 3. Análisis estático (PHPStan nivel 6)
+        run: ./vendor/bin/phpstan analyse --no-progress --memory-limit=1G
+
+      - name: 4-5. Pruebas y cobertura mínima 80 %
+        run: ./vendor/bin/pest --coverage --min=80
+
+      - name: Auditoría de dependencias
+        run: composer audit --no-interaction
+
+  imagen:
+    name: 6. Construir imagen del incremento
+    needs: [backend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/develop'
+    runs-on: ubuntu-24.04
+    steps:
+      - uses: actions/checkout@v4
+      - name: Construir imagen de producción
+        run: docker build -f docker/Dockerfile --target prod -t spei-app:${{ github.sha }} .

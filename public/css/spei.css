@@ -1,0 +1,914 @@
+/**
+ * ============================================================================
+ * SPEI - Sistema de Préstamo de Equipo Institucional
+ * ============================================================================
+ *
+ * @project      SPEI (Sistema de Préstamo de Equipo Institucional)
+ * @module       Interfaz web
+ * @file         spei.css
+ * @path         public/css/spei.css
+ *
+ * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
+ * @date         2026-10-18
+ * @lastModified 2026-10-18
+ * @version      v1.0.0
+ *
+ * @license      Propietario - BigBitByte / Institución Educativa
+ *               Todos los derechos reservados.
+ *
+ * @description  Hoja de estilos única de las vistas Blade: paleta (Tablas 48
+ *               y 49), fondos (52), grid y contenedores (58–60), layouts (61),
+ *               menús (62–65), componentes (66–67), tipografía (68–69) y
+ *               mensajes (70–71). Los textos sobre colores de estado usan
+ *               14 pt en negrita (texto grande WCAG, contraste ≥ 3:1).
+ *
+ * @requisitos   RNF-008, RNF-009
+ *
+ * @see          Manual de Programación v1.2, capítulo 2; DT-014; CREDITS.md
+ * ============================================================================
+ */
+
+/* --- Tipografías locales (CREDITS.md) ------------------------------------- */
+@font-face {
+    font-family: 'Carlito';
+    font-style: normal;
+    font-weight: 400;
+    font-display: swap;
+    src: url('../fonts/carlito-latin-400-normal.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Carlito';
+    font-style: normal;
+    font-weight: 500 700;
+    font-display: swap;
+    src: url('../fonts/carlito-latin-700-normal.woff2') format('woff2');
+}
+
+@font-face {
+    font-family: 'Material Icons';
+    font-style: normal;
+    font-weight: 400;
+    font-display: block;
+    src: url('../fonts/material-icons.woff2') format('woff2');
+}
+
+/* --- Variables de diseño --------------------------------------------------- */
+:root {
+    --azul-cielo: #3B82F6;
+    --azul-claro: #60A5FA;
+    --azul-oscuro: #1F2937;
+    --blanco-suave: #F0F9FF;
+    --blanco: #FFFFFF;
+    --exito: #10B981;
+    --advertencia: #F59E0B;
+    --error: #EF4444;
+    --informacion: #3B82F6;
+    --texto-secundario: #6B7280;
+    --deshabilitado: #9CA3AF;
+    --sombra-control: 0 1px 2px rgba(0, 0, 0, 0.05);
+    --sombra-tarjeta: 0 2px 4px rgba(0, 0, 0, 0.1);
+    --sombra-topbar: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --overlay: rgba(31, 41, 55, 0.5);
+    --ancho-sidebar: 240px;
+    --alto-topbar: 64px;
+    --margen-lateral: 32px;
+    --gutter: 24px;
+    --fuente: Calibri, 'Carlito', 'Segoe UI', sans-serif;
+}
+
+/* --- Base ------------------------------------------------------------------ */
+*,
+*::before,
+*::after {
+    box-sizing: border-box;
+}
+
+html {
+    -webkit-text-size-adjust: 100%;
+}
+
+body {
+    margin: 0;
+    min-height: 100vh;
+    background: var(--blanco-suave);
+    color: var(--azul-oscuro);
+    font-family: var(--fuente);
+    font-size: 14pt;
+    line-height: 1.4;
+}
+
+a {
+    color: var(--azul-cielo);
+    font-weight: 700;
+}
+
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+select:focus-visible,
+textarea:focus-visible,
+summary:focus-visible,
+label.menu-boton:focus-within {
+    outline: 2px solid var(--azul-cielo);
+    outline-offset: 2px;
+}
+
+h1,
+h2,
+h3 {
+    margin: 0 0 16px;
+    color: var(--azul-oscuro);
+}
+
+.titulo-pantalla {
+    font-size: 24pt;
+    font-weight: 700;
+}
+
+.subtitulo {
+    font-size: 18pt;
+    font-weight: 600;
+}
+
+.texto-secundario {
+    color: var(--texto-secundario);
+    font-size: 12pt;
+}
+
+.pie {
+    color: var(--texto-secundario);
+    font-size: 10pt;
+    text-align: center;
+    padding: 16px;
+}
+
+.visualmente-oculto {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0 0 0 0);
+    white-space: nowrap;
+}
+
+/* --- Iconos (Material Icons, un solo set) --------------------------------- */
+.icono {
+    font-family: 'Material Icons';
+    font-weight: normal;
+    font-style: normal;
+    font-size: 24px;
+    line-height: 1;
+    letter-spacing: normal;
+    text-transform: none;
+    display: inline-block;
+    white-space: nowrap;
+    direction: ltr;
+    vertical-align: middle;
+    -webkit-font-smoothing: antialiased;
+    font-feature-settings: 'liga';
+}
+
+.icono--boton {
+    font-size: 20px;
+}
+
+.icono--tarjeta {
+    font-size: 32px;
+}
+
+.icono--vacio {
+    font-size: 64px;
+    color: var(--deshabilitado);
+}
+
+/* --- Layout de la aplicación (Tabla 61: Sidebar + contenido) ---------------- */
+.aplicacion {
+    display: flex;
+    min-height: 100vh;
+}
+
+.sidebar {
+    position: fixed;
+    inset: 0 auto 0 0;
+    width: var(--ancho-sidebar);
+    background: var(--azul-oscuro);
+    color: var(--blanco-suave);
+    display: flex;
+    flex-direction: column;
+    z-index: 30;
+    overflow-y: auto;
+}
+
+.sidebar__marca {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    height: var(--alto-topbar);
+    padding: 8px 16px;
+    color: var(--blanco-suave);
+    text-decoration: none;
+    font-size: 18pt;
+}
+
+.sidebar__marca img {
+    width: 48px;
+    height: 48px;
+}
+
+.menu {
+    list-style: none;
+    margin: 8px 0;
+    padding: 0;
+}
+
+.menu__enlace {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    padding: 0 16px;
+    color: var(--blanco-suave);
+    font-weight: 400;
+    text-decoration: none;
+}
+
+.menu__enlace:hover {
+    background: rgba(240, 249, 255, 0.08);
+}
+
+.menu__enlace--boton {
+    width: 100%;
+    border: 0;
+    background: none;
+    font-family: var(--fuente);
+    font-size: 14pt;
+    text-align: left;
+    cursor: pointer;
+}
+
+.menu__enlace--activo {
+    background: var(--azul-cielo);
+    font-weight: 700;
+}
+
+.contenido {
+    flex: 1;
+    min-width: 0;
+    margin-left: var(--ancho-sidebar);
+    display: flex;
+    flex-direction: column;
+}
+
+.topbar {
+    position: sticky;
+    top: 0;
+    z-index: 20;
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    height: var(--alto-topbar);
+    padding: 0 var(--margen-lateral);
+    background: var(--blanco);
+    box-shadow: var(--sombra-topbar);
+}
+
+.topbar__titulo {
+    flex: 1;
+    margin: 0;
+    font-size: 18pt;
+    font-weight: 600;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.topbar__acciones {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+}
+
+.topbar__perfil {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-end;
+    font-size: 12pt;
+    line-height: 1.2;
+}
+
+.notificaciones-enlace {
+    position: relative;
+    display: inline-flex;
+    color: var(--azul-oscuro);
+}
+
+.notificaciones-enlace__contador {
+    position: absolute;
+    top: -6px;
+    right: -8px;
+    min-width: 20px;
+    height: 20px;
+    padding: 0 4px;
+    border-radius: 10px;
+    background: var(--azul-oscuro);
+    color: var(--blanco-suave);
+    font-size: 10pt;
+    font-weight: 700;
+    line-height: 20px;
+    text-align: center;
+}
+
+.principal {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: var(--gutter) var(--margen-lateral);
+    flex: 1;
+}
+
+.menu-boton,
+.menu-interruptor {
+    display: none;
+}
+
+.capa-menu {
+    display: none;
+}
+
+/* --- Layout público (Tabla 61: login centrado, 1 columna) ------------------- */
+.publico {
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 24px 16px;
+}
+
+.publico__tarjeta {
+    width: 100%;
+    max-width: 450px;
+}
+
+.publico__tarjeta--ancha {
+    max-width: 720px;
+}
+
+.publico__logo {
+    display: block;
+    width: 64px;
+    height: 64px;
+    margin: 0 auto 16px;
+}
+
+.publico__encabezado {
+    text-align: center;
+    margin-bottom: 24px;
+}
+
+/* --- Tarjetas (Tabla 67) --------------------------------------------------- */
+.tarjeta {
+    width: 100%;
+    padding: 16px;
+    border-radius: 12px;
+    background: var(--blanco);
+    box-shadow: var(--sombra-tarjeta);
+}
+
+.tarjeta + .tarjeta {
+    margin-top: var(--gutter);
+}
+
+.tarjeta__titulo {
+    margin: 0 0 8px;
+    font-size: 16pt;
+    font-weight: 600;
+}
+
+.metricas {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gutter);
+    margin-bottom: var(--gutter);
+}
+
+.metrica {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+}
+
+.metrica__valor {
+    font-size: 24pt;
+    font-weight: 700;
+}
+
+.cuadricula {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--gutter);
+}
+
+.cuadricula--planes {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+
+.recurso-tarjeta {
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
+}
+
+.recurso-tarjeta__cabecera {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.plan-opcion {
+    display: block;
+    cursor: pointer;
+    border: 1px solid var(--deshabilitado);
+}
+
+.plan-opcion:has(input:checked) {
+    border: 2px solid var(--azul-cielo);
+}
+
+.plan-opcion:has(input:focus-visible) {
+    outline: 3px solid var(--azul-oscuro);
+    outline-offset: 3px;
+}
+
+.cuadricula > .plan-opcion {
+    min-width: 0;
+    margin-top: 0;
+    overflow-wrap: anywhere;
+}
+
+.plan-opcion__precio {
+    font-size: 18pt;
+    font-weight: 700;
+}
+
+/* --- Formularios (Tablas 66 y 67) ----------------------------------------- */
+.contenedor-formulario {
+    max-width: 720px;
+}
+
+.campo {
+    display: flex;
+    flex-direction: column;
+    gap: 4px;
+    margin-bottom: 16px;
+}
+
+.campo__etiqueta {
+    font-size: 12pt;
+    font-weight: 500;
+}
+
+.campo__ayuda {
+    color: var(--texto-secundario);
+    font-size: 12pt;
+}
+
+.campo__error {
+    display: flex;
+    align-items: center;
+    gap: 4px;
+    color: var(--error);
+    font-size: 14pt;
+    font-weight: 700;
+}
+
+.control {
+    width: 100%;
+    height: 48px;
+    padding: 0 16px;
+    border: 1px solid var(--deshabilitado);
+    border-radius: 8px;
+    background: var(--blanco);
+    box-shadow: var(--sombra-control);
+    color: var(--azul-oscuro);
+    font-family: var(--fuente);
+    font-size: 14pt;
+}
+
+.control:focus {
+    border: 2px solid var(--azul-cielo);
+    padding: 0 15px;
+    outline: none;
+}
+
+textarea.control {
+    height: auto;
+    min-height: 120px;
+    padding: 12px 16px;
+    resize: vertical;
+}
+
+.control[aria-invalid='true'] {
+    border-color: var(--error);
+}
+
+.casilla {
+    display: inline-flex;
+    align-items: center;
+    gap: 12px;
+    min-height: 48px;
+    cursor: pointer;
+}
+
+.casilla input {
+    width: 24px;
+    height: 24px;
+    margin: 0;
+    accent-color: var(--azul-cielo);
+}
+
+.fila-campos {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0 var(--gutter);
+}
+
+.acciones {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px;
+    margin-top: 8px;
+}
+
+.filtros {
+    display: grid;
+    grid-template-columns: 2fr repeat(3, minmax(0, 1fr)) auto;
+    gap: 12px;
+    align-items: end;
+    margin-bottom: var(--gutter);
+}
+
+.filtros .campo {
+    margin-bottom: 0;
+}
+
+/* --- Botones (Tablas 66, 67 y 73) ----------------------------------------- */
+.boton {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 8px;
+    height: 48px;
+    padding: 0 24px;
+    border: 0;
+    border-radius: 8px;
+    background: var(--azul-cielo);
+    box-shadow: var(--sombra-control);
+    color: var(--blanco);
+    font-family: var(--fuente);
+    font-size: 14pt;
+    font-weight: 700;
+    text-decoration: none;
+    white-space: nowrap;
+    cursor: pointer;
+}
+
+.boton:hover {
+    background: var(--azul-claro);
+    color: var(--azul-oscuro);
+}
+
+.boton:disabled {
+    background: var(--deshabilitado);
+    cursor: not-allowed;
+}
+
+.boton--secundario {
+    height: 40px;
+    padding: 0 20px;
+    border: 1px solid var(--azul-cielo);
+    background: var(--blanco);
+    color: var(--azul-oscuro);
+}
+
+.boton--secundario:hover {
+    background: var(--blanco-suave);
+}
+
+.boton--pequeno {
+    height: 32px;
+    padding: 0 16px;
+    font-size: 12pt;
+}
+
+.boton--texto {
+    height: auto;
+    padding: 0;
+    background: none;
+    box-shadow: none;
+    color: var(--azul-oscuro);
+}
+
+.boton--texto:hover {
+    background: none;
+    color: var(--azul-cielo);
+}
+
+.boton--peligro {
+    border-color: var(--error);
+}
+
+.boton--bloque {
+    width: 100%;
+}
+
+.formulario-en-linea {
+    display: inline;
+}
+
+/* --- Etiquetas de estado (badges, Tabla 67; colores Tabla 49) -------------- */
+.etiqueta {
+    display: inline-flex;
+    align-items: center;
+    height: 24px;
+    padding: 0 8px;
+    border-radius: 4px;
+    color: var(--azul-oscuro);
+    font-size: 14pt;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.etiqueta--exito {
+    background: var(--exito);
+}
+
+.etiqueta--advertencia {
+    background: var(--advertencia);
+}
+
+.etiqueta--error {
+    background: var(--error);
+}
+
+.etiqueta--informacion {
+    background: var(--informacion);
+}
+
+.etiqueta--neutra {
+    background: var(--blanco-suave);
+    border: 1px solid var(--deshabilitado);
+}
+
+/* --- Tablas (Tabla 48: encabezado azul oscuro, filas alternas) ------------- */
+.tabla-contenedor {
+    width: 100%;
+    overflow-x: auto;
+}
+
+.tabla {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 14pt;
+}
+
+.tabla th {
+    background: var(--azul-oscuro);
+    color: var(--blanco-suave);
+    font-weight: 600;
+    text-align: left;
+    padding: 12px 16px;
+}
+
+.tabla td {
+    padding: 12px 16px;
+    border-bottom: 1px solid var(--blanco-suave);
+    vertical-align: middle;
+}
+
+.tabla tbody tr:nth-child(even) {
+    background: var(--blanco-suave);
+}
+
+.tabla__acciones {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+}
+
+/* --- Mensajes del sistema (Tablas 70 y 71) -------------------------------- */
+.alerta {
+    position: relative;
+    display: flex;
+    gap: 12px;
+    align-items: flex-start;
+    margin-bottom: var(--gutter);
+    padding: 16px 48px 16px 16px;
+    border-left: 6px solid var(--informacion);
+    border-radius: 8px;
+    background: var(--blanco);
+    box-shadow: var(--sombra-tarjeta);
+}
+
+.alerta--exito {
+    border-left-color: var(--exito);
+}
+
+.alerta--advertencia {
+    border-left-color: var(--advertencia);
+}
+
+.alerta--error {
+    border-left-color: var(--error);
+}
+
+.alerta__titulo {
+    margin: 0;
+    font-size: 14pt;
+    font-weight: 600;
+}
+
+.alerta__mensaje {
+    margin: 0;
+}
+
+.alerta__lista {
+    margin: 4px 0 0;
+    padding-left: 20px;
+}
+
+.alerta__cerrar {
+    position: absolute;
+    top: 12px;
+    right: 12px;
+    border: 0;
+    background: none;
+    color: var(--azul-oscuro);
+    cursor: pointer;
+}
+
+.alerta--exito .alerta__icono {
+    color: var(--exito);
+}
+
+.alerta--advertencia .alerta__icono {
+    color: var(--advertencia);
+}
+
+.alerta--error .alerta__icono {
+    color: var(--error);
+}
+
+.alerta--informacion .alerta__icono {
+    color: var(--informacion);
+}
+
+.alerta--toast {
+    animation: ocultar-toast 0.3s ease-in 3s forwards;
+}
+
+@keyframes ocultar-toast {
+    to {
+        opacity: 0;
+        visibility: hidden;
+        height: 0;
+        margin: 0;
+        padding: 0;
+    }
+}
+
+/* --- Estado vacío y paginación -------------------------------------------- */
+.estado-vacio {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 8px;
+    padding: 48px 16px;
+    color: var(--texto-secundario);
+    text-align: center;
+}
+
+.paginacion {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: var(--gutter);
+}
+
+.paginacion__enlaces {
+    display: flex;
+    gap: 8px;
+}
+
+.lista-datos {
+    display: grid;
+    grid-template-columns: max-content 1fr;
+    gap: 8px 24px;
+    margin: 0;
+}
+
+.lista-datos dt {
+    color: var(--texto-secundario);
+    font-size: 12pt;
+}
+
+.lista-datos dd {
+    margin: 0;
+}
+
+.columnas {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: var(--gutter);
+}
+
+/* --- Tablet (640–1024 px, Tabla 60) ---------------------------------------- */
+@media (max-width: 1024px) {
+    :root {
+        --margen-lateral: 24px;
+        --gutter: 16px;
+    }
+
+    .sidebar {
+        transform: translateX(-100%);
+        transition: transform 0.2s ease;
+    }
+
+    .menu-interruptor:checked ~ .sidebar {
+        transform: translateX(0);
+    }
+
+    .menu-interruptor:checked ~ .capa-menu {
+        display: block;
+        position: fixed;
+        inset: 0;
+        z-index: 25;
+        background: var(--overlay);
+    }
+
+    .menu-boton {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        width: 48px;
+        height: 48px;
+        cursor: pointer;
+    }
+
+    .contenido {
+        margin-left: 0;
+    }
+
+    .cuadricula {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .metricas {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .filtros {
+        grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+}
+
+/* --- Móvil (< 640 px, Tabla 60) --------------------------------------------- */
+@media (max-width: 639px) {
+    :root {
+        --margen-lateral: 16px;
+        --gutter: 12px;
+    }
+
+    .topbar__perfil {
+        display: none;
+    }
+
+    .cuadricula,
+    .cuadricula--planes,
+    .metricas,
+    .filtros,
+    .fila-campos,
+    .columnas {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .lista-datos {
+        grid-template-columns: minmax(0, 1fr);
+    }
+
+    .acciones .boton {
+        flex: 1 1 auto;
+    }
+}
+
+@media (prefers-reduced-motion: reduce) {
+    .sidebar,
+    .alerta--toast {
+        transition: none;
+        animation: none;
+    }
+}
