@@ -33,3 +33,4 @@ use Illuminate\Support\Facades\Schedule;
 
 Schedule::command('spei:aplicar-vencimientos')->dailyAt('00:05')->withoutOverlapping()->onOneServer();
 Schedule::command('spei:alertar-vencimientos')->dailyAt('07:00')->withoutOverlapping()->onOneServer();
+Schedule::command('spei:vencer-prestamos')->everyMinute()->withoutOverlapping()->onOneServer();

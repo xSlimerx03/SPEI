@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -32,6 +32,7 @@ declare(strict_types=1);
 
 namespace App\Services;
 
+use App\Enums\EstadoRecurso;
 use App\Models\Recurso;
 use App\Models\Usuario;
 use Illuminate\Contracts\Pagination\LengthAwarePaginator;
@@ -73,13 +74,38 @@ class CatalogoService
     {
         $consulta = Recurso::query()
             ->with('area')
-            ->when($actor->esResponsableDeArea(), fn (Builder $q) => $q->where('id_area', $actor->id_area_asignada))
-            ->when($filtros['estado'] ?? null, fn (Builder $q, string $estado) => $q->where('estado', $estado));
+            ->when($actor->esResponsableDeArea(), fn (Builder $q): Builder => $q->where('id_area', $actor->id_area_asignada))
+            ->when($filtros['estado'] ?? null, fn (Builder $q, string $estado): Builder => $q->where('estado', $estado));
 
         return $this->aplicarFiltros($consulta, $filtros)
             ->orderBy('nombre_recurso')
             ->paginate((int) config('spei.catalogo.por_pagina'))
             ->withQueryString();
+    }
+
+    /**
+     * Totales del inventario por estado con los filtros vigentes (sin el de estado), para los chips.
+     *
+     * @param  Usuario  $actor  Administrador que consulta.
+     * @param  array<string, mixed>  $filtros  Filtros validados.
+     * @return array<string, int> Clave = valor del estado, más "todos".
+     */
+    public function contarInventario(Usuario $actor, array $filtros): array
+    {
+        $consulta = Recurso::query()
+            ->when($actor->esResponsableDeArea(), fn (Builder $q): Builder => $q->where('id_area', $actor->id_area_asignada));
+        $porEstado = $this->aplicarFiltros($consulta, $filtros)
+            ->toBase()
+            ->selectRaw('estado, COUNT(*) AS total')
+            ->groupBy('estado')
+            ->pluck('total', 'estado');
+        $conteo = ['todos' => (int) $porEstado->sum()];
+
+        foreach (EstadoRecurso::cases() as $estado) {
+            $conteo[$estado->value] = (int) ($porEstado[$estado->value] ?? 0);
+        }
+
+        return $conteo;
     }
 
     /**
@@ -94,11 +120,11 @@ class CatalogoService
         return $consulta
             ->when($filtros['texto'] ?? null, function (Builder $q, string $texto): void {
                 $patron = '%' . addcslashes($texto, '%_\\') . '%';
-                $q->where(fn (Builder $sub) => $sub->where('nombre_recurso', 'like', $patron)
+                $q->where(fn (Builder $sub): Builder => $sub->where('nombre_recurso', 'like', $patron)
                     ->orWhere('marca', 'like', $patron)
                     ->orWhere('numero_inventario', 'like', $patron));
             })
-            ->when($filtros['tipo_recurso'] ?? null, fn (Builder $q, string $tipo) => $q->where('tipo_recurso', $tipo))
-            ->when($filtros['id_area'] ?? null, fn (Builder $q, int|string $area) => $q->where('id_area', (int) $area));
+            ->when($filtros['tipo_recurso'] ?? null, fn (Builder $q, string $tipo): Builder => $q->where('tipo_recurso', $tipo))
+            ->when($filtros['id_area'] ?? null, fn (Builder $q, int|string $area): Builder => $q->where('id_area', (int) $area));
     }
 }

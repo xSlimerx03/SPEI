@@ -10,76 +10,45 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
- * @version      v1.0.0
+ * @lastModified 2026-10-25
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
  * @description  Administradores del sistema de la institución con su estado
- *               de registro.
+ *               de registro y reenvío de invitación.
  *
  * @requisitos   RF-008
  *
- * @see          docs/requisitos/BBB_CU004_InvitarAdministrador_v1.0.md
+ * @see          docs/requisitos/BBB_CU004_InvitarAdministrador_v1.0.md; DT-028
  * ============================================================================
 --}}
 @extends('layouts.app')
 
-@section('titulo', 'Administradores del sistema')
+@section('titulo', 'Administradores')
+@section('ruta', 'Suscripción')
 
 @section('contenido')
-    <div class="acciones" style="margin-bottom: 24px;">
-        <a href="{{ route('administradores.create') }}" class="boton">
-            <span class="icono icono--boton" aria-hidden="true">add</span>Invitar administrador
-        </a>
-    </div>
-    <div class="tarjeta">
-        @if ($administradores->isEmpty())
-            <div class="estado-vacio">
-                <span class="icono icono--vacio" aria-hidden="true">inbox</span>
-                <p>Aún no hay administradores del sistema.</p>
+    <section class="tarjeta" aria-labelledby="titulo-administradores">
+        <div class="tarjeta__cabecera">
+            <div class="titulos">
+                <h2 id="titulo-administradores" class="tarjeta__titulo">Administradores del sistema</h2>
+                <span class="tarjeta__subtitulo">Sin área asignada administran todo el inventario; con área, solo esa área.</span>
             </div>
-        @else
-            <div class="tabla-contenedor">
-                <table class="tabla">
-                    <thead>
-                        <tr>
-                            <th scope="col">Nombre</th>
-                            <th scope="col">Correo</th>
-                            <th scope="col">Área a cargo</th>
-                            <th scope="col">Registro</th>
-                            <th scope="col"><span class="visualmente-oculto">Acciones</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($administradores as $administrador)
-                            <tr>
-                                <td>{{ $administrador->nombre_completo }}</td>
-                                <td>{{ $administrador->correo_institucional }}</td>
-                                <td>{{ $administrador->areaAsignada?->nombre_area ?? 'Todas' }}</td>
-                                <td>
-                                    <span class="etiqueta {{ $administrador->activo ? 'etiqueta--exito' : 'etiqueta--advertencia' }}">
-                                        {{ $administrador->activo ? 'Completo' : 'Pendiente' }}
-                                    </span>
-                                </td>
-                                <td>
-                                    @unless ($administrador->activo)
-                                        <form method="POST" class="formulario-en-linea"
-                                              action="{{ route('administradores.reenviar', $administrador) }}">
-                                            @csrf
-                                            <button type="submit" class="boton boton--pequeno">
-                                                <span class="icono icono--boton" aria-hidden="true">send</span>Reenviar
-                                            </button>
-                                        </form>
-                                    @endunless
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <a href="{{ route('administradores.create') }}" class="boton boton--primario">
+                <span class="icono" aria-hidden="true">person_add</span>Crear
+            </a>
+        </div>
+        @forelse ($administradores as $administrador)
+            @include('administradores.fila', ['administrador' => $administrador])
+        @empty
+            <div class="vacio">
+                <span class="icono" aria-hidden="true">manage_accounts</span>
+                <span class="vacio__titulo">Aún no hay administradores del sistema</span>
+                <span class="vacio__texto">Invita al primero para que registre áreas y recursos.</span>
             </div>
-            {{ $administradores->links('partials.paginacion') }}
-        @endif
-    </div>
+        @endforelse
+        {{ $administradores->links('partials.paginacion') }}
+    </section>
 @endsection

@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -33,13 +33,12 @@ declare(strict_types=1);
 
 namespace App\Providers;
 
-use App\Models\Notificacion;
 use App\Support\ContextoInstitucional;
+use App\View\Composers\LayoutAppComposer;
 use Illuminate\Cache\RateLimiting\Limit;
-use Illuminate\Contracts\View\View as ViewContract;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Http\Request;
-use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Carbon;
 use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\View;
 use Illuminate\Support\ServiceProvider;
@@ -73,13 +72,10 @@ class AppServiceProvider extends ServiceProvider
     public function boot(): void
     {
         Model::preventLazyLoading(! $this->app->environment('production'));
+        // Fechas relativas ("hace 5 minutos") en el idioma de la aplicación.
+        Carbon::setLocale((string) config('app.locale'));
 
-        View::composer('layouts.app', function (ViewContract $vista): void {
-            $vista->with('notificacionesSinLeer', Notificacion::query()
-                ->where('id_usuario', Auth::id())
-                ->where('leida', false)
-                ->count());
-        });
+        View::composer('layouts.app', LayoutAppComposer::class);
 
         RateLimiter::for('inicio-sesion', function (Request $request): Limit {
             $clave = mb_strtolower(trim((string) $request->input('correo_institucional'))) . '|' . $request->ip();
@@ -99,7 +95,8 @@ class AppServiceProvider extends ServiceProvider
      */
     private function responderLimite(Request $request, array $headers): Response
     {
-        $mensaje = sprintf('Demasiados intentos. Intente de nuevo en %d segundos.', (int) ($headers['Retry-After'] ?? 60));
+        $segundos = (int) ($headers['Retry-After'] ?? 60);
+        $mensaje = sprintf('Demasiados intentos. Intente de nuevo en %d segundos.', $segundos);
 
         if ($request->expectsJson()) {
             return response()->json(['message' => $mensaje], 429, $headers);

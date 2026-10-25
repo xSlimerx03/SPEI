@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -51,6 +51,11 @@ class AutenticacionService
 
     public const MENSAJE_SUSCRIPCION = 'La suscripción de la institución no está disponible.';
 
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  AuditoriaService  $auditoriaService  Dependencia inyectada.
+     */
     public function __construct(
         private AuditoriaService $auditoriaService,
     ) {}
@@ -70,7 +75,8 @@ class AutenticacionService
             ->first();
 
         // NOTE: el mismo mensaje para todos los casos evita revelar qué cuentas existen (CU-005 E1).
-        if (! $usuario instanceof Usuario || ! $usuario->activo || ! Hash::check($contrasena, $usuario->contrasena_hash)) {
+        if (! $usuario instanceof Usuario || ! $usuario->activo
+            || ! Hash::check($contrasena, $usuario->contrasena_hash)) {
             throw ValidationException::withMessages(['correo_institucional' => self::MENSAJE_CREDENCIALES]);
         }
 

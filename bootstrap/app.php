@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -57,13 +57,13 @@ return Application::configure(basePath: dirname(__DIR__))
             'rol' => RolMiddleware::class,
             'suscripcion' => SuscripcionMiddleware::class,
         ]);
-        $middleware->redirectGuestsTo(fn () => route('login'));
-        $middleware->redirectUsersTo(fn () => route('panel'));
+        $middleware->redirectGuestsTo(fn (): string => route('login'));
+        $middleware->redirectUsersTo(fn (): string => route('panel'));
     })
     ->withExceptions(function (Exceptions $exceptions): void {
-        $exceptions->dontFlash(['contrasena', 'contrasena_confirmation']);
+        $exceptions->dontFlash(['contrasena', 'contrasena_confirmation', 'codigo']);
         $exceptions->map(
             InvalidSignatureException::class,
-            fn () => new AccessDeniedHttpException('El enlace no es válido o ha caducado.'),
+            fn (): AccessDeniedHttpException => new AccessDeniedHttpException('El enlace no es válido o ha caducado.'),
         );
     })->create();

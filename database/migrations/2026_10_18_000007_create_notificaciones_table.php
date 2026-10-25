@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -43,7 +43,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('notificaciones', function (Blueprint $table) {
+        Schema::create('notificaciones', function (Blueprint $table): void {
             $table->engine('InnoDB');
             $table->comment('Notificaciones enviadas a los usuarios en el sistema y por correo.');
 

@@ -12,20 +12,20 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
- * @version      v1.0.0
+ * @lastModified 2026-10-25
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
- * @description  Panel de inicio según el rol: métricas de la plataforma para
- *               el superadmin, de la suscripción para el administrador
- *               institucional y del inventario para el administrador del
- *               sistema; el usuario final va al catálogo.
+ * @description  Inicio de cada rol según el prototipo hi-fi: dashboard
+ *               operativo del administrador del sistema, panel de plataforma
+ *               del superadmin; el asistente va al mostrador, el administrador
+ *               institucional a la suscripción y el usuario final al catálogo.
  *
- * @requisitos   RF-004, RF-013, RF-015
+ * @requisitos   RF-004, RF-013, RF-049, RF-054
  *
- * @see          Manual de Programación v1.2, sección 2.4.5 (layout de dashboard)
+ * @see          Prototipo interactivo SPEI/design_handoff_spei_web/README.md (Dashboard); DT-028
  * ============================================================================
  */
 
@@ -33,14 +33,12 @@ declare(strict_types=1);
 
 namespace App\Http\Controllers\Web;
 
-use App\Enums\EstadoRecurso;
 use App\Enums\EstadoSuscripcion;
 use App\Enums\Rol;
 use App\Http\Controllers\Controller;
 use App\Models\Institucion;
-use App\Models\Recurso;
 use App\Models\Usuario;
-use App\Services\SuscripcionService;
+use App\Services\TableroService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -54,12 +52,17 @@ use Illuminate\View\View;
  */
 class PanelController extends Controller
 {
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  TableroService  $tableroService  Dependencia inyectada.
+     */
     public function __construct(
-        private SuscripcionService $suscripcionService,
+        private TableroService $tableroService,
     ) {}
 
     /**
-     * Muestra las métricas del rol o redirige al catálogo.
+     * Muestra el inicio del rol o redirige a su pantalla principal.
      *
      * @param  Request  $request  Petición en curso.
      * @return View|RedirectResponse
@@ -70,63 +73,52 @@ class PanelController extends Controller
         $usuario = $request->user();
 
         return match ($usuario->rol) {
-            Rol::Superadmin => view('panel.superadmin', ['metricas' => $this->contarInstituciones()]),
-            Rol::AdminInstitucional => $this->mostrarSuscripcion($usuario),
-            Rol::AdminSistema => view('panel.admin-sistema', ['metricas' => $this->contarRecursos($usuario)]),
-            Rol::Asistente => redirect()->route('notificaciones.index'),
-            default => redirect()->route('catalogo.index'),
+            Rol::Superadmin => $this->mostrarPlataforma(),
+            Rol::AdminSistema => $this->mostrarTablero($usuario),
+            Rol::AdminInstitucional => redirect()->route('suscripcion.show'),
+            Rol::Asistente => redirect()->route('mostrador.index'),
+            Rol::Alumno, Rol::Docente => redirect()->route('catalogo.index'),
         };
     }
 
     /**
-     * Panel del administrador institucional.
+     * Dashboard operativo del administrador del sistema.
      *
-     * @param  Usuario  $usuario  Administrador institucional.
+     * @param  Usuario  $usuario  Administrador del sistema.
      * @return View
      */
-    private function mostrarSuscripcion(Usuario $usuario): View
+    private function mostrarTablero(Usuario $usuario): View
     {
-        $institucion = Institucion::query()->findOrFail($usuario->id_institucion);
-
-        return view('panel.admin-institucional', [
-            'institucion' => $institucion,
-            'uso' => $this->suscripcionService->obtenerUso($institucion),
+        return view('panel.admin-sistema', [
+            'usuario' => $usuario,
+            'indicadores' => $this->tableroService->obtenerIndicadores($usuario),
+            'serie' => $this->tableroService->obtenerSerieDiaria($usuario),
+            'inventario' => $this->tableroService->obtenerInventario($usuario),
+            'porAtender' => $this->tableroService->obtenerPorAtender($usuario),
+            'agenda' => $this->tableroService->obtenerAgendaHoy($usuario),
         ]);
     }
 
     /**
-     * Total de instituciones por estado de suscripción.
+     * Panel del superadmin: instituciones por estado y próximas a vencer.
      *
-     * @return array<string, int>
+     * @return View
      */
-    private function contarInstituciones(): array
+    private function mostrarPlataforma(): View
     {
         $metricas = [];
 
         foreach (EstadoSuscripcion::cases() as $estado) {
-            $metricas[$estado->obtenerEtiqueta()] = Institucion::query()->where('estado_suscripcion', $estado)->count();
+            $metricas[$estado->value] = Institucion::query()->where('estado_suscripcion', $estado)->count();
         }
 
-        return $metricas;
-    }
-
-    /**
-     * Total de recursos por estado (del área asignada si es responsable).
-     *
-     * @param  Usuario  $usuario  Administrador del sistema.
-     * @return array<string, int>
-     */
-    private function contarRecursos(Usuario $usuario): array
-    {
-        $metricas = [];
-
-        foreach (EstadoRecurso::cases() as $estado) {
-            $metricas[$estado->obtenerEtiqueta()] = Recurso::query()
-                ->where('estado', $estado)
-                ->when($usuario->esResponsableDeArea(), fn ($q) => $q->where('id_area', $usuario->id_area_asignada))
-                ->count();
-        }
-
-        return $metricas;
+        return view('panel.superadmin', [
+            'metricas' => $metricas,
+            'porVencer' => Institucion::query()
+                ->whereIn('estado_suscripcion', [EstadoSuscripcion::Activa, EstadoSuscripcion::SoloLectura])
+                ->orderBy('fecha_corte')
+                ->limit(8)
+                ->get(),
+        ]);
     }
 }

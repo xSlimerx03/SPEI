@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -48,6 +48,11 @@ use Illuminate\Support\Facades\DB;
  */
 class RecursoService
 {
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  AuditoriaService  $auditoriaService  Dependencia inyectada.
+     */
     public function __construct(
         private AuditoriaService $auditoriaService,
     ) {}

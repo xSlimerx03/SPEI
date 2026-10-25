@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -78,5 +78,21 @@ class NotificacionController extends Controller
         $notificacion->update(['leida' => true]);
 
         return back();
+    }
+
+    /**
+     * Marca como leídas todas las notificaciones propias.
+     *
+     * @param  Request  $request  Petición en curso.
+     * @return RedirectResponse
+     */
+    public function marcarTodas(Request $request): RedirectResponse
+    {
+        Notificacion::query()
+            ->where('id_usuario', $request->user()?->getAuthIdentifier())
+            ->where('leida', false)
+            ->update(['leida' => true]);
+
+        return back()->with('success', 'Notificaciones marcadas como leídas.');
     }
 }

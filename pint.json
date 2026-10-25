@@ -20,6 +20,7 @@
     },
     "exclude": [
         "bootstrap/cache",
-        "storage"
+        "storage",
+        "tmp"
     ]
 }

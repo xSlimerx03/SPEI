@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -50,6 +50,13 @@ class InvitacionAdministradorMail extends Mailable implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    /**
+     * Recibe los datos del correo.
+     *
+     * @param  string  $nombreInvitado  Nombre del administrador invitado.
+     * @param  string  $nombreInstitucion  Institución que invita.
+     * @param  string  $enlace  Enlace firmado para completar el registro.
+     */
     public function __construct(
         public string $nombreInvitado,
         public string $nombreInstitucion,

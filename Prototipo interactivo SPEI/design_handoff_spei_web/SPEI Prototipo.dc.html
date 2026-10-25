@@ -1,0 +1,1259 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Carlito:wght@400;700&family=Fira+Code:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:opsz,wght,FILL,GRAD@20..48,400,0..1,0" rel="stylesheet">
+<style>
+html,body{margin:0;padding:0;background:#F0F9FF;color:#1F2937}
+*{box-sizing:border-box}
+a{color:#2563EB;text-decoration:none}
+a:hover{color:#1D4ED8;text-decoration:underline}
+input,select,textarea,button{font-family:inherit}
+</style>
+</helmet>
+<div style="font-family:Calibri,Carlito,'Segoe UI',system-ui,sans-serif;color:#1F2937;font-size:14px;line-height:1.45;background:#F0F9FF;min-height:100vh;-webkit-font-smoothing:antialiased">
+
+<sc-if value="{{ isLogin }}" hint-placeholder-val="{{ false }}">
+<div style="min-height:100vh;width:100%;display:flex;align-items:center;justify-content:center;padding:32px 16px;background-color:#F0F9FF;background-image:linear-gradient(rgba(59,130,246,0.07) 1px,transparent 1px),linear-gradient(90deg,rgba(59,130,246,0.07) 1px,transparent 1px);background-size:32px 32px">
+<div style="width:100%;max-width:450px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#FFFFFF;border-radius:16px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 12px 32px rgba(31,41,55,0.08);padding:40px 40px 32px;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:center;gap:12px">
+<div style="width:48px;height:48px;border-radius:12px;background:#3B82F6;color:#F0F9FF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:26px">B</div>
+<div style="display:flex;flex-direction:column;line-height:1.1"><span style="font-size:22px;font-weight:700;letter-spacing:0.02em">SPEI</span><span style="font-size:12px;color:#6B7280">por Bigbitbyte</span></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:4px">
+<div style="font-size:24px;font-weight:700">Iniciar sesión</div>
+<div style="font-size:14px;color:#6B7280">Sistema de Préstamo de Equipo Institucional</div>
+</div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px;border-radius:8px;background:#F0F9FF">
+<div style="width:36px;height:36px;border-radius:8px;background:#FFFFFF;box-shadow:0 0 0 1px rgba(31,41,55,0.08);display:flex;align-items:center;justify-content:center;color:#2563EB"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">account_balance</span></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;line-height:1.2"><span style="font-size:14px;font-weight:700">Universidad Tecnológica del Valle</span><span style="font-size:12px;color:#6B7280">utvalle.edu.mx</span></div>
+<a href="#" style="font-size:13px;font-weight:700">Cambiar</a>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Correo institucional</span>
+<div style="position:relative;display:flex;align-items:center"><span style="position:absolute;left:14px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">mail</span><input placeholder="nombre@utvalle.edu.mx" style="width:100%;height:48px;border:1px solid #9CA3AF;border-radius:8px;padding:0 16px 0 44px;font-size:14px;color:#1F2937;outline:none;background:#FFFFFF" style-focus="border:2px solid #3B82F6;padding:0 15px 0 43px"></div></label>
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Contraseña</span>
+<div style="position:relative;display:flex;align-items:center"><span style="position:absolute;left:14px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">lock</span><input type="password" value="contrasena" readonly style="width:100%;height:48px;border:1px solid #9CA3AF;border-radius:8px;padding:0 44px 0 44px;font-size:14px;color:#1F2937;outline:none;background:#FFFFFF" style-focus="border:2px solid #3B82F6"><span style="position:absolute;right:14px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280;cursor:pointer">visibility</span></div></label>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:20px;border-radius:4px;background:#2563EB;color:#FFFFFF;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:16px;line-height:1">check</span></div><span style="font-size:14px">Mantener sesión iniciada</span></div>
+<button onClick="{{ doLogin }}" style="height:48px;border:none;border-radius:8px;background:#2563EB;color:#FFFFFF;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px;box-shadow:0 1px 2px rgba(0,0,0,0.05)" style-hover="background:#1D4ED8">Iniciar sesión<span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">arrow_forward</span></button>
+<div style="display:flex;align-items:center;gap:12px;color:#9CA3AF;font-size:12px"><div style="flex:1;height:1px;background:#E5E7EB"></div>o<div style="flex:1;height:1px;background:#E5E7EB"></div></div>
+<button onClick="{{ doLogin }}" style="height:48px;border:1px solid #CBD5E1;border-radius:8px;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#F0F9FF;border-color:#93C5FD"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#2563EB">key</span>Continuar con SSO institucional</button>
+</div>
+<div style="display:flex;flex-direction:column;align-items:center;gap:8px;padding-top:8px;border-top:1px solid #EEF2F7">
+<a href="#" style="font-size:14px;font-weight:700;padding-top:12px">¿Olvidaste tu contraseña?</a>
+<span style="font-size:12px;color:#6B7280;text-align:center;text-wrap:pretty">Tu rol se asigna automáticamente según tu dominio institucional.</span>
+</div>
+</div>
+<div style="border:1px dashed #93C5FD;border-radius:12px;padding:14px 16px;display:flex;flex-direction:column;gap:10px;background:rgba(255,255,255,0.6)">
+<span style="font-size:12px;font-weight:700;color:#1E40AF;text-transform:uppercase;letter-spacing:0.06em">Demostración · entrar como</span>
+<div style="display:flex;flex-wrap:wrap;gap:8px">
+<sc-for list="{{ roleItems }}" as="r" hint-placeholder-count="4">
+<button onClick="{{ r.loginAs }}" style="height:32px;padding:0 14px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:13px;font-weight:700;cursor:pointer" style-hover="border-color:#3B82F6;color:#1D4ED8">{{ r.label }}</button>
+</sc-for>
+</div>
+</div>
+<div style="text-align:center;font-size:12px;color:#6B7280">© 2026 Bigbitbyte · SPEI v1.0 · <a href="#">Aviso de privacidad</a></div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ isApp }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;height:100vh;overflow:hidden">
+
+<aside style="flex:none;width:{{ sideW }};height:100vh;background:#1F2937;color:#F0F9FF;display:flex;flex-direction:column;transition:width 0.2s ease;overflow:hidden">
+<div style="height:64px;flex:none;display:flex;align-items:center;gap:12px;padding:0 16px;border-bottom:1px solid rgba(240,249,255,0.08)">
+<div style="flex:none;width:32px;height:32px;border-radius:8px;background:#3B82F6;color:#F0F9FF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:18px">B</div>
+<sc-if value="{{ notCollapsed }}" hint-placeholder-val="{{ true }}"><div style="display:flex;flex-direction:column;line-height:1.1;white-space:nowrap"><span style="font-size:18px;font-weight:700;letter-spacing:0.02em">SPEI</span><span style="font-size:11px;color:#9CA3AF">por Bigbitbyte</span></div></sc-if>
+</div>
+<sc-if value="{{ notCollapsed }}" hint-placeholder-val="{{ true }}">
+<div style="padding:16px 12px 4px">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:rgba(240,249,255,0.06);white-space:nowrap">
+<span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#93C5FD">account_balance</span>
+<div style="min-width:0;display:flex;flex-direction:column;line-height:1.2"><span style="font-size:13px;font-weight:700;overflow:hidden;text-overflow:ellipsis">UT del Valle</span><span style="font-size:12px;color:#9CA3AF">Plan Pro · utvalle.edu.mx</span></div>
+</div>
+</div>
+</sc-if>
+<nav style="flex:1;overflow:auto;display:flex;flex-direction:column;gap:4px;padding:8px 12px">
+<sc-for list="{{ nav }}" as="item" hint-placeholder-count="7">
+<sc-if value="{{ item.showHead }}" hint-placeholder-val="{{ false }}"><div style="font-size:11px;font-weight:700;color:#9CA3AF;text-transform:uppercase;letter-spacing:0.08em;padding:14px 12px 6px;white-space:nowrap">{{ item.h }}</div></sc-if>
+<sc-if value="{{ item.isLink }}" hint-placeholder-val="{{ true }}">
+<button onClick="{{ item.go }}" title="{{ item.l }}" style="display:flex;align-items:center;gap:12px;height:44px;padding:0 10px;border-radius:8px;background:{{ item.bg }};color:{{ item.fg }};border:none;cursor:pointer;font-size:14px;font-weight:700;width:100%;text-align:left;white-space:nowrap;justify-content:{{ item.jc }}" style-hover="filter:brightness(1.2)">
+<span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1;flex:none">{{ item.i }}</span>
+<sc-if value="{{ notCollapsed }}" hint-placeholder-val="{{ true }}"><span style="flex:1;overflow:hidden;text-overflow:ellipsis">{{ item.l }}</span></sc-if>
+<sc-if value="{{ item.showBadge }}" hint-placeholder-val="{{ false }}"><span style="min-width:22px;height:20px;padding:0 6px;border-radius:10px;background:{{ item.badgeBg }};font-size:12px;display:flex;align-items:center;justify-content:center">{{ item.b }}</span></sc-if>
+</button>
+</sc-if>
+</sc-for>
+</nav>
+<div style="flex:none;padding:12px;border-top:1px solid rgba(240,249,255,0.08)">
+<button onClick="{{ toggleCollapse }}" style="display:flex;align-items:center;gap:12px;height:40px;padding:0 10px;border-radius:8px;background:transparent;color:#CBD5E1;border:none;cursor:pointer;font-size:13px;font-weight:700;width:100%;white-space:nowrap;justify-content:{{ collapseJc }}" style-hover="background:rgba(240,249,255,0.06)">
+<span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1">{{ collapseIcon }}</span>
+<sc-if value="{{ notCollapsed }}" hint-placeholder-val="{{ true }}"><span>Contraer menú</span></sc-if>
+</button>
+</div>
+</aside>
+
+<div ref="{{ mainRef }}" style="flex:1;min-width:0;height:100vh;overflow:auto;display:flex;flex-direction:column">
+<header style="height:64px;flex:none;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.1);display:flex;align-items:center;gap:16px;padding:0 32px;position:sticky;top:0;z-index:30">
+<div style="flex:1 1 auto;min-width:160px;display:flex;flex-direction:column">
+<span style="font-size:12px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ crumb }}</span>
+<span style="font-size:24px;font-weight:700;line-height:1.1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ title }}</span>
+</div>
+<div style="position:relative;display:flex;align-items:center;flex:0 1 300px;min-width:120px"><span style="position:absolute;left:12px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">search</span><input placeholder="{{ searchPh }}" style="width:100%;height:40px;border:1px solid #CBD5E1;border-radius:8px;padding:0 12px 0 40px;font-size:14px;outline:none;background:#F8FBFF" style-focus="border-color:#3B82F6;background:#FFFFFF"></div>
+<div style="position:relative">
+<button onClick="{{ toggleNotif }}" title="Notificaciones" style="position:relative;width:40px;height:40px;border-radius:8px;border:none;background:transparent;color:#1F2937;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1">notifications</span><span style="position:absolute;top:6px;right:6px;min-width:16px;height:16px;padding:0 4px;border-radius:8px;background:#EF4444;color:#FFFFFF;font-size:10px;font-weight:700;display:flex;align-items:center;justify-content:center;box-shadow:0 0 0 2px #FFFFFF">4</span></button>
+<sc-if value="{{ notifOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:48px;right:0;width:380px;background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.08),0 16px 40px rgba(31,41,55,0.16);overflow:hidden;z-index:40">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:14px 16px;border-bottom:1px solid #EEF2F7"><span style="font-size:16px;font-weight:700">Notificaciones</span><a href="#" style="font-size:13px;font-weight:700">Marcar como leídas</a></div>
+<sc-for list="{{ notifs }}" as="n" hint-placeholder-count="4">
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid #F1F5F9;cursor:pointer" style-hover="background:#F8FBFF">
+<div style="flex:none;width:36px;height:36px;border-radius:8px;background:{{ n.bg }};color:{{ n.fg }};display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">{{ n.i }}</span></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{ n.t }}</span><span style="font-size:13px;color:#4B5563;text-wrap:pretty">{{ n.d }}</span><span style="font-size:12px;color:#6B7280">{{ n.w }}</span></div>
+</div>
+</sc-for>
+<div style="padding:12px 16px;text-align:center"><a href="#" style="font-size:13px;font-weight:700">Ver todas</a></div>
+</div>
+</sc-if>
+</div>
+<div style="width:1px;height:32px;background:#E5E7EB"></div>
+<div style="position:relative">
+<button onClick="{{ toggleMenu }}" style="display:flex;align-items:center;gap:10px;height:48px;padding:0 8px;border:none;background:transparent;border-radius:8px;cursor:pointer;color:#1F2937;text-align:left" style-hover="background:#F0F9FF">
+<div style="width:40px;height:40px;border-radius:50%;background:#DBEAFE;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px">{{ user.ini }}</div>
+<div style="display:flex;flex-direction:column;line-height:1.2;white-space:nowrap"><span style="font-size:14px;font-weight:700">{{ user.name }}</span><span style="font-size:12px;color:#6B7280">{{ user.label }}</span></div>
+<span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span>
+</button>
+<sc-if value="{{ menuOpen }}" hint-placeholder-val="{{ false }}">
+<div style="position:absolute;top:56px;right:0;width:280px;background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.08),0 16px 40px rgba(31,41,55,0.16);padding:8px;z-index:40">
+<div style="font-size:11px;font-weight:700;color:#6B7280;text-transform:uppercase;letter-spacing:0.08em;padding:8px 10px 6px">Ver como (demostración)</div>
+<sc-for list="{{ roleItems }}" as="r" hint-placeholder-count="4">
+<button onClick="{{ r.pick }}" style="display:flex;align-items:center;gap:10px;width:100%;height:40px;padding:0 10px;border:none;border-radius:8px;background:{{ r.bg }};color:#1F2937;font-size:14px;cursor:pointer;text-align:left" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:{{ r.ic }}">{{ r.icon }}</span><span style="flex:1">{{ r.label }}</span><sc-if value="{{ r.on }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#2563EB">check</span></sc-if></button>
+</sc-for>
+<div style="height:1px;background:#EEF2F7;margin:6px 0"></div>
+<button style="display:flex;align-items:center;gap:10px;width:100%;height:40px;padding:0 10px;border:none;border-radius:8px;background:transparent;color:#1F2937;font-size:14px;cursor:pointer" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">person</span>Mi perfil</button>
+<button onClick="{{ doLogout }}" style="display:flex;align-items:center;gap:10px;width:100%;height:40px;padding:0 10px;border:none;border-radius:8px;background:transparent;color:#B91C1C;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#FEF2F2"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">logout</span>Cerrar sesión</button>
+</div>
+</sc-if>
+</div>
+</header>
+
+<sc-if value="{{ readOnly }}" hint-placeholder-val="{{ false }}">
+<div style="flex:none;display:flex;align-items:center;gap:12px;padding:12px 32px;background:#FFFBEB;border-bottom:1px solid #FDE68A;color:#78350F">
+<span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1;color:#D97706">lock_clock</span>
+<span style="flex:1;font-size:14px"><strong>Suscripción vencida · modo solo lectura.</strong> Puedes consultar la información, pero no crear ni modificar registros hasta renovar el plan.</span>
+<button style="height:32px;padding:0 16px;border-radius:8px;border:none;background:#92400E;color:#FFFFFF;font-size:13px;font-weight:700;cursor:pointer">Renovar plan</button>
+</div>
+</sc-if>
+
+<main style="flex:1;width:100%;max-width:1344px;margin:0 auto;padding:32px">
+<sc-if value="{{ is.dashboard }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:flex-end;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:13px;color:#6B7280">Viernes 23 de octubre de 2026</span><span style="font-size:18px;font-weight:700;text-wrap:pretty">Buen día, Helen. Tienes 12 solicitudes por revisar.</span></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<button onClick="{{ goReportes }}" style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF;border-color:#93C5FD"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">bar_chart</span>Ver reportes</button>
+<button onClick="{{ goPrestamos }}" style="height:40px;padding:0 20px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;box-shadow:0 1px 2px rgba(0,0,0,0.05)" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">pending_actions</span>Revisar solicitudes</button>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px">
+<sc-for list="{{ kpis }}" as="k" hint-placeholder-count="4">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:14px;color:#4B5563;font-weight:700">{{ k.l }}</span><div style="width:40px;height:40px;border-radius:10px;background:{{ k.bg }};color:{{ k.fg }};display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1">{{ k.i }}</span></div></div>
+<span style="font-size:36px;font-weight:700;line-height:1;letter-spacing:-0.01em">{{ k.v }}</span>
+<span style="font-size:13px;color:{{ k.dc }}">{{ k.d }}</span>
+</div>
+</sc-for>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:16px;grid-column:span 2;min-width:0">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Préstamos por día</span><span style="font-size:13px;color:#6B7280">Últimos 14 días · octubre 2026</span></div><div style="display:flex;align-items:center;gap:16px;font-size:12px;color:#4B5563"><span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#BFDBFE"></span>Días previos</span><span style="display:flex;align-items:center;gap:6px"><span style="width:10px;height:10px;border-radius:2px;background:#3B82F6"></span>Hoy (parcial)</span></div></div>
+<div style="display:flex;gap:12px;height:220px">
+<div style="display:flex;flex-direction:column;justify-content:space-between;font-size:11px;color:#6B7280;padding-bottom:22px;text-align:right;width:20px"><span>50</span><span>25</span><span>0</span></div>
+<div style="flex:1;position:relative;display:flex;flex-direction:column">
+<div style="position:absolute;left:0;right:0;top:0;bottom:22px;display:flex;flex-direction:column;justify-content:space-between;pointer-events:none"><div style="border-top:1px dashed #E5E7EB"></div><div style="border-top:1px dashed #E5E7EB"></div><div style="border-top:1px solid #E5E7EB"></div></div>
+<div style="flex:1;display:flex;align-items:flex-end;gap:8px;position:relative">
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="14">
+<div style="flex:1;height:100%;display:flex;flex-direction:column;justify-content:flex-end;align-items:center;gap:4px" title="{{ b.v }} préstamos">
+<span style="font-size:11px;color:#4B5563;font-weight:{{ b.fw }}">{{ b.v }}</span>
+<div style="width:100%;max-width:28px;height:{{ b.h }};background:{{ b.c }};border-radius:4px 4px 0 0"></div>
+</div>
+</sc-for>
+</div>
+<div style="height:22px;display:flex;gap:8px;align-items:flex-end">
+<sc-for list="{{ bars }}" as="b" hint-placeholder-count="14"><span style="flex:1;text-align:center;font-size:11px;color:#6B7280;font-weight:{{ b.fw }}">{{ b.d }}</span></sc-for>
+</div>
+</div>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:20px;min-width:0">
+<div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Estado del inventario</span><span style="font-size:13px;color:#6B7280">Tiempo real · 268 recursos</span></div>
+<div style="display:flex;height:12px;border-radius:6px;overflow:hidden;gap:2px">
+<sc-for list="{{ inv }}" as="s" hint-placeholder-count="4"><div style="width:{{ s.w }};background:{{ s.c }}"></div></sc-for>
+</div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ inv }}" as="s" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #F1F5F9"><span style="width:10px;height:10px;border-radius:50%;background:{{ s.c }}"></span><span style="flex:1;font-size:14px">{{ s.l }}</span><span style="font-size:14px;font-weight:700">{{ s.v }}</span><span style="width:44px;text-align:right;font-size:13px;color:#6B7280">{{ s.p }}</span></div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,420px),1fr));gap:24px">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);display:flex;flex-direction:column;min-width:0;grid-column:span 2">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #EEF2F7"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Solicitudes por atender</span><span style="font-size:13px;color:#6B7280">Ordenadas por prioridad de rol e historial</span></div><a href="#" onClick="{{ goPrestamos }}" style="font-size:13px;font-weight:700">Ver todas</a></div>
+<sc-for list="{{ pend }}" as="p" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid #F1F5F9;flex-wrap:wrap">
+<div style="flex:none;width:40px;height:40px;border-radius:50%;background:#F0F9FF;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700">{{ p.ini }}</div>
+<div style="flex:1 1 220px;min-width:0;display:flex;flex-direction:column;gap:2px">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-size:14px;font-weight:700">{{ p.user }}</span><span style="height:20px;padding:0 6px;border-radius:4px;background:#F1F5F9;color:#374151;font-size:12px;display:inline-flex;align-items:center">{{ p.rol }}</span><sc-if value="{{ p.hasConf }}" hint-placeholder-val="{{ false }}"><span style="height:20px;padding:0 6px;border-radius:4px;background:#FEF3C7;color:#92400E;font-size:12px;font-weight:700;display:inline-flex;align-items:center;gap:4px"><span style="font-family:'Material Symbols Outlined';font-size:14px;line-height:1">event_busy</span>Conflicto</span></sc-if></div>
+<span style="font-size:13px;color:#4B5563;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">{{ p.rec1 }}</span>
+</div>
+<div style="flex:none;display:flex;flex-direction:column;align-items:flex-end;font-size:13px;line-height:1.3"><span style="font-weight:700">{{ p.dia }}</span><span style="color:#6B7280">{{ p.hora }}</span></div>
+<button onClick="{{ p.review }}" style="flex:none;height:32px;padding:0 16px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:13px;font-weight:700;cursor:pointer" style-hover="border-color:#3B82F6;color:#1D4ED8">Revisar</button>
+</div>
+</sc-for>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);display:flex;flex-direction:column;min-width:0">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #EEF2F7"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Agenda de mostrador</span><span style="font-size:13px;color:#6B7280">Entregas y devoluciones de hoy</span></div></div>
+<sc-for list="{{ agenda }}" as="a" hint-placeholder-count="5">
+<div style="display:flex;gap:12px;padding:12px 20px;border-bottom:1px solid #F1F5F9;align-items:flex-start">
+<span style="flex:none;width:44px;font-family:'Fira Code',ui-monospace,monospace;font-size:13px;font-weight:500;padding-top:1px">{{ a.t }}</span>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">{{ a.who }}</span><span style="font-size:13px;color:#4B5563;display:flex;align-items:center;gap:4px"><span style="font-family:'Material Symbols Outlined';font-size:16px;line-height:1;color:#6B7280">{{ a.i }}</span>{{ a.tipo }} · {{ a.what }}</span></div>
+<span style="flex:none;height:24px;padding:0 8px;border-radius:4px;background:{{ a.bg }};color:{{ a.fg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap">{{ a.st }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.prestamos }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:4px;border-bottom:1px solid #E5E7EB;overflow-x:auto;overflow-y:hidden;scrollbar-width:none">
+<sc-for list="{{ ptabs }}" as="t" hint-placeholder-count="6">
+<button onClick="{{ t.click }}" style="height:44px;padding:0 14px;border:none;background:transparent;border-bottom:2px solid {{ t.bd }};color:{{ t.fg }};font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap">{{ t.l }}<span style="height:20px;min-width:24px;padding:0 6px;border-radius:10px;background:{{ t.cbg }};font-size:12px;display:inline-flex;align-items:center;justify-content:center">{{ t.c }}</span></button>
+</sc-for>
+</div>
+<div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+<div style="flex:1 1 560px;min-width:0;background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);overflow:hidden">
+<div style="display:flex;gap:12px;padding:16px;border-bottom:1px solid #EEF2F7;flex-wrap:wrap">
+<div style="position:relative;flex:1 1 220px;display:flex;align-items:center"><span style="position:absolute;left:12px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">search</span><input placeholder="Buscar por folio o solicitante" style="width:100%;height:40px;border:1px solid #9CA3AF;border-radius:8px;padding:0 12px 0 40px;font-size:14px;outline:none" style-focus="border:2px solid #3B82F6;padding:0 11px 0 39px"></div>
+<div style="height:40px;padding:0 12px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none;min-width:150px"><span style="flex:1">Todas las áreas</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div>
+<div style="height:40px;padding:0 12px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">calendar_month</span><span>20 – 26 oct</span></div>
+<button style="height:40px;padding:0 16px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">filter_list</span>Filtrar</button>
+</div>
+<div style="display:grid;grid-template-columns:132px minmax(150px,1.3fr) minmax(150px,1.4fr) 128px 112px;gap:16px;padding:10px 16px;background:#F0F9FF;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;color:#1F2937;min-width:720px"><span>Folio</span><span>Solicitante</span><span>Recursos</span><span>Horario</span><span>Estado</span></div>
+<div style="overflow-x:auto">
+<sc-for list="{{ prows }}" as="p" hint-placeholder-count="6">
+<div onClick="{{ p.select }}" style="display:grid;grid-template-columns:132px minmax(150px,1.3fr) minmax(150px,1.4fr) 128px 112px;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid #F1F5F9;background:{{ p.rowBg }};cursor:pointer;min-width:720px" style-hover="background:#F8FBFF">
+<span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px;font-weight:500;color:#1D4ED8">{{ p.id }}</span>
+<div style="display:flex;align-items:center;gap:10px;min-width:0"><div style="flex:none;width:32px;height:32px;border-radius:50%;background:#F0F9FF;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:12px">{{ p.ini }}</div><div style="min-width:0;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.user }}</span><span style="font-size:12px;color:#6B7280">{{ p.rol }} · {{ p.area }}</span></div></div>
+<div style="min-width:0;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ p.rec1 }}</span><sc-if value="{{ p.hasMore }}" hint-placeholder-val="{{ false }}"><span style="font-size:12px;color:#6B7280">{{ p.more }}</span></sc-if></div>
+<div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;font-weight:700">{{ p.dia }}</span><span style="font-size:12px;color:#6B7280">{{ p.hora }}</span></div>
+<div style="display:flex;flex-direction:column;gap:2px;align-items:flex-start"><span style="height:24px;padding:0 8px;border-radius:4px;background:{{ p.bbg }};color:{{ p.bfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center">{{ p.bl }}</span><span style="font-size:11px;color:#6B7280;white-space:nowrap">{{ p.sub }}</span></div>
+</div>
+</sc-for>
+</div>
+<div style="display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-top:1px solid #EEF2F7;font-size:13px;color:#6B7280;flex-wrap:wrap;gap:8px"><span>Mostrando 1 – 8 de 214</span><div style="display:flex;gap:6px"><button style="width:32px;height:32px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#9CA3AF"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">chevron_left</span></button><button style="width:32px;height:32px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-weight:700;cursor:pointer">1</button><button style="width:32px;height:32px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;cursor:pointer">2</button><button style="width:32px;height:32px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;cursor:pointer">3</button><button style="width:32px;height:32px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">chevron_right</span></button></div></div>
+</div>
+
+<div style="flex:0 1 400px;min-width:320px;background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);display:flex;flex-direction:column;position:sticky;top:96px">
+<div style="padding:20px;border-bottom:1px solid #EEF2F7;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:8px"><span style="font-family:'Fira Code',ui-monospace,monospace;font-size:13px;font-weight:500;color:#1D4ED8">{{ sel.id }}</span><span style="height:24px;padding:0 8px;border-radius:4px;background:{{ sel.bbg }};color:{{ sel.bfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center">{{ sel.bl }} · {{ sel.sub }}</span></div>
+<div style="display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:50%;background:#DBEAFE;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">{{ sel.ini }}</div><div style="flex:1;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:18px;font-weight:700">{{ sel.user }}</span><span style="font-size:13px;color:#6B7280">{{ sel.rol }} · {{ sel.marcasTxt }}</span></div></div>
+<div style="height:6px;border-radius:3px;background:#F1F5F9;overflow:hidden"><div style="height:100%;width:{{ sel.marcasPct }};background:{{ sel.marcasC }}"></div></div>
+</div>
+<sc-if value="{{ sel.hasConf }}" hint-placeholder-val="{{ false }}">
+<div style="margin:16px 20px 0;padding:12px;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;display:flex;gap:10px;color:#78350F"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#D97706">event_busy</span><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">Conflicto de horario</span><span style="font-size:13px;text-wrap:pretty">{{ sel.conflicto }}</span></div></div>
+</sc-if>
+<sc-if value="{{ sel.hasNota }}" hint-placeholder-val="{{ false }}">
+<div style="margin:16px 20px 0;padding:12px;border-radius:8px;background:#F3F4F6;display:flex;gap:10px;color:#374151"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">info</span><span style="font-size:13px;text-wrap:pretty">{{ sel.nota }}</span></div>
+</sc-if>
+<div style="padding:16px 20px;display:flex;flex-direction:column;gap:14px;border-bottom:1px solid #EEF2F7">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#6B7280;font-weight:700">Fecha</span><span style="font-size:14px">{{ sel.dia }}</span></div>
+<div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:12px;color:#6B7280;font-weight:700">Horario</span><span style="font-size:14px">{{ sel.hora }}</span></div>
+<div style="display:flex;flex-direction:column;gap:2px;grid-column:span 2"><span style="font-size:12px;color:#6B7280;font-weight:700">Motivo</span><span style="font-size:14px;text-wrap:pretty">{{ sel.motivo }}</span></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:12px;color:#6B7280;font-weight:700">Recursos solicitados</span>
+<sc-for list="{{ sel.recs }}" as="r" hint-placeholder-count="2"><div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:#F8FBFF;border:1px solid #E5EDF5"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#2563EB">devices</span><span style="flex:1;font-size:14px">{{ r.n }}</span><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#10B981">check_circle</span></div></sc-for>
+</div>
+</div>
+<div style="padding:16px 20px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:16px;font-weight:700">Conversación</span><span style="font-size:12px;color:#6B7280">Previa a la aprobación</span></div>
+<sc-if value="{{ sel.noMsgs }}" hint-placeholder-val="{{ false }}"><div style="padding:16px;border-radius:8px;background:#F8FBFF;text-align:center;font-size:13px;color:#6B7280">Sin mensajes. Usa este canal para aclarar dudas antes de aprobar.</div></sc-if>
+<div style="display:flex;flex-direction:column;gap:8px;max-height:220px;overflow:auto">
+<sc-for list="{{ msgs }}" as="m" hint-placeholder-count="2">
+<div style="display:flex;flex-direction:column;align-items:{{ m.al }};gap:2px"><div style="max-width:85%;padding:8px 12px;border-radius:12px;background:{{ m.bg }};color:{{ m.fg }};font-size:14px;text-wrap:pretty">{{ m.t }}</div><span style="font-size:11px;color:#6B7280">{{ m.who }} · {{ m.h }}</span></div>
+</sc-for>
+</div>
+<sc-if value="{{ canChat }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;gap:8px"><input value="{{ msgDraft }}" onChange="{{ onMsg }}" placeholder="Escribe un mensaje…" style="flex:1;min-width:0;height:40px;border:1px solid #9CA3AF;border-radius:8px;padding:0 12px;font-size:14px;outline:none" style-focus="border:2px solid #3B82F6;padding:0 11px"><button onClick="{{ sendMsg }}" title="Enviar" style="width:40px;height:40px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">send</span></button></div>
+</sc-if>
+</div>
+<sc-if value="{{ sel.isPend }}" hint-placeholder-val="{{ true }}">
+<div style="padding:16px 20px;border-top:1px solid #EEF2F7;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;gap:12px"><button onClick="{{ reject }}" style="flex:1;height:48px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="border-color:#EF4444;color:#B91C1C"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">close</span>Rechazar</button><button onClick="{{ approve }}" style="flex:1;height:48px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">check</span>Aprobar</button></div>
+</div>
+</sc-if>
+<sc-if value="{{ sel.isApproved }}" hint-placeholder-val="{{ false }}">
+<div style="padding:16px 20px;border-top:1px solid #EEF2F7;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:8px;align-items:center;font-size:13px;color:#4B5563"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#10B981">verified</span>Recursos bloqueados para este horario. Tolerancia de recogida: 15 min.</div>
+<button onClick="{{ openPrio }}" style="height:40px;border-radius:8px;border:1px solid #FCA5A5;background:#FFFFFF;color:#B91C1C;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#FEF2F2"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">priority_high</span>Cancelar por prioridad</button>
+</div>
+</sc-if>
+<sc-if value="{{ sel.isActivo }}" hint-placeholder-val="{{ false }}">
+<div style="padding:16px 20px;border-top:1px solid #EEF2F7;display:flex;flex-direction:column;gap:10px">
+<div style="display:flex;gap:8px;align-items:flex-start;font-size:13px;color:#4B5563;text-wrap:pretty"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#6B7280">block</span>No se permiten prórrogas. Si necesita más tiempo, el usuario debe crear una nueva solicitud.</div>
+<button style="height:40px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">download</span>Descargar comprobante</button>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.recursos }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;gap:8px;flex-wrap:wrap">
+<sc-for list="{{ rchips }}" as="c" hint-placeholder-count="5">
+<button onClick="{{ c.click }}" style="height:36px;padding:0 14px;border-radius:18px;border:1px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px">{{ c.l }}<span style="font-size:12px;opacity:0.75">{{ c.c }}</span></button>
+</sc-for>
+</div>
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<button style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF;border-color:#93C5FD"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">barcode_scanner</span>Escanear código</button>
+<button style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF;border-color:#93C5FD"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">upload_file</span>Importar CSV</button>
+<button style="height:40px;padding:0 20px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">add</span>Crear</button>
+</div>
+</sc-if>
+</div>
+<div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center;background:#FFFFFF;padding:12px;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06)">
+<div style="position:relative;flex:1 1 260px;display:flex;align-items:center"><span style="position:absolute;left:14px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">search</span><input placeholder="Buscar por nombre, inventario o número de serie" style="width:100%;height:48px;border:1px solid #9CA3AF;border-radius:8px;padding:0 16px 0 44px;font-size:14px;outline:none" style-focus="border:2px solid #3B82F6;padding:0 15px 0 43px"></div>
+<div style="height:48px;padding:0 14px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none;min-width:170px"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">apartment</span><span style="flex:1">Todas las áreas</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div>
+<div style="height:48px;padding:0 14px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none;min-width:170px"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">category</span><span style="flex:1">Equipos y espacios</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div>
+<div style="display:flex;padding:4px;border-radius:8px;background:#F1F5F9;gap:2px">
+<button onClick="{{ setGrid }}" title="Tarjetas" style="width:40px;height:40px;border-radius:6px;border:none;background:{{ gridBg }};box-shadow:{{ gridSh }};cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1F2937"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">grid_view</span></button>
+<button onClick="{{ setList }}" title="Lista" style="width:40px;height:40px;border-radius:6px;border:none;background:{{ listBg }};box-shadow:{{ listSh }};cursor:pointer;display:flex;align-items:center;justify-content:center;color:#1F2937"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">view_list</span></button>
+</div>
+</div>
+<sc-if value="{{ noResults }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FFFFFF;border-radius:12px;padding:56px 24px;display:flex;flex-direction:column;align-items:center;gap:12px;text-align:center;box-shadow:0 0 0 1px rgba(31,41,55,0.06)"><span style="font-family:'Material Symbols Outlined';font-size:64px;line-height:1;color:#93C5FD">inventory_2</span><span style="font-size:18px;font-weight:700">Sin recursos en este estado</span><span style="font-size:14px;color:#6B7280">Prueba con otro filtro o limpia la búsqueda.</span></div>
+</sc-if>
+<sc-if value="{{ isGrid }}" hint-placeholder-val="{{ true }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:24px">
+<sc-for list="{{ rcards }}" as="r" hint-placeholder-count="8">
+<div onClick="{{ r.open }}" style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);overflow:hidden;display:flex;flex-direction:column;cursor:pointer;transition:box-shadow 0.15s,transform 0.15s" style-hover="box-shadow:0 0 0 1px rgba(59,130,246,0.35),0 10px 24px rgba(31,41,55,0.10);transform:translateY(-2px)">
+<div style="position:relative;aspect-ratio:4/3;background:repeating-linear-gradient(135deg,#EAF2FB 0 10px,#F5F9FE 10px 20px);display:flex;align-items:center;justify-content:center">
+<span style="font-family:'Fira Code',ui-monospace,monospace;font-size:11px;color:#6B7280;background:rgba(255,255,255,0.85);padding:4px 8px;border-radius:4px">{{ r.ph }}</span>
+<span style="position:absolute;top:12px;left:12px;height:24px;padding:0 8px;border-radius:4px;background:{{ r.bbg }};color:{{ r.bfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center">{{ r.bl }}</span>
+<span style="position:absolute;top:12px;right:12px;height:24px;padding:0 8px;border-radius:4px;background:rgba(255,255,255,0.92);color:#374151;font-size:12px;display:inline-flex;align-items:center">{{ r.tipoL }}</span>
+</div>
+<div style="padding:16px;display:flex;flex-direction:column;gap:4px;flex:1">
+<span style="font-size:16px;font-weight:700;line-height:1.25;text-wrap:pretty">{{ r.n }}</span>
+<span style="font-size:13px;color:#6B7280">{{ r.area }} · <span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px">{{ r.inv }}</span></span>
+</div>
+<div style="padding:12px 16px;border-top:1px solid #F1F5F9;display:flex;align-items:center;gap:8px;min-height:56px">
+<span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:{{ r.bfg }}">schedule</span>
+<span style="flex:1;font-size:13px;color:#374151">{{ r.foot }}</span>
+<sc-if value="{{ isFinal }}" hint-placeholder-val="{{ false }}"><sc-if value="{{ r.canReq }}" hint-placeholder-val="{{ false }}"><button onClick="{{ r.req }}" style="height:32px;padding:0 14px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:13px;font-weight:700;cursor:pointer" style-hover="background:#1D4ED8">Solicitar</button></sc-if></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ isList }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);overflow-x:auto">
+<div style="display:grid;grid-template-columns:minmax(220px,2fr) 130px 130px 110px minmax(180px,1.4fr);gap:16px;padding:10px 16px;background:#F0F9FF;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;min-width:820px"><span>Recurso</span><span>Área</span><span>Inventario</span><span>Estado</span><span>Disponibilidad</span></div>
+<sc-for list="{{ rcards }}" as="r" hint-placeholder-count="8">
+<div onClick="{{ r.open }}" style="display:grid;grid-template-columns:minmax(220px,2fr) 130px 130px 110px minmax(180px,1.4fr);gap:16px;align-items:center;padding:12px 16px;border-top:1px solid #F1F5F9;cursor:pointer;min-width:820px" style-hover="background:#F8FBFF">
+<div style="display:flex;align-items:center;gap:12px;min-width:0"><div style="flex:none;width:40px;height:40px;border-radius:8px;background:repeating-linear-gradient(135deg,#EAF2FB 0 6px,#F5F9FE 6px 12px)"></div><div style="min-width:0;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ r.n }}</span><span style="font-size:12px;color:#6B7280">{{ r.tipoL }}</span></div></div>
+<span style="font-size:14px">{{ r.area }}</span>
+<span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px">{{ r.inv }}</span>
+<span style="height:24px;padding:0 8px;border-radius:4px;background:{{ r.bbg }};color:{{ r.bfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-self:start">{{ r.bl }}</span>
+<span style="font-size:13px;color:#374151">{{ r.foot }}</span>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.recurso }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<button onClick="{{ backRecursos }}" style="align-self:flex-start;height:32px;padding:0 12px 0 6px;border-radius:8px;border:none;background:transparent;color:#1D4ED8;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:4px" style-hover="background:#DBEAFE"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">arrow_back</span>Volver al catálogo</button>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:24px;align-items:start">
+<div style="display:flex;flex-direction:column;gap:24px;grid-column:span 1;min-width:0">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:24px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;gap:8px;flex-wrap:wrap"><span style="height:24px;padding:0 8px;border-radius:4px;background:{{ rec.bbg }};color:{{ rec.bfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center">{{ rec.bl }}</span><span style="height:24px;padding:0 8px;border-radius:4px;background:#F1F5F9;color:#374151;font-size:12px;display:inline-flex;align-items:center">{{ rec.tipoL }}</span></div>
+<div style="display:flex;flex-direction:column;gap:6px"><span style="font-size:28px;font-weight:700;line-height:1.15;text-wrap:pretty">{{ rec.n }}</span><span style="font-size:14px;color:#6B7280">{{ rec.area }} · <span style="font-family:'Fira Code',ui-monospace,monospace;font-size:13px">{{ rec.inv }}</span></span></div>
+<div style="display:flex;align-items:center;gap:10px;padding:12px 14px;border-radius:8px;background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1;color:#2563EB">schedule</span><span style="flex:1;font-size:14px;font-weight:700">{{ rec.foot }}</span></div>
+<span style="font-size:14px;color:#374151;text-wrap:pretty">{{ rec.desc }}</span>
+<div style="display:flex;gap:12px;flex-wrap:wrap">
+<sc-if value="{{ isFinal }}" hint-placeholder-val="{{ false }}"><button onClick="{{ goSolicitud }}" style="height:48px;padding:0 24px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">add</span>Solicitar préstamo</button></sc-if>
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+<button style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">edit</span>Editar</button>
+<button onClick="{{ toggleMant }}" style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">build</span><sc-if value="{{ rec.notMant }}" hint-placeholder-val="{{ true }}">Marcar en mantenimiento</sc-if><sc-if value="{{ rec.isMant }}" hint-placeholder-val="{{ false }}">Reactivar recurso</sc-if></button>
+</sc-if>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:24px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Disponibilidad</span><span style="font-size:13px;color:#6B7280">Semana del 23 al 28 de octubre · horario operativo 7:00 – 22:00</span></div><div style="display:flex;gap:14px;font-size:12px;color:#4B5563"><span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#DBEAFE;border:1px solid #3B82F6"></span>Reservado</span><span style="display:flex;align-items:center;gap:6px"><span style="width:12px;height:12px;border-radius:3px;background:#FEF3C7;border:1px solid #F59E0B"></span>Por aprobar</span></div></div>
+<div style="display:flex;flex-direction:column;gap:8px">
+<div style="display:flex;gap:12px"><span style="width:64px;flex:none"></span><div style="flex:1;display:flex;justify-content:space-between;font-size:11px;color:#6B7280"><sc-for list="{{ hours }}" as="h" hint-placeholder-count="6"><span>{{ h.h }}</span></sc-for></div></div>
+<sc-for list="{{ days }}" as="d" hint-placeholder-count="5">
+<div style="display:flex;gap:12px;align-items:center"><span style="width:64px;flex:none;font-size:13px;font-weight:{{ d.fw }};color:{{ d.fc }}">{{ d.d }}</span>
+<div style="flex:1;position:relative;height:36px;border-radius:6px;background:#F0F9FF;background-image:linear-gradient(90deg,rgba(31,41,55,0.06) 1px,transparent 1px);background-size:20% 100%">
+<sc-for list="{{ d.blocks }}" as="b" hint-placeholder-count="1"><div style="position:absolute;top:4px;bottom:4px;left:{{ b.left }};width:{{ b.width }};background:{{ b.bg }};border:1px solid {{ b.bd }};border-radius:4px;color:{{ b.fg }};font-size:11px;font-weight:700;display:flex;align-items:center;padding:0 6px;overflow:hidden;white-space:nowrap">{{ b.t }}</div></sc-for>
+</div></div>
+</sc-for>
+</div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px;min-width:0">
+<div style="display:flex;flex-direction:column;gap:12px">
+<div style="aspect-ratio:4/3;border-radius:12px;background:repeating-linear-gradient(135deg,#EAF2FB 0 12px,#F5F9FE 12px 24px);box-shadow:0 0 0 1px rgba(31,41,55,0.06);display:flex;align-items:center;justify-content:center"><span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px;color:#6B7280;background:rgba(255,255,255,0.85);padding:6px 10px;border-radius:4px">{{ rec.ph }}</span></div>
+<div style="display:grid;grid-template-columns:repeat(4,1fr);gap:12px">
+<div style="aspect-ratio:1;border-radius:8px;background:repeating-linear-gradient(135deg,#EAF2FB 0 6px,#F5F9FE 6px 12px);box-shadow:0 0 0 2px #3B82F6"></div>
+<div style="aspect-ratio:1;border-radius:8px;background:repeating-linear-gradient(135deg,#EAF2FB 0 6px,#F5F9FE 6px 12px);box-shadow:0 0 0 1px rgba(31,41,55,0.08)"></div>
+<div style="aspect-ratio:1;border-radius:8px;background:repeating-linear-gradient(135deg,#EAF2FB 0 6px,#F5F9FE 6px 12px);box-shadow:0 0 0 1px rgba(31,41,55,0.08)"></div>
+<div style="aspect-ratio:1;border-radius:8px;background:#F1F5F9;display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#4B5563">+3</div>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:8px 20px">
+<sc-for list="{{ rec.specs }}" as="s" hint-placeholder-count="6"><div style="display:flex;justify-content:space-between;gap:16px;padding:12px 0;border-bottom:1px solid #F1F5F9;font-size:14px"><span style="color:#6B7280">{{ s.k }}</span><span style="font-weight:700;text-align:right">{{ s.v }}</span></div></sc-for>
+</div>
+<sc-if value="{{ isAdmin }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06)">
+<div style="padding:16px 20px;border-bottom:1px solid #EEF2F7;font-size:16px;font-weight:700">Historial reciente</div>
+<sc-for list="{{ recHist }}" as="h" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid #F1F5F9"><span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px;color:#1D4ED8">{{ h.f }}</span><span style="flex:1;font-size:14px">{{ h.u }}</span><span style="font-size:13px;color:#6B7280">{{ h.d }}</span><span style="height:24px;padding:0 8px;border-radius:4px;background:{{ h.bbg }};color:{{ h.bfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center">{{ h.bl }}</span></div></sc-for>
+</div>
+</sc-if>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.solicitud }}" hint-placeholder-val="{{ false }}">
+<div style="max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:flex-start;gap:0">
+<sc-for list="{{ steps }}" as="s" hint-placeholder-count="3">
+<div style="flex:1;display:flex;align-items:flex-start;gap:12px;min-width:0">
+<div style="flex:none;width:36px;height:36px;border-radius:50%;background:{{ s.cbg }};color:{{ s.cfg }};border:2px solid {{ s.cbd }};display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px"><sc-if value="{{ s.done }}" hint-placeholder-val="{{ false }}"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">check</span></sc-if><sc-if value="{{ s.notDone }}" hint-placeholder-val="{{ true }}">{{ s.n }}</sc-if></div>
+<div style="display:flex;flex-direction:column;line-height:1.2;padding-top:2px;min-width:0"><span style="font-size:14px;font-weight:700;color:{{ s.lfg }};white-space:nowrap">{{ s.l }}</span><span style="font-size:12px;color:#6B7280;white-space:nowrap">{{ s.s }}</span></div>
+<sc-if value="{{ s.line }}" hint-placeholder-val="{{ true }}"><div style="flex:1;height:2px;background:{{ s.lineC }};margin:17px 12px 0;min-width:16px"></div></sc-if>
+</div>
+</sc-for>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:28px;display:flex;flex-direction:column;gap:20px">
+<sc-if value="{{ step1 }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700">¿Qué recursos necesitas?</span><span style="font-size:14px;color:#6B7280">Puedes incluir varios recursos en una sola solicitud.</span></div>
+<div style="position:relative;display:flex;align-items:center"><span style="position:absolute;left:14px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">search</span><input placeholder="Agregar recurso por nombre o inventario" style="width:100%;height:48px;border:1px solid #9CA3AF;border-radius:8px;padding:0 16px 0 44px;font-size:14px;outline:none" style-focus="border:2px solid #3B82F6;padding:0 15px 0 43px"></div>
+<div style="display:flex;flex-direction:column;gap:10px">
+<sc-for list="{{ solRecs }}" as="r" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:14px;padding:12px;border-radius:12px;border:1px solid #E5EDF5;background:#F8FBFF">
+<div style="flex:none;width:56px;height:56px;border-radius:8px;background:repeating-linear-gradient(135deg,#EAF2FB 0 6px,#FFFFFF 6px 12px);box-shadow:0 0 0 1px rgba(31,41,55,0.06)"></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:700">{{ r.n }}</span><span style="font-size:13px;color:#6B7280">{{ r.a }}</span></div>
+<span style="height:24px;padding:0 8px;border-radius:4px;background:#D1FAE5;color:#065F46;font-size:12px;font-weight:700;display:inline-flex;align-items:center">Disponible</span>
+<button title="Quitar" style="width:36px;height:36px;border-radius:8px;border:none;background:transparent;color:#6B7280;cursor:pointer;display:flex;align-items:center;justify-content:center" style-hover="background:#FEE2E2;color:#B91C1C"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">delete</span></button>
+</div>
+</sc-for>
+<button style="height:48px;border-radius:12px;border:1px dashed #93C5FD;background:transparent;color:#1D4ED8;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">add</span>Agregar otro recurso</button>
+</div>
+</sc-if>
+<sc-if value="{{ step2 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700">¿Cuándo lo usarás?</span><span style="font-size:14px;color:#6B7280">Verificamos la disponibilidad real de todos los recursos en el horario elegido.</span></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px">
+<div style="border:1px solid #E5EDF5;border-radius:12px;padding:16px;display:flex;flex-direction:column;gap:12px">
+<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:16px;font-weight:700">Octubre 2026</span><div style="display:flex;gap:4px"><button style="width:32px;height:32px;border-radius:8px;border:none;background:#F1F5F9;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#9CA3AF"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">chevron_left</span></button><button style="width:32px;height:32px;border-radius:8px;border:none;background:#F1F5F9;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">chevron_right</span></button></div></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px;text-align:center;font-size:12px;font-weight:700;color:#6B7280"><span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span></div>
+<div style="display:grid;grid-template-columns:repeat(7,1fr);gap:4px">
+<sc-for list="{{ cal }}" as="c" hint-placeholder-count="34"><button onClick="{{ c.click }}" style="aspect-ratio:1;border-radius:8px;border:1.5px solid {{ c.bd }};background:{{ c.bg }};color:{{ c.fg }};font-size:14px;font-weight:{{ c.fw }};cursor:{{ c.cur }};display:flex;align-items:center;justify-content:center;padding:0">{{ c.n }}</button></sc-for>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:16px">
+<div style="display:grid;grid-template-columns:1fr 1fr;gap:12px">
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Hora de inicio</span><div style="height:48px;padding:0 14px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none"><span style="flex:1">10:00</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div></label>
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Hora de fin</span><div style="height:48px;padding:0 14px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none"><span style="flex:1">12:00</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div></label>
+</div>
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Motivo de uso</span><textarea placeholder="Describe brevemente para qué usarás los recursos" style="min-height:120px;resize:vertical;border:1px solid #9CA3AF;border-radius:8px;padding:12px 16px;font-size:14px;outline:none;color:#1F2937" style-focus="border:2px solid #3B82F6;padding:11px 15px">Presentación de avances de tesis en la sala B2.</textarea></label>
+<sc-if value="{{ okDay }}" hint-placeholder-val="{{ true }}"><div style="display:flex;gap:10px;padding:12px;border-radius:8px;background:#ECFDF5;border:1px solid #A7F3D0;color:#065F46"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#10B981">check_circle</span><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">Disponible</span><span style="font-size:13px;text-wrap:pretty">Los 2 recursos están libres el {{ fecha }} de 10:00 a 12:00.</span></div></div></sc-if>
+<sc-if value="{{ conflictDay }}" hint-placeholder-val="{{ false }}"><div style="display:flex;gap:10px;padding:12px;border-radius:8px;background:#FFFBEB;border:1px solid #FDE68A;color:#78350F"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#D97706">warning</span><div style="display:flex;flex-direction:column;gap:2px"><span style="font-size:14px;font-weight:700">El recurso está reservado en ese horario.</span><span style="font-size:13px;text-wrap:pretty">Proyector Epson PowerLite X49 está ocupado el {{ fecha }} de 8:00 a 12:00. Elige otro día u horario.</span></div></div></sc-if>
+</div>
+</div>
+</sc-if>
+<sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700">Revisa tu solicitud</span><span style="font-size:14px;color:#6B7280">El responsable del área la revisará y te notificaremos por push y correo.</span></div>
+<div style="border:1px solid #E5EDF5;border-radius:12px;overflow:hidden">
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid #EEF2F7"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1;color:#2563EB">devices</span><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:12px;color:#6B7280;font-weight:700">Recursos</span><span style="font-size:14px">Proyector Epson PowerLite X49 · Cable HDMI 3 m</span></div></div>
+<div style="display:flex;gap:12px;padding:14px 16px;border-bottom:1px solid #EEF2F7"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1;color:#2563EB">event</span><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:12px;color:#6B7280;font-weight:700">Fecha y horario</span><span style="font-size:14px">{{ fecha }} · 10:00 – 12:00</span></div></div>
+<div style="display:flex;gap:12px;padding:14px 16px"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1;color:#2563EB">location_on</span><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:12px;color:#6B7280;font-weight:700">Punto de entrega</span><span style="font-size:14px">Mostrador central · Edificio A, planta baja</span></div></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:10px;padding:16px;border-radius:12px;background:#F0F9FF">
+<span style="font-size:14px;font-weight:700">Antes de enviar</span>
+<div style="display:flex;gap:10px;font-size:14px;color:#374151"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#2563EB">timer</span>Tienes 15 minutos de tolerancia para recoger; después la solicitud se cancela automáticamente.</div>
+<div style="display:flex;gap:10px;font-size:14px;color:#374151"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#2563EB">qr_code_2</span>La entrega y la devolución se confirman con un código QR de un solo uso.</div>
+<div style="display:flex;gap:10px;font-size:14px;color:#374151"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#2563EB">block</span>No se permiten prórrogas; si necesitas más tiempo, crea una nueva solicitud.</div>
+</div>
+<div style="display:flex;align-items:center;gap:10px"><div style="width:20px;height:20px;border-radius:4px;background:#2563EB;color:#FFFFFF;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:16px;line-height:1">check</span></div><span style="font-size:14px">Acepto el reglamento de préstamo de la institución.</span></div>
+</sc-if>
+<div style="display:flex;justify-content:space-between;gap:12px;padding-top:20px;border-top:1px solid #EEF2F7;flex-wrap:wrap">
+<button onClick="{{ cancelSol }}" style="height:48px;padding:0 24px;border-radius:8px;border:none;background:transparent;color:#4B5563;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#F1F5F9">Cancelar</button>
+<div style="display:flex;gap:12px">
+<sc-if value="{{ notStep1 }}" hint-placeholder-val="{{ false }}"><button onClick="{{ prevStep }}" style="height:48px;padding:0 24px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">arrow_back</span>Anterior</button></sc-if>
+<sc-if value="{{ notStep3 }}" hint-placeholder-val="{{ true }}"><button onClick="{{ nextStep }}" style="height:48px;padding:0 24px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#1D4ED8">Siguiente<span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">arrow_forward</span></button></sc-if>
+<sc-if value="{{ step3 }}" hint-placeholder-val="{{ false }}"><button onClick="{{ submitSol }}" style="height:48px;padding:0 24px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">send</span>Enviar solicitud</button></sc-if>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.mis }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap">
+<div style="flex:1 1 560px;min-width:0;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;gap:4px;border-bottom:1px solid #E5E7EB">
+<sc-for list="{{ misTabs }}" as="t" hint-placeholder-count="2"><button onClick="{{ t.click }}" style="height:44px;padding:0 14px;border:none;background:transparent;border-bottom:2px solid {{ t.bd }};color:{{ t.fg }};font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px">{{ t.l }}<span style="height:20px;min-width:24px;padding:0 6px;border-radius:10px;background:{{ t.cbg }};font-size:12px;display:inline-flex;align-items:center;justify-content:center">{{ t.c }}</span></button></sc-for>
+</div>
+<sc-if value="{{ misAct }}" hint-placeholder-val="{{ true }}">
+<div style="display:flex;flex-direction:column;gap:16px">
+<sc-for list="{{ mis }}" as="m" hint-placeholder-count="3">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;gap:20px;flex-wrap:wrap;align-items:center">
+<div style="flex:none;width:72px;height:72px;border-radius:12px;background:repeating-linear-gradient(135deg,#EAF2FB 0 6px,#F5F9FE 6px 12px)"></div>
+<div style="flex:1 1 260px;min-width:0;display:flex;flex-direction:column;gap:6px">
+<div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap"><span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px;color:#1D4ED8">{{ m.id }}</span><span style="height:24px;padding:0 8px;border-radius:4px;background:{{ m.bbg }};color:{{ m.bfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center">{{ m.bl }}</span></div>
+<span style="font-size:16px;font-weight:700;text-wrap:pretty">{{ m.n }}</span>
+<span style="font-size:14px;color:#374151;display:flex;align-items:center;gap:6px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#6B7280">event</span>{{ m.when }}</span>
+<span style="font-size:13px;color:#6B7280;display:flex;align-items:flex-start;gap:6px;text-wrap:pretty"><span style="font-family:'Material Symbols Outlined';font-size:16px;line-height:1.2">{{ m.icon }}</span>{{ m.note }}</span>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;flex:none">
+<sc-if value="{{ m.qr }}" hint-placeholder-val="{{ false }}"><button onClick="{{ m.showQR }}" style="height:48px;padding:0 20px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">qr_code_2</span>{{ m.qrL }}</button></sc-if>
+<sc-if value="{{ m.msg }}" hint-placeholder-val="{{ false }}"><button onClick="{{ goChat }}" style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">forum</span>Mensajes<span style="height:18px;min-width:18px;padding:0 5px;border-radius:9px;background:#EF4444;color:#FFFFFF;font-size:11px;display:inline-flex;align-items:center;justify-content:center">1</span></button></sc-if>
+<sc-if value="{{ m.cancel }}" hint-placeholder-val="{{ false }}"><button onClick="{{ m.doCancel }}" style="height:32px;padding:0 16px;border-radius:8px;border:none;background:transparent;color:#B91C1C;font-size:13px;font-weight:700;cursor:pointer" style-hover="background:#FEF2F2">Cancelar solicitud</button></sc-if>
+</div>
+</div>
+</sc-for>
+</div>
+</sc-if>
+<sc-if value="{{ misHistOn }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06)">
+<sc-for list="{{ misHist }}" as="h" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:16px;padding:16px 20px;border-bottom:1px solid #F1F5F9;flex-wrap:wrap">
+<span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1;color:#10B981">task_alt</span>
+<div style="flex:1 1 220px;min-width:0;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:700">{{ h.n }}</span><span style="font-size:13px;color:#6B7280"><span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px">{{ h.f }}</span> · {{ h.w }} · {{ h.s }}</span></div>
+<button onClick="{{ h.dl }}" style="height:32px;padding:0 14px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">download</span>Comprobante PDF</button>
+</div>
+</sc-for>
+</div>
+</sc-if>
+</div>
+<div style="flex:0 1 320px;min-width:280px;display:flex;flex-direction:column;gap:16px">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:14px">
+<span style="font-size:16px;font-weight:700">Tu historial</span>
+<div style="display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:50%;background:#D1FAE5;color:#065F46;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:26px;line-height:1">verified_user</span></div><div style="display:flex;flex-direction:column"><span style="font-size:15px;font-weight:700">Sin sanciones activas</span><span style="font-size:13px;color:#6B7280">0 de 3 marcas permitidas</span></div></div>
+<div style="display:grid;grid-template-columns:repeat(3,1fr);gap:6px"><div style="height:6px;border-radius:3px;background:#E5E7EB"></div><div style="height:6px;border-radius:3px;background:#E5E7EB"></div><div style="height:6px;border-radius:3px;background:#E5E7EB"></div></div>
+<span style="font-size:13px;color:#6B7280;text-wrap:pretty">Al llegar a 3 marcas, tu cuenta se bloquea 7 días para nuevas solicitudes.</span>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px">
+<div style="display:flex;flex-direction:column"><span style="font-size:28px;font-weight:700">27</span><span style="font-size:13px;color:#6B7280">Préstamos este semestre</span></div>
+<div style="display:flex;flex-direction:column"><span style="font-size:28px;font-weight:700">100 %</span><span style="font-size:13px;color:#6B7280">Devoluciones a tiempo</span></div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.mostrador }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:16px;flex-wrap:wrap;background:#FFFFFF;padding:12px 16px;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06)">
+<span style="height:32px;padding:0 12px;border-radius:16px;background:{{ connBg }};color:{{ connFg }};font-size:13px;font-weight:700;display:inline-flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">{{ connI }}</span>{{ connL }}</span>
+<sc-if value="{{ hasPending }}" hint-placeholder-val="{{ true }}"><span style="font-size:13px;color:#374151;display:flex;align-items:center;gap:6px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#D97706">sync_problem</span><strong>{{ pending }}</strong> eventos pendientes de sincronizar</span><button onClick="{{ doSync }}" style="height:32px;padding:0 14px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">sync</span>Sincronizar</button></sc-if>
+<div style="flex:1"></div>
+<button onClick="{{ toggleOffline }}" style="display:flex;align-items:center;gap:10px;border:none;background:transparent;cursor:pointer;font-size:13px;color:#4B5563;padding:0"><span>Simular sin conexión</span><span style="position:relative;width:56px;height:32px;border-radius:16px;background:{{ swBg }};transition:background 0.15s"><span style="position:absolute;top:4px;left:{{ swX }};width:24px;height:24px;border-radius:50%;background:#FFFFFF;box-shadow:0 1px 3px rgba(0,0,0,0.2);transition:left 0.15s"></span></span></button>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,400px),1fr));gap:24px;align-items:start">
+<div style="background:#1F2937;border-radius:12px;padding:20px;display:flex;flex-direction:column;gap:16px;color:#F0F9FF">
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Escanear código QR</span><span style="font-size:13px;color:#9CA3AF">Entrega o devolución · token de un solo uso</span></div><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1;color:#93C5FD">flashlight_on</span></div>
+<div style="position:relative;aspect-ratio:4/3;border-radius:12px;background:repeating-linear-gradient(135deg,#273244 0 12px,#2C3849 12px 24px);display:flex;align-items:center;justify-content:center;overflow:hidden">
+<span style="position:absolute;bottom:12px;font-family:'Fira Code',ui-monospace,monospace;font-size:11px;color:#9CA3AF">vista de la cámara</span>
+<div style="position:relative;width:52%;aspect-ratio:1">
+<div style="position:absolute;top:0;left:0;width:32px;height:32px;border-top:4px solid #3B82F6;border-left:4px solid #3B82F6;border-radius:8px 0 0 0"></div>
+<div style="position:absolute;top:0;right:0;width:32px;height:32px;border-top:4px solid #3B82F6;border-right:4px solid #3B82F6;border-radius:0 8px 0 0"></div>
+<div style="position:absolute;bottom:0;left:0;width:32px;height:32px;border-bottom:4px solid #3B82F6;border-left:4px solid #3B82F6;border-radius:0 0 0 8px"></div>
+<div style="position:absolute;bottom:0;right:0;width:32px;height:32px;border-bottom:4px solid #3B82F6;border-right:4px solid #3B82F6;border-radius:0 0 8px 0"></div>
+<div style="position:absolute;left:8%;right:8%;top:50%;height:2px;background:#60A5FA;box-shadow:0 0 12px #60A5FA"></div>
+</div>
+</div>
+<button onClick="{{ doScan }}" style="height:48px;border-radius:8px;border:none;background:#3B82F6;color:#FFFFFF;font-size:15px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#2563EB"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">qr_code_scanner</span>Simular escaneo</button>
+<div style="display:flex;gap:8px"><input placeholder="O ingresa el folio manualmente" style="flex:1;min-width:0;height:48px;border:1px solid #4B5563;border-radius:8px;padding:0 16px;font-size:14px;outline:none;background:#273244;color:#F0F9FF" style-focus="border:2px solid #3B82F6;padding:0 15px"><button onClick="{{ doScan }}" style="height:48px;padding:0 20px;border-radius:8px;border:1px solid #4B5563;background:transparent;color:#F0F9FF;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#273244">Validar</button></div>
+</div>
+<div style="display:flex;flex-direction:column;gap:24px;min-width:0">
+<sc-if value="{{ scanned }}" hint-placeholder-val="{{ false }}">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 2px #10B981,0 8px 24px rgba(16,185,129,0.12);overflow:hidden">
+<div style="display:flex;align-items:center;gap:12px;padding:14px 20px;background:#ECFDF5;color:#065F46"><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1;color:#10B981">verified</span><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:15px;font-weight:700">Token válido · Entrega</span><span style="font-size:13px">PR-2026-0478 · expira en 0:31</span></div></div>
+<div style="padding:20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;gap:12px"><div style="width:48px;height:48px;border-radius:50%;background:#DBEAFE;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:16px">JR</div><div style="flex:1;display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Jorge Ramírez Soto</span><span style="font-size:13px;color:#6B7280">Alumno · 0 de 3 marcas · Hoy 12:00 – 14:00</span></div></div>
+<div style="display:flex;flex-direction:column;gap:10px"><span style="font-size:12px;font-weight:700;color:#6B7280">Condición al entregar</span>
+<sc-for list="{{ scanItems }}" as="it" hint-placeholder-count="2">
+<div style="display:flex;align-items:center;gap:12px;padding:10px 12px;border-radius:8px;border:1px solid #E5EDF5;flex-wrap:wrap">
+<div style="flex:1 1 160px;min-width:0;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700">{{ it.n }}</span><span style="font-family:'Fira Code',ui-monospace,monospace;font-size:11px;color:#6B7280">{{ it.inv }}</span></div>
+<div style="display:flex;border:1px solid #CBD5E1;border-radius:8px;overflow:hidden">
+<sc-for list="{{ it.opts }}" as="o" hint-placeholder-count="3"><button onClick="{{ o.click }}" style="height:32px;padding:0 12px;border:none;background:{{ o.bg }};color:{{ o.fg }};font-size:13px;font-weight:700;cursor:pointer">{{ o.l }}</button></sc-for>
+</div>
+</div>
+</sc-for>
+</div>
+<button onClick="{{ openInc }}" style="align-self:flex-start;height:32px;padding:0 12px 0 8px;border-radius:8px;border:none;background:transparent;color:#B91C1C;font-size:13px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:6px" style-hover="background:#FEF2F2"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">report</span>Registrar incidencia</button>
+<div style="display:flex;gap:12px"><button onClick="{{ cancelScan }}" style="flex:1;height:48px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#F0F9FF">Cancelar</button><button onClick="{{ confirmScan }}" style="flex:2;height:48px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;justify-content:center;gap:8px" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">check</span>Confirmar entrega</button></div>
+</div>
+</div>
+</sc-if>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06)">
+<div style="display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid #EEF2F7"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Agenda de hoy</span><span style="font-size:13px;color:#6B7280">Mostrador central · 5 movimientos</span></div></div>
+<sc-for list="{{ agenda }}" as="a" hint-placeholder-count="5">
+<div style="display:flex;gap:12px;padding:12px 20px;border-bottom:1px solid #F1F5F9;align-items:center">
+<span style="flex:none;width:44px;font-family:'Fira Code',ui-monospace,monospace;font-size:13px;font-weight:500">{{ a.t }}</span>
+<div style="flex:none;width:32px;height:32px;border-radius:8px;background:#F0F9FF;color:#2563EB;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">{{ a.i }}</span></div>
+<div style="flex:1;min-width:0;display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700">{{ a.who }}</span><span style="font-size:13px;color:#4B5563;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ a.tipo }} · {{ a.what }}</span></div>
+<span style="flex:none;height:24px;padding:0 8px;border-radius:4px;background:{{ a.bg }};color:{{ a.fg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center;white-space:nowrap">{{ a.st }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.usuarios }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,380px),1fr));gap:24px">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Carga masiva de usuarios</span><span style="font-size:13px;color:#6B7280">CSV con nombre, correo institucional y teléfono opcional</span></div><a href="#" style="font-size:13px;font-weight:700;white-space:nowrap">Descargar plantilla</a></div>
+<div style="border:2px dashed #93C5FD;border-radius:12px;background:#F8FBFF;padding:24px;display:flex;flex-direction:column;align-items:center;gap:8px;text-align:center;cursor:pointer"><span style="font-family:'Material Symbols Outlined';font-size:40px;line-height:1;color:#3B82F6">upload_file</span><span style="font-size:15px;font-weight:700">Arrastra tu archivo CSV aquí</span><span style="font-size:13px;color:#6B7280">o <a href="#">selecciónalo desde tu equipo</a> · máx. 10 MB</span></div>
+<div style="display:flex;align-items:center;gap:10px;padding:10px 12px;border-radius:8px;background:#FFFBEB;color:#78350F;font-size:13px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#D97706">info</span><span style="flex:1">Última carga: 1,248 usuarios importados · 3 filas rechazadas.</span><a href="#" style="font-weight:700;color:#92400E">Ver errores</a></div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Mapeo de roles por dominio</span><span style="font-size:13px;color:#6B7280;text-wrap:pretty">El rol se determina por el dominio del correo; el usuario no puede autodeclararlo.</span></div>
+<div style="display:flex;flex-direction:column;border:1px solid #EEF2F7;border-radius:8px;overflow:hidden">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #EEF2F7"><span style="flex:1;font-family:'Fira Code',ui-monospace,monospace;font-size:13px">@alumnos.utvalle.edu.mx</span><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#9CA3AF">arrow_forward</span><span style="width:96px;height:24px;padding:0 8px;border-radius:4px;background:#F1F5F9;color:#374151;font-size:12px;font-weight:700;display:inline-flex;align-items:center">Alumno</span><span style="width:52px;text-align:right;font-size:13px;color:#6B7280">1,034</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px;border-bottom:1px solid #EEF2F7"><span style="flex:1;font-family:'Fira Code',ui-monospace,monospace;font-size:13px">@utvalle.edu.mx</span><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#9CA3AF">arrow_forward</span><span style="width:96px;height:24px;padding:0 8px;border-radius:4px;background:#F1F5F9;color:#374151;font-size:12px;font-weight:700;display:inline-flex;align-items:center">Docente</span><span style="width:52px;text-align:right;font-size:13px;color:#6B7280">214</span></div>
+<div style="display:flex;align-items:center;gap:12px;padding:12px 14px"><span style="flex:1;font-size:13px;color:#4B5563">Asignación manual</span><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#9CA3AF">arrow_forward</span><span style="width:96px;height:24px;padding:0 8px;border-radius:4px;background:#DBEAFE;color:#1E40AF;font-size:12px;font-weight:700;display:inline-flex;align-items:center">Staff</span><span style="width:52px;text-align:right;font-size:13px;color:#6B7280">16</span></div>
+</div>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);overflow:hidden">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:0 16px;border-bottom:1px solid #EEF2F7;flex-wrap:wrap">
+<div style="display:flex;gap:4px;overflow-x:auto;overflow-y:hidden;scrollbar-width:none"><sc-for list="{{ utabs }}" as="t" hint-placeholder-count="4"><button onClick="{{ t.click }}" style="height:52px;padding:0 12px;border:none;background:transparent;border-bottom:2px solid {{ t.bd }};color:{{ t.fg }};font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px;white-space:nowrap">{{ t.l }}<span style="height:20px;min-width:24px;padding:0 6px;border-radius:10px;background:{{ t.cbg }};font-size:12px;display:inline-flex;align-items:center;justify-content:center">{{ t.c }}</span></button></sc-for></div>
+<div style="display:flex;gap:8px;padding:8px 0"><button style="height:40px;padding:0 16px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">badge</span>Asignar asistente</button><button style="height:40px;padding:0 16px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:6px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">person_add</span>Crear responsable</button></div>
+</div>
+<div style="overflow-x:auto">
+<div style="display:grid;grid-template-columns:minmax(240px,2fr) 150px 150px 80px 170px 40px;gap:16px;padding:10px 16px;background:#F0F9FF;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;min-width:880px"><span>Usuario</span><span>Rol</span><span>Área asignada</span><span>Marcas</span><span>Estado</span><span></span></div>
+<sc-for list="{{ urows }}" as="u" hint-placeholder-count="8">
+<div style="display:grid;grid-template-columns:minmax(240px,2fr) 150px 150px 80px 170px 40px;gap:16px;align-items:center;padding:12px 16px;border-top:1px solid #F1F5F9;min-width:880px" style-hover="background:#F8FBFF">
+<div style="display:flex;align-items:center;gap:12px;min-width:0"><div style="flex:none;width:40px;height:40px;border-radius:50%;background:#F0F9FF;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">{{ u.ini }}</div><div style="min-width:0;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;font-weight:700">{{ u.n }}</span><span style="font-size:12px;color:#6B7280;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ u.mail }}</span></div></div>
+<span style="height:24px;padding:0 8px;border-radius:4px;background:{{ u.rbg }};color:{{ u.rfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-self:start;white-space:nowrap">{{ u.rol }}</span>
+<span style="font-size:14px">{{ u.area }}</span>
+<span style="font-size:14px">{{ u.marcas }}</span>
+<span style="height:24px;padding:0 8px;border-radius:4px;background:{{ u.sbg }};color:{{ u.sfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-self:start;white-space:nowrap">{{ u.st }}</span>
+<button style="width:32px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:#6B7280;display:flex;align-items:center;justify-content:center" style-hover="background:#F1F5F9"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">more_vert</span></button>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.sanciones }}" hint-placeholder-val="{{ false }}">
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:24px;align-items:start">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);display:flex;flex-direction:column">
+<div style="padding:20px;border-bottom:1px solid #EEF2F7;display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Matriz de sanciones</span><span style="font-size:13px;color:#6B7280;text-wrap:pretty">Marcas que se registran automáticamente por cada tipo de incidencia.</span></div>
+<sc-for list="{{ matriz }}" as="m" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:14px;padding:14px 20px;border-bottom:1px solid #F1F5F9">
+<div style="flex:none;width:40px;height:40px;border-radius:10px;background:#F0F9FF;color:#2563EB;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1">{{ m.i }}</span></div>
+<span style="flex:1;font-size:15px;font-weight:700">{{ m.l }}</span>
+<div style="display:flex;align-items:center;border:1px solid #9CA3AF;border-radius:8px;height:40px;overflow:hidden"><button onClick="{{ m.dec }}" style="width:36px;height:100%;border:none;background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#4B5563" style-hover="background:#F1F5F9"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">remove</span></button><span style="width:36px;text-align:center;font-size:15px;font-weight:700">{{ m.v }}</span><button onClick="{{ m.inc }}" style="width:36px;height:100%;border:none;background:#FFFFFF;cursor:pointer;display:flex;align-items:center;justify-content:center;color:#4B5563" style-hover="background:#F1F5F9"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">add</span></button></div>
+<span style="width:48px;font-size:13px;color:#6B7280">marcas</span>
+</div>
+</sc-for>
+<div style="padding:20px;display:grid;grid-template-columns:1fr 1fr;gap:16px;background:#F8FBFF">
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:700">Umbral de bloqueo</span><div style="display:flex;align-items:center;gap:10px"><div style="display:flex;align-items:center;border:1px solid #9CA3AF;border-radius:8px;height:40px;overflow:hidden;background:#FFFFFF"><button onClick="{{ umbralDec }}" style="width:36px;height:100%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">remove</span></button><span style="width:36px;text-align:center;font-size:15px;font-weight:700">{{ umbral }}</span><button onClick="{{ umbralInc }}" style="width:36px;height:100%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">add</span></button></div><span style="font-size:13px;color:#6B7280">marcas</span></div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><span style="font-size:13px;font-weight:700">Duración del bloqueo</span><div style="display:flex;align-items:center;gap:10px"><div style="display:flex;align-items:center;border:1px solid #9CA3AF;border-radius:8px;height:40px;overflow:hidden;background:#FFFFFF"><button onClick="{{ diasDec }}" style="width:36px;height:100%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">remove</span></button><span style="width:36px;text-align:center;font-size:15px;font-weight:700">{{ dias }}</span><button onClick="{{ diasInc }}" style="width:36px;height:100%;border:none;background:transparent;cursor:pointer;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1">add</span></button></div><span style="font-size:13px;color:#6B7280">días</span></div></div>
+</div>
+<div style="padding:16px 20px;border-top:1px solid #EEF2F7;display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap"><span style="font-size:13px;color:#6B7280">Los cambios aplican a incidencias nuevas.</span><button onClick="{{ saveMatriz }}" style="height:40px;padding:0 20px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">save</span>Guardar</button></div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06)">
+<div style="padding:20px;border-bottom:1px solid #EEF2F7;display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Sanciones recientes</span><span style="font-size:13px;color:#6B7280">Las exenciones requieren motivo y quedan en auditoría.</span></div>
+<sc-for list="{{ sancRec }}" as="s" hint-placeholder-count="4">
+<div style="display:flex;gap:14px;padding:16px 20px;border-bottom:1px solid #F1F5F9;align-items:flex-start;flex-wrap:wrap">
+<div style="flex:none;width:40px;height:40px;border-radius:50%;background:#F0F9FF;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">{{ s.ini }}</div>
+<div style="flex:1 1 200px;min-width:0;display:flex;flex-direction:column;gap:3px">
+<div style="display:flex;align-items:center;gap:8px;flex-wrap:wrap"><span style="font-size:14px;font-weight:700">{{ s.n }}</span><span style="height:24px;padding:0 8px;border-radius:4px;background:{{ s.sbg }};color:{{ s.sfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center">{{ s.st }}</span></div>
+<span style="font-size:13px;color:#4B5563">{{ s.tipo }} · {{ s.rec }}</span>
+<span style="font-size:12px;color:#6B7280">{{ s.m }} marca · total {{ s.tot }} · {{ s.f }}</span>
+</div>
+<sc-if value="{{ s.canEx }}" hint-placeholder-val="{{ true }}"><button onClick="{{ s.exentar }}" style="height:32px;padding:0 14px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:13px;font-weight:700;cursor:pointer" style-hover="border-color:#3B82F6;color:#1D4ED8">Exentar</button></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.reportes }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:16px;flex-wrap:wrap">
+<div style="display:flex;gap:12px;flex-wrap:wrap;align-items:center">
+<div style="display:flex;padding:4px;border-radius:8px;background:#E6EEF8;gap:2px"><sc-for list="{{ periodos }}" as="p" hint-placeholder-count="3"><button onClick="{{ p.click }}" style="height:32px;padding:0 14px;border-radius:6px;border:none;background:{{ p.bg }};color:{{ p.fg }};box-shadow:{{ p.sh }};font-size:13px;font-weight:700;cursor:pointer">{{ p.l }}</button></sc-for></div>
+<div style="height:40px;padding:0 12px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none;background:#FFFFFF;min-width:170px"><span style="flex:1">Todas las áreas</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div>
+</div>
+<div style="display:flex;gap:12px"><button onClick="{{ exportCsv }}" style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">table_view</span>Exportar CSV</button><button onClick="{{ exportPdf }}" style="height:40px;padding:0 20px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">download</span>Exportar PDF</button></div>
+</div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,440px),1fr));gap:24px">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Equipos más prestados</span><span style="font-size:13px;color:#6B7280">Número de préstamos en el periodo</span></div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<sc-for list="{{ top }}" as="t" hint-placeholder-count="7">
+<div style="display:grid;grid-template-columns:20px minmax(0,190px) 1fr 32px;gap:12px;align-items:center"><span style="font-size:13px;color:#6B7280;font-weight:700">{{ t.r }}</span><span style="font-size:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">{{ t.n }}</span><div style="height:12px;border-radius:6px;background:#F1F5F9;overflow:hidden"><div style="height:100%;width:{{ t.w }};background:{{ t.c }};border-radius:6px"></div></div><span style="font-size:14px;font-weight:700;text-align:right">{{ t.v }}</span></div>
+</sc-for>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;align-items:flex-start;justify-content:space-between;gap:12px"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Tiempo promedio de uso</span><span style="font-size:13px;color:#6B7280">Por categoría de recurso</span></div><div style="display:flex;flex-direction:column;align-items:flex-end"><span style="font-size:24px;font-weight:700">14 min</span><span style="font-size:12px;color:#6B7280">retraso promedio en devolución</span></div></div>
+<div style="display:flex;flex-direction:column;gap:14px">
+<sc-for list="{{ tiempos }}" as="t" hint-placeholder-count="4">
+<div style="display:flex;flex-direction:column;gap:6px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>{{ t.n }}</span><span style="font-weight:700">{{ t.v }}</span></div><div style="height:8px;border-radius:4px;background:#F1F5F9;overflow:hidden"><div style="height:100%;width:{{ t.w }};background:#3B82F6;border-radius:4px"></div></div></div>
+</sc-for>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Incidentes y sanciones</span><span style="font-size:13px;color:#6B7280">34 incidentes · 31 sanciones aplicadas · 3 exentadas</span></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<sc-for list="{{ incid }}" as="x" hint-placeholder-count="4">
+<div style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:10px;background:#F8FBFF;border:1px solid #E5EDF5"><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1;color:#2563EB">{{ x.i }}</span><div style="display:flex;flex-direction:column;line-height:1.2"><span style="font-size:24px;font-weight:700">{{ x.v }}</span><span style="font-size:13px;color:#4B5563">{{ x.l }}</span></div></div>
+</sc-for>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:20px;display:flex;flex-direction:column;gap:16px">
+<div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Cancelaciones y justificaciones</span><span style="font-size:13px;color:#6B7280">80 cancelaciones en el periodo</span></div>
+<div style="display:flex;height:16px;border-radius:8px;overflow:hidden;gap:2px"><sc-for list="{{ canc }}" as="c" hint-placeholder-count="4"><div style="width:{{ c.w }};background:{{ c.c }}"></div></sc-for></div>
+<div style="display:flex;flex-direction:column">
+<sc-for list="{{ canc }}" as="c" hint-placeholder-count="4"><div style="display:flex;align-items:center;gap:10px;padding:10px 0;border-top:1px solid #F1F5F9"><span style="width:10px;height:10px;border-radius:2px;background:{{ c.c }};box-shadow:inset 0 0 0 1px rgba(31,41,55,0.1)"></span><span style="flex:1;font-size:14px">{{ c.l }}</span><span style="font-size:14px;font-weight:700">{{ c.v }}</span><span style="width:44px;text-align:right;font-size:13px;color:#6B7280">{{ c.p }}</span></div></sc-for>
+</div>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.auditoria }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 16px;border-radius:12px;background:#FFFFFF;box-shadow:0 0 0 1px rgba(31,41,55,0.06);flex-wrap:wrap"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1;color:#2563EB">shield_lock</span><span style="flex:1 1 300px;font-size:14px;color:#374151;text-wrap:pretty"><strong>Registro inalterable.</strong> Los eventos se conservan 1 año en almacenamiento activo y 3 años más comprimidos.</span><button onClick="{{ exportCsv }}" style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#F0F9FF"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">download</span>Exportar</button></div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);overflow:hidden">
+<div style="display:flex;gap:12px;padding:16px;border-bottom:1px solid #EEF2F7;flex-wrap:wrap">
+<div style="position:relative;flex:1 1 220px;display:flex;align-items:center"><span style="position:absolute;left:12px;font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">search</span><input placeholder="Buscar por usuario, registro o detalle" style="width:100%;height:40px;border:1px solid #9CA3AF;border-radius:8px;padding:0 12px 0 40px;font-size:14px;outline:none" style-focus="border:2px solid #3B82F6;padding:0 11px 0 39px"></div>
+<div style="height:40px;padding:0 12px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none;min-width:150px"><span style="flex:1">Todas las acciones</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div>
+<div style="height:40px;padding:0 12px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none;min-width:150px"><span style="flex:1">Todas las tablas</span><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">expand_more</span></div>
+<div style="height:40px;padding:0 12px;border:1px solid #9CA3AF;border-radius:8px;display:flex;align-items:center;gap:8px;font-size:14px;cursor:pointer;white-space:nowrap;flex:none"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1;color:#6B7280">calendar_month</span>Hoy</div>
+</div>
+<div style="overflow-x:auto">
+<div style="display:grid;grid-template-columns:170px 130px 110px 140px 120px minmax(220px,1fr) 96px;gap:14px;padding:10px 16px;background:#F0F9FF;font-size:12px;font-weight:700;text-transform:uppercase;letter-spacing:0.04em;min-width:1040px"><span>Fecha y hora</span><span>Usuario</span><span>Acción</span><span>Tabla</span><span>Registro</span><span>Detalle</span><span>Resultado</span></div>
+<sc-for list="{{ audit }}" as="a" hint-placeholder-count="10">
+<div style="display:grid;grid-template-columns:170px 130px 110px 140px 120px minmax(220px,1fr) 96px;gap:14px;align-items:center;padding:11px 16px;border-top:1px solid #F1F5F9;min-width:1040px;font-size:13px" style-hover="background:#F8FBFF">
+<span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px;color:#4B5563">{{ a.f }}</span>
+<span style="font-weight:700">{{ a.u }}</span>
+<span style="font-family:'Fira Code',ui-monospace,monospace;font-size:11px;font-weight:500;color:#1E40AF;background:#EFF6FF;padding:3px 6px;border-radius:4px;justify-self:start">{{ a.a }}</span>
+<span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px">{{ a.t }}</span>
+<span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px;color:#1D4ED8">{{ a.r }}</span>
+<span style="color:#374151">{{ a.d }}</span>
+<span style="height:24px;padding:0 8px;border-radius:4px;background:{{ a.sbg }};color:{{ a.sfg }};font-size:12px;font-weight:700;display:inline-flex;align-items:center;justify-self:start">{{ a.sl }}</span>
+</div>
+</sc-for>
+</div>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ is.suscripcion }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;flex-direction:column;gap:24px">
+<div style="display:flex;align-items:center;gap:12px;padding:14px 16px;border-radius:12px;background:#EFF6FF;border:1px solid #BFDBFE;color:#1E3A8A;flex-wrap:wrap"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1;color:#2563EB">notifications_active</span><span style="flex:1 1 300px;font-size:14px;text-wrap:pretty"><strong>Tu plan vence en 38 días.</strong> Renueva antes del 30 de noviembre para evitar el modo solo lectura.</span><button style="height:32px;padding:0 16px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:13px;font-weight:700;cursor:pointer" style-hover="background:#1D4ED8">Renovar plan</button></div>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,360px),1fr));gap:24px">
+<div style="background:#1F2937;color:#F0F9FF;border-radius:12px;padding:24px;display:flex;flex-direction:column;gap:20px">
+<div style="display:flex;align-items:center;justify-content:space-between"><div style="display:flex;flex-direction:column"><span style="font-size:13px;color:#9CA3AF">Plan actual</span><span style="font-size:32px;font-weight:700;line-height:1.1">Pro</span></div><span style="height:24px;padding:0 8px;border-radius:4px;background:#D1FAE5;color:#065F46;font-size:12px;font-weight:700;display:inline-flex;align-items:center">Activa</span></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:13px;color:#CBD5E1"><span>01 dic 2025</span><span>Corte: 30 nov 2026</span></div><div style="height:8px;border-radius:4px;background:rgba(240,249,255,0.12);overflow:hidden"><div style="height:100%;width:90%;background:#60A5FA;border-radius:4px"></div></div><span style="font-size:13px;color:#CBD5E1">327 de 365 días transcurridos</span></div>
+<div style="display:flex;gap:12px;flex-wrap:wrap"><button style="height:40px;padding:0 20px;border-radius:8px;border:none;background:#3B82F6;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#2563EB">Renovar</button><button style="height:40px;padding:0 20px;border-radius:8px;border:1px solid #4B5563;background:transparent;color:#F0F9FF;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#273244">Cancelar suscripción</button></div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06);padding:24px;display:flex;flex-direction:column;gap:20px">
+<span style="font-size:16px;font-weight:700">Uso del plan</span>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Áreas</span><span><strong>8</strong> de 15</span></div><div style="height:8px;border-radius:4px;background:#F1F5F9;overflow:hidden"><div style="height:100%;width:53%;background:#3B82F6;border-radius:4px"></div></div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Recursos</span><span><strong>268</strong> de 500</span></div><div style="height:8px;border-radius:4px;background:#F1F5F9;overflow:hidden"><div style="height:100%;width:54%;background:#3B82F6;border-radius:4px"></div></div></div>
+<div style="display:flex;flex-direction:column;gap:8px"><div style="display:flex;justify-content:space-between;font-size:14px"><span>Administradores del sistema</span><span><strong>3</strong> de 5</span></div><div style="height:8px;border-radius:4px;background:#F1F5F9;overflow:hidden"><div style="height:100%;width:60%;background:#3B82F6;border-radius:4px"></div></div></div>
+</div>
+</div>
+<div style="display:flex;flex-direction:column;gap:12px">
+<span style="font-size:18px;font-weight:700">Planes disponibles</span>
+<div style="display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:24px">
+<sc-for list="{{ plans }}" as="p" hint-placeholder-count="3">
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:{{ p.ring }};padding:20px;display:flex;flex-direction:column;gap:14px">
+<div style="display:flex;align-items:center;justify-content:space-between"><span style="font-size:18px;font-weight:700">{{ p.n }}</span><sc-if value="{{ p.cur }}" hint-placeholder-val="{{ false }}"><span style="height:24px;padding:0 8px;border-radius:4px;background:#DBEAFE;color:#1E40AF;font-size:12px;font-weight:700;display:inline-flex;align-items:center">Plan actual</span></sc-if></div>
+<div style="display:flex;flex-direction:column;gap:8px;font-size:14px;color:#374151">
+<span style="display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#10B981">check</span>{{ p.a }}</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#10B981">check</span>{{ p.r }}</span>
+<span style="display:flex;align-items:center;gap:8px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#10B981">check</span>{{ p.x }}</span>
+</div>
+<sc-if value="{{ p.notCur }}" hint-placeholder-val="{{ true }}"><button style="height:40px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#F0F9FF;border-color:#93C5FD">Cambiar a {{ p.n }}</button></sc-if>
+</div>
+</sc-for>
+</div>
+</div>
+<div style="background:#FFFFFF;border-radius:12px;box-shadow:0 0 0 1px rgba(31,41,55,0.06),0 2px 4px rgba(31,41,55,0.06)">
+<div style="display:flex;align-items:center;justify-content:space-between;gap:12px;padding:16px 20px;border-bottom:1px solid #EEF2F7;flex-wrap:wrap"><div style="display:flex;flex-direction:column"><span style="font-size:16px;font-weight:700">Administradores del sistema</span><span style="font-size:13px;color:#6B7280">Gestionan áreas, recursos, usuarios y sanciones</span></div><button onClick="{{ crearAdmin }}" style="height:40px;padding:0 20px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;display:inline-flex;align-items:center;gap:8px;cursor:pointer;white-space:nowrap;flex:none" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">person_add</span>Crear</button></div>
+<sc-for list="{{ admins }}" as="a" hint-placeholder-count="3">
+<div style="display:flex;align-items:center;gap:12px;padding:12px 20px;border-bottom:1px solid #F1F5F9;flex-wrap:wrap">
+<div style="flex:none;width:40px;height:40px;border-radius:50%;background:#F0F9FF;color:#1E40AF;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:13px">{{ a.ini }}</div>
+<div style="flex:1 1 220px;min-width:0;display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;font-weight:700">{{ a.n }}</span><span style="font-size:12px;color:#6B7280">{{ a.m }}</span></div>
+<span style="flex:0 1 200px;font-size:14px">{{ a.r }}</span>
+<span style="flex:0 1 140px;font-size:14px;color:#4B5563">{{ a.a }}</span>
+<button style="width:32px;height:32px;border-radius:8px;border:none;background:transparent;cursor:pointer;color:#6B7280;display:flex;align-items:center;justify-content:center" style-hover="background:#F1F5F9"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">more_vert</span></button>
+</div>
+</sc-for>
+</div>
+</div>
+</sc-if>
+</main>
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasModal }}" hint-placeholder-val="{{ false }}">
+<div onClick="{{ closeModal }}" style="position:fixed;inset:0;z-index:90;background:rgba(31,41,55,0.5);display:flex;align-items:center;justify-content:center;padding:24px">
+<div onClick="{{ stop }}" style="width:100%;max-width:600px;max-height:calc(100vh - 48px);overflow:auto;background:#FFFFFF;border-radius:16px;box-shadow:0 4px 6px rgba(0,0,0,0.1),0 24px 48px rgba(31,41,55,0.2);padding:24px;display:flex;flex-direction:column;gap:20px">
+
+<sc-if value="{{ mPrio }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:14px;align-items:flex-start"><div style="flex:none;width:44px;height:44px;border-radius:12px;background:#FEE2E2;color:#B91C1C;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1">priority_high</span></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700">Cancelar por prioridad institucional</span><span style="font-size:14px;color:#4B5563;text-wrap:pretty">Se cancelará <strong>{{ sel.id }}</strong> de {{ sel.user }} y los recursos se liberarán para el evento prioritario. El usuario recibirá la justificación por push y correo.</span></div><button onClick="{{ closeModal }}" style="border:none;background:transparent;cursor:pointer;color:#6B7280;display:flex"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1">close</span></button></div>
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Justificación (obligatoria)</span><textarea value="{{ prioDraft }}" onChange="{{ onPrio }}" placeholder="Ej. Visita del organismo acreditador en la sala B2 el lunes de 9:00 a 13:00" style="min-height:120px;resize:vertical;border:1px solid #9CA3AF;border-radius:8px;padding:12px 16px;font-size:14px;outline:none;color:#1F2937" style-focus="border:2px solid #3B82F6;padding:11px 15px"></textarea><span style="font-size:12px;color:#6B7280">{{ prioCount }} / 20 caracteres mínimos · queda registrada en auditoría</span></label>
+<div style="display:flex;justify-content:flex-end;gap:12px"><button onClick="{{ closeModal }}" style="height:48px;padding:0 24px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#F0F9FF">Cancelar</button><button onClick="{{ confirmPrio }}" style="height:48px;padding:0 24px;border-radius:8px;border:none;background:{{ prioBg }};color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer">Confirmar</button></div>
+</sc-if>
+
+<sc-if value="{{ mInc }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:14px;align-items:flex-start"><div style="flex:none;width:44px;height:44px;border-radius:12px;background:#FEF3C7;color:#92400E;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1">report</span></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700">Registrar incidencia</span><span style="font-size:14px;color:#4B5563">PR-2026-0478 · Jorge Ramírez Soto</span></div><button onClick="{{ closeModal }}" style="border:none;background:transparent;cursor:pointer;color:#6B7280;display:flex"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1">close</span></button></div>
+<div style="display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px">
+<sc-for list="{{ incOpts }}" as="o" hint-placeholder-count="4"><button onClick="{{ o.click }}" style="display:flex;align-items:center;gap:12px;padding:14px;border-radius:12px;border:1px solid {{ o.bd }};background:{{ o.bg }};box-shadow:{{ o.ring }};cursor:pointer;text-align:left;color:#1F2937"><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1;color:{{ o.ic }}">{{ o.i }}</span><div style="display:flex;flex-direction:column;line-height:1.25"><span style="font-size:14px;font-weight:700">{{ o.l }}</span><span style="font-size:12px;color:#6B7280">{{ o.m }}</span></div></button></sc-for>
+</div>
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Descripción</span><textarea placeholder="Describe lo observado al recibir el recurso" style="min-height:96px;resize:vertical;border:1px solid #9CA3AF;border-radius:8px;padding:12px 16px;font-size:14px;outline:none" style-focus="border:2px solid #3B82F6;padding:11px 15px"></textarea></label>
+<div style="border:2px dashed #CBD5E1;border-radius:12px;padding:16px;display:flex;align-items:center;gap:12px;cursor:pointer"><span style="font-family:'Material Symbols Outlined';font-size:28px;line-height:1;color:#6B7280">add_a_photo</span><div style="display:flex;flex-direction:column"><span style="font-size:14px;font-weight:700">Adjuntar evidencia</span><span style="font-size:12px;color:#6B7280">Fotografía JPG o PNG · opcional</span></div></div>
+<div style="display:flex;gap:10px;padding:12px;border-radius:8px;background:#FFFBEB;color:#78350F;font-size:13px"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#D97706">info</span>Según la matriz vigente se aplicará <strong>+{{ incM }} {{ incMtxt }}</strong> y se notificará al usuario.</div>
+<div style="display:flex;justify-content:flex-end;gap:12px"><button onClick="{{ closeModal }}" style="height:48px;padding:0 24px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#F0F9FF">Cancelar</button><button onClick="{{ confirmInc }}" style="height:48px;padding:0 24px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#1D4ED8">Registrar</button></div>
+</sc-if>
+
+<sc-if value="{{ mExe }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;gap:14px;align-items:flex-start"><div style="flex:none;width:44px;height:44px;border-radius:12px;background:#DBEAFE;color:#1E40AF;display:flex;align-items:center;justify-content:center"><span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1">gpp_good</span></div><div style="flex:1;display:flex;flex-direction:column;gap:4px"><span style="font-size:18px;font-weight:700">Exentar sanción</span><span style="font-size:14px;color:#4B5563;text-wrap:pretty">{{ exeS.n }} · {{ exeS.tipo }} ({{ exeS.m }} marca). La marca se retirará del conteo y se desbloqueará la cuenta si aplica.</span></div><button onClick="{{ closeModal }}" style="border:none;background:transparent;cursor:pointer;color:#6B7280;display:flex"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1">close</span></button></div>
+<label style="display:flex;flex-direction:column;gap:6px"><span style="font-size:13px;font-weight:700">Motivo de la exención</span><textarea value="{{ exeDraft }}" onChange="{{ onExe }}" placeholder="Ej. Falla del sistema de mostrador al registrar la devolución" style="min-height:120px;resize:vertical;border:1px solid #9CA3AF;border-radius:8px;padding:12px 16px;font-size:14px;outline:none;color:#1F2937" style-focus="border:2px solid #3B82F6;padding:11px 15px"></textarea><span style="font-size:12px;color:#6B7280">Solo administradores · queda registrado en auditoría</span></label>
+<div style="display:flex;justify-content:flex-end;gap:12px"><button onClick="{{ closeModal }}" style="height:48px;padding:0 24px;border-radius:8px;border:1px solid #CBD5E1;background:#FFFFFF;color:#1F2937;font-size:14px;font-weight:700;cursor:pointer" style-hover="background:#F0F9FF">Cancelar</button><button onClick="{{ confirmExe }}" style="height:48px;padding:0 24px;border-radius:8px;border:none;background:{{ exeBg }};color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer">Confirmar</button></div>
+</sc-if>
+
+<sc-if value="{{ mQR }}" hint-placeholder-val="{{ false }}">
+<div style="display:flex;align-items:flex-start;gap:12px"><div style="flex:1;display:flex;flex-direction:column;gap:2px"><span style="font-size:18px;font-weight:700">{{ qr.title }}</span><span style="font-family:'Fira Code',ui-monospace,monospace;font-size:12px;color:#6B7280">{{ qr.folio }}</span></div><button onClick="{{ closeModal }}" style="border:none;background:transparent;cursor:pointer;color:#6B7280;display:flex"><span style="font-family:'Material Symbols Outlined';font-size:22px;line-height:1">close</span></button></div>
+<div style="align-self:center;position:relative;padding:16px;border-radius:16px;background:#FFFFFF;box-shadow:0 0 0 1px rgba(31,41,55,0.1)">
+<div style="width:250px;height:250px;display:grid;grid-template-columns:repeat(25,1fr);grid-template-rows:repeat(25,1fr)">
+<sc-for list="{{ qr.cells }}" as="c" hint-placeholder-count="0"><div style="background:{{ c.c }}"></div></sc-for>
+</div>
+<sc-if value="{{ qr.expired }}" hint-placeholder-val="{{ false }}"><div style="position:absolute;inset:0;border-radius:16px;background:rgba(255,255,255,0.94);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:12px;text-align:center;padding:24px"><span style="font-family:'Material Symbols Outlined';font-size:48px;line-height:1;color:#EF4444">timer_off</span><span style="font-size:16px;font-weight:700">Código expirado</span><button onClick="{{ qr.regen }}" style="height:40px;padding:0 20px;border-radius:8px;border:none;background:#2563EB;color:#FFFFFF;font-size:14px;font-weight:700;cursor:pointer;display:flex;align-items:center;gap:8px" style-hover="background:#1D4ED8"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">refresh</span>Generar nuevo</button></div></sc-if>
+</div>
+<div style="display:flex;flex-direction:column;gap:8px;align-self:center;width:282px">
+<div style="display:flex;justify-content:space-between;font-size:13px"><span style="color:#6B7280">Vigencia del código</span><span style="font-family:'Fira Code',ui-monospace,monospace;font-weight:500">{{ qr.left }}</span></div>
+<div style="height:6px;border-radius:3px;background:#F1F5F9;overflow:hidden"><div style="height:100%;width:{{ qr.pct }};background:{{ qr.barC }};transition:width 1s linear"></div></div>
+</div>
+<div style="display:flex;gap:10px;padding:12px;border-radius:8px;background:#F0F9FF;font-size:13px;color:#374151;text-wrap:pretty"><span style="font-family:'Material Symbols Outlined';font-size:18px;line-height:1;color:#2563EB">shield</span>Muéstralo al asistente de mostrador. Es de un solo uso y expira en 45 segundos por seguridad.</div>
+</sc-if>
+
+</div>
+</div>
+</sc-if>
+
+<sc-if value="{{ hasToast }}" hint-placeholder-val="{{ false }}">
+<div style="position:fixed;right:24px;bottom:24px;z-index:100;display:flex;align-items:center;gap:12px;min-width:320px;max-width:440px;padding:14px 16px;border-radius:12px;background:{{ toast.bg }};color:#FFFFFF;box-shadow:0 12px 32px rgba(31,41,55,0.25)">
+<span style="font-family:'Material Symbols Outlined';font-size:24px;line-height:1">{{ toast.i }}</span>
+<span style="flex:1;font-size:14px;font-weight:700;text-wrap:pretty">{{ toast.msg }}</span>
+<button onClick="{{ closeToast }}" style="border:none;background:transparent;color:#FFFFFF;cursor:pointer;display:flex"><span style="font-family:'Material Symbols Outlined';font-size:20px;line-height:1">close</span></button>
+</div>
+</sc-if>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props="{&quot;rol&quot;:{&quot;editor&quot;:&quot;enum&quot;,&quot;options&quot;:[&quot;admin_sistema&quot;,&quot;asistente&quot;,&quot;admin_institucional&quot;,&quot;usuario_final&quot;],&quot;default&quot;:&quot;admin_sistema&quot;,&quot;tsType&quot;:&quot;string&quot;,&quot;section&quot;:&quot;Vista&quot;},&quot;sidebarColapsado&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Vista&quot;},&quot;soloLectura&quot;:{&quot;editor&quot;:&quot;boolean&quot;,&quot;default&quot;:false,&quot;tsType&quot;:&quot;boolean&quot;,&quot;section&quot;:&quot;Estado del tenant&quot;}}">
+const ROLES = {
+  admin_sistema: { label: 'Administrador del sistema', name: 'Helen Chávez Neri', ini: 'HC', home: 'dashboard', icon: 'admin_panel_settings',
+    nav: [{ h: 'Operación' }, { id: 'dashboard', l: 'Dashboard', i: 'space_dashboard' }, { id: 'prestamos', l: 'Préstamos', i: 'assignment', b: '12' }, { id: 'recursos', l: 'Recursos', i: 'inventory_2' },
+      { h: 'Administración' }, { id: 'usuarios', l: 'Usuarios', i: 'group' }, { id: 'sanciones', l: 'Sanciones', i: 'gavel' }, { id: 'reportes', l: 'Reportes', i: 'bar_chart' }, { id: 'auditoria', l: 'Auditoría', i: 'manage_search' }] },
+  asistente: { label: 'Asistente de mostrador', name: 'Raúl Treviño Licona', ini: 'RT', home: 'mostrador', icon: 'qr_code_scanner',
+    nav: [{ h: 'Mostrador' }, { id: 'mostrador', l: 'Entregas y devoluciones', i: 'qr_code_scanner', b: '5' }, { id: 'prestamos', l: 'Préstamos', i: 'assignment' }, { id: 'recursos', l: 'Recursos', i: 'inventory_2' }] },
+  admin_institucional: { label: 'Administrador institucional', name: 'David Jiménez Valdín', ini: 'DJ', home: 'suscripcion', icon: 'account_balance',
+    nav: [{ h: 'Institución' }, { id: 'suscripcion', l: 'Suscripción', i: 'workspace_premium' }, { id: 'auditoria', l: 'Auditoría', i: 'manage_search' }] },
+  usuario_final: { label: 'Docente', name: 'Mariana López Ortega', ini: 'ML', home: 'recursos', icon: 'school',
+    nav: [{ h: 'Préstamos' }, { id: 'recursos', l: 'Catálogo', i: 'inventory_2' }, { id: 'solicitud', l: 'Nueva solicitud', i: 'add_circle' }, { id: 'mis', l: 'Mis préstamos', i: 'assignment', b: '3' }] },
+};
+const ROLE_ORDER = ['admin_sistema', 'asistente', 'admin_institucional', 'usuario_final'];
+const ROLE_SHORT = { admin_sistema: 'Admin. del sistema', asistente: 'Asistente', admin_institucional: 'Admin. institucional', usuario_final: 'Usuario final' };
+const TITLES = { dashboard: 'Dashboard', prestamos: 'Préstamos', recursos: 'Recursos', recurso: 'Detalle de recurso', solicitud: 'Nueva solicitud', mis: 'Mis préstamos', mostrador: 'Mostrador', usuarios: 'Usuarios', sanciones: 'Sanciones', reportes: 'Reportes', auditoria: 'Auditoría', suscripcion: 'Suscripción' };
+const EST = {
+  pendiente: { l: 'Pendiente', bg: '#FEF3C7', fg: '#92400E' }, activo: { l: 'Activo', bg: '#DBEAFE', fg: '#1E40AF' },
+  devuelto: { l: 'Devuelto', bg: '#D1FAE5', fg: '#065F46' }, vencido: { l: 'Vencido', bg: '#FEE2E2', fg: '#991B1B' },
+  cancelado: { l: 'Cancelado', bg: '#F3F4F6', fg: '#4B5563' },
+  disponible: { l: 'Disponible', bg: '#D1FAE5', fg: '#065F46' }, prestado: { l: 'Prestado', bg: '#DBEAFE', fg: '#1E40AF' },
+  bloqueado: { l: 'Bloqueado', bg: '#FEF3C7', fg: '#92400E' }, mantenimiento: { l: 'Mantenimiento', bg: '#F3F4F6', fg: '#4B5563' },
+};
+const PRESTAMOS = [
+  { id: 'PR-2026-0482', user: 'Mariana López Ortega', ini: 'ML', rol: 'Docente', marcas: 0, recursos: ['Proyector Epson PowerLite X49', 'Cable HDMI 3 m'], area: 'Audiovisual', dia: 'Lun 26 oct', hora: '10:00 – 12:00', estado: 'pendiente', sub: 'Por aprobar', motivo: 'Presentación de avances de tesis en la sala B2.',
+    conflicto: 'Se traslapa con PR-2026-0479 (alumno). Por prioridad de rol, esta solicitud tiene preferencia.',
+    msgs: [{ me: false, t: 'Buen día. ¿El proyector incluye control remoto? Lo necesito para la presentación.', h: '09:12' }, { me: true, t: 'Sí, se entrega con control y funda. Revisamos la disponibilidad y te confirmamos hoy.', h: '09:20' }, { me: false, t: '¡Muchas gracias!', h: '09:21' }] },
+  { id: 'PR-2026-0479', user: 'Diego Hernández Ruiz', ini: 'DH', rol: 'Alumno', marcas: 1, recursos: ['Proyector Epson PowerLite X49'], area: 'Audiovisual', dia: 'Lun 26 oct', hora: '10:30 – 11:30', estado: 'pendiente', sub: 'Por aprobar', motivo: 'Exposición de la materia Redes II.',
+    conflicto: 'Se traslapa con PR-2026-0482 (docente). Se resolverá a favor de la solicitud con mayor prioridad de rol.', msgs: [] },
+  { id: 'PR-2026-0478', user: 'Jorge Ramírez Soto', ini: 'JR', rol: 'Alumno', marcas: 0, recursos: ['Laptop Dell Latitude 5440', 'Mouse inalámbrico Logitech'], area: 'Cómputo', dia: 'Hoy', hora: '12:00 – 14:00', estado: 'activo', sub: 'En custodia', motivo: 'Práctica de laboratorio de bases de datos.', msgs: [] },
+  { id: 'PR-2026-0475', user: 'Ana Sofía Méndez', ini: 'AM', rol: 'Docente', marcas: 0, recursos: ['Auditorio principal'], area: 'Espacios', dia: 'Hoy', hora: '16:00 – 19:00', estado: 'pendiente', sub: 'Aprobada · por recoger', motivo: 'Conferencia de la Semana de Ingeniería.', msgs: [{ me: false, t: '¿Podemos ingresar 15 minutos antes para montar el equipo?', h: 'Ayer' }, { me: true, t: 'Sí, el asistente de mostrador les abrirá a las 15:45.', h: 'Ayer' }] },
+  { id: 'PR-2026-0471', user: 'Carlos Aguilar Peña', ini: 'CA', rol: 'Alumno', marcas: 3, recursos: ['Cámara Canon EOS R50'], area: 'Audiovisual', dia: 'Jue 22 oct', hora: '09:00 – 13:00', estado: 'vencido', sub: 'Sin devolver · 1 día', motivo: 'Grabación de cortometraje.', msgs: [] },
+  { id: 'PR-2026-0468', user: 'Valeria Torres Gil', ini: 'VT', rol: 'Alumno', marcas: 0, recursos: ['Kit Arduino Mega 2560'], area: 'Laboratorio', dia: 'Mié 21 oct', hora: '08:00 – 10:00', estado: 'devuelto', sub: 'Sin incidencias', motivo: 'Proyecto integrador.', msgs: [] },
+  { id: 'PR-2026-0466', user: 'Fernando Ortiz Luna', ini: 'FO', rol: 'Docente', marcas: 0, recursos: ['Sala de juntas B2'], area: 'Espacios', dia: 'Mié 21 oct', hora: '12:00 – 14:00', estado: 'cancelado', sub: 'Prioridad institucional', motivo: 'Reunión de academia.', nota: 'Cancelada por prioridad institucional: visita del organismo acreditador.', msgs: [] },
+  { id: 'PR-2026-0463', user: 'Paola Núñez Vega', ini: 'PN', rol: 'Alumno', marcas: 0, recursos: ['Micrófono inalámbrico Shure BLX24'], area: 'Audiovisual', dia: 'Mar 20 oct', hora: '11:00 – 13:00', estado: 'devuelto', sub: 'Sin incidencias', motivo: 'Evento cultural.', msgs: [] },
+];
+const RECURSOS = [
+  { id: 'r1', n: 'Proyector Epson PowerLite X49', area: 'Audiovisual', inv: 'INV-AV-0032', serie: 'X4KF2103391', tipo: 'equipo', estado: 'disponible', foot: 'Disponible ahora', anio: '2024', desc: 'Proyector 3LCD de 3,600 lúmenes con resolución XGA. Incluye control remoto, cable de corriente y funda de transporte.' },
+  { id: 'r2', n: 'Laptop Dell Latitude 5440', area: 'Cómputo', inv: 'INV-CO-0117', serie: 'DL5440-88KQ2', tipo: 'equipo', estado: 'prestado', foot: 'Regresa hoy a las 14:00', anio: '2025', desc: 'Intel Core i5 de 13.ª generación, 16 GB RAM, SSD de 512 GB. Incluye cargador USB-C.' },
+  { id: 'r3', n: 'Auditorio principal', area: 'Espacios', inv: 'ESP-AUD-01', serie: '—', tipo: 'espacio', estado: 'bloqueado', foot: 'Reservado 16:00 – 19:00', anio: '—', desc: 'Capacidad para 220 personas, sistema de audio, pantalla de proyección y cabina técnica.' },
+  { id: 'r4', n: 'Cámara Canon EOS R50', area: 'Audiovisual', inv: 'INV-AV-0051', serie: 'CN-R50-55310', tipo: 'equipo', estado: 'disponible', foot: 'Disponible ahora', anio: '2024', desc: 'Cámara mirrorless de 24.2 MP con lente 18-45 mm, batería extra y tarjeta SD de 64 GB.' },
+  { id: 'r5', n: 'Kit Arduino Mega 2560', area: 'Laboratorio', inv: 'INV-LB-0209', serie: 'ARD-MEGA-0209', tipo: 'equipo', estado: 'mantenimiento', foot: 'Fuera de servicio hasta 30 oct', anio: '2023', desc: 'Placa Arduino Mega, protoboard, sensores y cables de conexión.' },
+  { id: 'r6', n: 'Sala de juntas B2', area: 'Espacios', inv: 'ESP-B2', serie: '—', tipo: 'espacio', estado: 'disponible', foot: 'Libre hasta las 16:00', anio: '—', desc: 'Sala para 12 personas con pantalla de 65", videoconferencia y pizarrón.' },
+  { id: 'r7', n: 'Micrófono inalámbrico Shure BLX24', area: 'Audiovisual', inv: 'INV-AV-0078', serie: 'SHR-BLX-7781', tipo: 'equipo', estado: 'prestado', foot: 'Regresa hoy a las 13:30', anio: '2022', desc: 'Sistema inalámbrico de mano con receptor y baterías recargables.' },
+  { id: 'r8', n: 'Tablet Samsung Galaxy Tab S9', area: 'Cómputo', inv: 'INV-CO-0142', serie: 'SM-X710-0142', tipo: 'equipo', estado: 'disponible', foot: 'Disponible ahora', anio: '2025', desc: 'Pantalla de 11", 128 GB, incluye S Pen y funda con teclado.' },
+];
+const AGENDA = [
+  { t: '09:00', tipo: 'Devolución', i: 'assignment_return', who: 'Carlos Aguilar Peña', what: 'Cámara Canon EOS R50', st: 'Vencido · 1 día', bg: '#FEE2E2', fg: '#991B1B' },
+  { t: '12:00', tipo: 'Entrega', i: 'outbox', who: 'Jorge Ramírez Soto', what: 'Laptop Dell Latitude 5440 + 1', st: 'En tolerancia · 08 min', bg: '#FEF3C7', fg: '#92400E' },
+  { t: '13:00', tipo: 'Devolución', i: 'assignment_return', who: 'Mariana López Ortega', what: 'Adaptador USB-C a HDMI', st: 'A tiempo', bg: '#D1FAE5', fg: '#065F46' },
+  { t: '13:30', tipo: 'Devolución', i: 'assignment_return', who: 'Paola Núñez Vega', what: 'Micrófono Shure BLX24', st: 'A tiempo', bg: '#D1FAE5', fg: '#065F46' },
+  { t: '16:00', tipo: 'Entrega', i: 'outbox', who: 'Ana Sofía Méndez', what: 'Auditorio principal', st: 'Programada', bg: '#F3F4F6', fg: '#4B5563' },
+];
+const NOTIFS = [
+  { t: 'Nueva solicitud pendiente', d: 'Diego Hernández solicitó Proyector Epson PowerLite X49 para el lun 26 oct.', w: 'Hace 5 min', i: 'pending_actions', bg: '#FEF3C7', fg: '#92400E' },
+  { t: 'Conflicto de horario', d: 'Dos solicitudes compiten por el mismo proyector. Se aplicará la prioridad de rol.', w: 'Hace 40 min', i: 'event_busy', bg: '#FEF3C7', fg: '#92400E' },
+  { t: 'Préstamo vencido', d: 'Carlos Aguilar no ha devuelto Cámara Canon EOS R50. Se registró una marca.', w: 'Hace 1 h', i: 'assignment_late', bg: '#FEE2E2', fg: '#991B1B' },
+  { t: 'Sincronización completada', d: '3 escaneos registrados sin conexión en mostrador se sincronizaron.', w: 'Ayer', i: 'cloud_done', bg: '#DBEAFE', fg: '#1E40AF' },
+];
+const USERS = [
+  { n: 'Helen Chávez Neri', ini: 'HC', mail: 'helen.chavez@utvalle.edu.mx', rol: 'Admin. del sistema', area: 'Todas', marcas: '—', st: 'Activo', g: 'staff' },
+  { n: 'Laura Campos Rivas', ini: 'LC', mail: 'laura.campos@utvalle.edu.mx', rol: 'Responsable de área', area: 'Audiovisual', marcas: '—', st: 'Activo', g: 'resp' },
+  { n: 'Raúl Treviño Licona', ini: 'RT', mail: 'raul.trevino@utvalle.edu.mx', rol: 'Asistente', area: 'Mostrador central', marcas: '—', st: 'Activo', g: 'asis' },
+  { n: 'Mariana López Ortega', ini: 'ML', mail: 'mariana.lopez@utvalle.edu.mx', rol: 'Docente', area: '—', marcas: '0 / 3', st: 'Activo', g: 'final' },
+  { n: 'Diego Hernández Ruiz', ini: 'DH', mail: 'diego.hernandez@alumnos.utvalle.edu.mx', rol: 'Alumno', area: '—', marcas: '1 / 3', st: 'Activo', g: 'final' },
+  { n: 'Carlos Aguilar Peña', ini: 'CA', mail: 'carlos.aguilar@alumnos.utvalle.edu.mx', rol: 'Alumno', area: '—', marcas: '3 / 3', st: 'Bloqueado hasta 30 oct', g: 'bloq' },
+  { n: 'Valeria Torres Gil', ini: 'VT', mail: 'valeria.torres@alumnos.utvalle.edu.mx', rol: 'Alumno', area: '—', marcas: '0 / 3', st: 'Activo', g: 'final' },
+  { n: 'Fernando Ortiz Luna', ini: 'FO', mail: 'fernando.ortiz@utvalle.edu.mx', rol: 'Docente', area: '—', marcas: '0 / 3', st: 'Activo', g: 'final' },
+];
+const AUDIT = [
+  ['2026-10-23 09:24:51', 'Raúl Treviño', 'VALIDAR_QR', 'tokens_qr', 'PR-2026-0478', 'Entrega confirmada', 'ok'],
+  ['2026-10-23 09:21:04', 'Helen Chávez', 'INSERT', 'conversaciones', 'PR-2026-0482', 'Mensaje enviado al solicitante', 'ok'],
+  ['2026-10-23 09:02:17', 'Sistema · job', 'UPDATE', 'prestamos', 'PR-2026-0471', 'estado: activo → vencido', 'ok'],
+  ['2026-10-23 09:02:18', 'Sistema · job', 'INSERT', 'penalizaciones', 'PEN-0193', '+1 marca a C. Aguilar (3/3) · bloqueo 7 días', 'ok'],
+  ['2026-10-23 08:41:12', 'Raúl Treviño', 'VALIDAR_QR', 'tokens_qr', 'PR-2026-0470', 'Token expirado (TTL 45 s)', 'err'],
+  ['2026-10-23 08:30:00', 'Helen Chávez', 'UPDATE', 'matriz_sanciones', 'MS-03', 'Dañado: 1 → 2 marcas', 'ok'],
+  ['2026-10-23 08:12:33', 'Helen Chávez', 'IMPORT', 'usuarios', 'CSV-0012', '1,248 filas · 3 rechazadas', 'warn'],
+  ['2026-10-23 07:55:09', 'Laura Campos', 'UPDATE', 'recursos', 'INV-LB-0209', 'estado: disponible → mantenimiento', 'ok'],
+  ['2026-10-23 07:40:22', 'Ana Méndez', 'LOGIN', 'usuarios', '—', 'Inicio de sesión', 'ok'],
+  ['2026-10-23 07:38:10', 'Desconocido', 'LOGIN', 'usuarios', '—', 'Credenciales inválidas · 192.168.10.44', 'err'],
+];
+const ST_AUD = { ok: { l: 'Éxito', bg: '#D1FAE5', fg: '#065F46' }, err: { l: 'Rechazado', bg: '#FEE2E2', fg: '#991B1B' }, warn: { l: 'Parcial', bg: '#FEF3C7', fg: '#92400E' } };
+const INC_TIPOS = [{ l: 'Retraso en devolución', i: 'schedule' }, { l: 'Mal estado', i: 'build' }, { l: 'Dañado', i: 'heart_broken' }, { l: 'No entregado', i: 'block' }];
+const SANC_REC = [
+  { id: 's1', n: 'Carlos Aguilar Peña', ini: 'CA', tipo: 'Retraso en devolución', rec: 'Cámara Canon EOS R50', m: '+1', tot: '3 / 3', st: 'Bloqueado hasta 30 oct', f: '23 oct' },
+  { id: 's2', n: 'Diego Hernández Ruiz', ini: 'DH', tipo: 'Mal estado', rec: 'Laptop Dell Latitude 5440', m: '+1', tot: '1 / 3', st: 'Marca activa', f: '18 oct' },
+  { id: 's3', n: 'Iván Robles Cruz', ini: 'IR', tipo: 'Dañado', rec: 'Tablet Galaxy Tab S9', m: '+2', tot: '2 / 3', st: 'Marca activa', f: '15 oct' },
+  { id: 's4', n: 'Sofía Castillo Mora', ini: 'SC', tipo: 'Retraso en devolución', rec: 'Sala de juntas B2', m: '+1', tot: '0 / 3', st: 'Exentada', f: '12 oct', exento: true },
+];
+
+function mkQR(seed) {
+  const N = 25; let s = seed;
+  const r = () => { s = (s * 9301 + 49297) % 233280; return s / 233280; };
+  const fin = (x, y) => {
+    for (const [ox, oy] of [[0, 0], [N - 7, 0], [0, N - 7]]) {
+      const dx = x - ox, dy = y - oy;
+      if (dx >= 0 && dx < 7 && dy >= 0 && dy < 7) return (dx === 0 || dx === 6 || dy === 0 || dy === 6 || (dx >= 2 && dx <= 4 && dy >= 2 && dy <= 4)) ? 1 : 0;
+      if (dx >= -1 && dx <= 7 && dy >= -1 && dy <= 7) return 0;
+    }
+    return -1;
+  };
+  const cells = [];
+  for (let y = 0; y < N; y++) for (let x = 0; x < N; x++) { const f = fin(x, y); const on = f === -1 ? r() > 0.5 : f === 1; cells.push({ c: on ? '#1F2937' : 'transparent' }); }
+  return cells;
+}
+
+class Component extends DCLogic {
+  state = {
+    logged: true, rol: null, screen: null, collapsed: null, menuOpen: false, notifOpen: false,
+    ptab: 'todos', selId: 'PR-2026-0482', msgDraft: '', extra: {}, over: {}, prioDraft: '',
+    rFilter: 'todos', rView: 'grid', recId: 'r1',
+    step: 1, day: 26, accept: true,
+    misTab: 'activos', qrLeft: 45, qrSeed: 7, qrTipo: 'entrega', qrFolio: 'PR-2026-0476',
+    offline: false, pending: 2, scanned: false, conds: [0, 0], incTipo: 0,
+    matriz: [1, 1, 2, 3], umbral: 3, dias: 7, exentos: {}, exeId: null, exeDraft: '',
+    utab: 'todos', periodo: 1, modal: null, toast: null,
+  };
+  mainRef = React.createRef();
+
+  componentDidMount() {
+    this._t = setInterval(() => {
+      if (this.state.modal === 'qr' && this.state.qrLeft > 0) this.setState(s => ({ qrLeft: s.qrLeft - 1 }));
+    }, 1000);
+  }
+  componentWillUnmount() { clearInterval(this._t); clearTimeout(this._toastT); }
+  componentDidUpdate(prev) {
+    if (prev.rol !== this.props.rol) this.setState({ rol: null, screen: null });
+    if (prev.sidebarColapsado !== this.props.sidebarColapsado) this.setState({ collapsed: null });
+  }
+
+  toast(msg, kind) {
+    clearTimeout(this._toastT);
+    const k = { ok: { bg: '#047857', i: 'check_circle' }, info: { bg: '#1F2937', i: 'info' }, warn: { bg: '#92400E', i: 'cloud_off' } }[kind || 'ok'];
+    this.setState({ toast: { msg, ...k } });
+    this._toastT = setTimeout(() => this.setState({ toast: null }), kind === 'info' ? 5000 : 3000);
+  }
+  go(id, extra) {
+    this.setState({ screen: id, menuOpen: false, notifOpen: false, ...(extra || {}) });
+    if (this.mainRef.current) this.mainRef.current.scrollTop = 0;
+  }
+
+  renderVals() {
+    const S = this.state;
+    const rol = S.rol || this.props.rol || 'admin_sistema';
+    const R = ROLES[rol] || ROLES.admin_sistema;
+    const screen = S.screen || R.home;
+    const collapsed = S.collapsed ?? this.props.sidebarColapsado ?? false;
+    const isAdmin = rol === 'admin_sistema';
+    const isFinal = rol === 'usuario_final';
+    const activeNav = screen === 'recurso' ? 'recursos' : screen;
+
+    const nav = R.nav.map(it => it.h
+      ? { isHead: true, showHead: !collapsed, isLink: false, h: it.h }
+      : { ...it, isHead: false, showHead: false, isLink: true, go: () => this.go(it.id),
+          bg: activeNav === it.id ? '#3B82F6' : 'transparent', fg: activeNav === it.id ? '#FFFFFF' : '#CBD5E1',
+          jc: collapsed ? 'center' : 'flex-start', showBadge: !!it.b && !collapsed,
+          badgeBg: activeNav === it.id ? 'rgba(255,255,255,0.28)' : 'rgba(240,249,255,0.14)' });
+
+    const roleItems = ROLE_ORDER.map(k => ({
+      label: ROLE_SHORT[k], icon: ROLES[k].icon, on: k === rol, bg: k === rol ? '#EFF6FF' : 'transparent', ic: k === rol ? '#2563EB' : '#6B7280',
+      pick: () => { this.setState({ rol: k, screen: null, menuOpen: false }); this.toast('Vista cambiada a ' + ROLE_SHORT[k].toLowerCase() + '.', 'info'); },
+      loginAs: () => this.setState({ rol: k, screen: null, logged: true }),
+    }));
+
+    const crumbs = { recurso: 'Recursos / Detalle', solicitud: 'Catálogo / Nueva solicitud' };
+    const title = isFinal && screen === 'recursos' ? 'Catálogo' : TITLES[screen];
+    const crumb = 'UT del Valle / ' + (crumbs[screen] || title);
+
+    // Préstamos
+    const rows = PRESTAMOS.map(p => ({ ...p, ...(S.over[p.id] || {}) }));
+    const ptabsDef = [['todos', 'Todos', '214'], ['pendiente', 'Pendientes', '12'], ['activo', 'Activos', '48'], ['vencido', 'Vencidos', '3'], ['devuelto', 'Devueltos', '139'], ['cancelado', 'Cancelados', '12']];
+    const ptabs = ptabsDef.map(([k, l, c]) => ({ l, c, on: S.ptab === k, fg: S.ptab === k ? '#1D4ED8' : '#4B5563', bd: S.ptab === k ? '#3B82F6' : 'transparent', cbg: S.ptab === k ? '#DBEAFE' : '#F1F5F9', click: () => this.setState({ ptab: k }) }));
+    const prows = rows.filter(p => S.ptab === 'todos' || p.estado === S.ptab).map(p => {
+      const b = EST[p.estado];
+      return { ...p, bl: b.l, bbg: b.bg, bfg: b.fg, rec1: p.recursos[0], more: p.recursos.length > 1 ? '+' + (p.recursos.length - 1) + ' más' : '', hasMore: p.recursos.length > 1,
+        rowBg: p.id === S.selId ? '#EFF6FF' : '#FFFFFF', select: () => this.setState({ selId: p.id, msgDraft: '' }) };
+    });
+    const sp = rows.find(p => p.id === S.selId) || rows[0];
+    const sb = EST[sp.estado];
+    const msgs = sp.msgs.concat(S.extra[sp.id] || []).map(m => ({ ...m, al: m.me ? 'flex-end' : 'flex-start', bg: m.me ? '#2563EB' : '#F0F9FF', fg: m.me ? '#FFFFFF' : '#1F2937', who: m.me ? 'Tú' : sp.user.split(' ')[0] }));
+    const sel = { ...sp, bl: sb.l, bbg: sb.bg, bfg: sb.bg && sb.fg, recs: sp.recursos.map(n => ({ n })), isPend: sp.estado === 'pendiente' && sp.sub === 'Por aprobar', isApproved: sp.estado === 'pendiente' && sp.sub !== 'Por aprobar',
+      isActivo: sp.estado === 'activo', isClosed: ['devuelto', 'cancelado', 'vencido'].includes(sp.estado), hasConf: !!sp.conflicto && sp.estado === 'pendiente' && sp.sub === 'Por aprobar', hasNota: !!sp.nota,
+      hasMsgs: msgs.length > 0, noMsgs: msgs.length === 0, marcasTxt: sp.marcas + ' de 3 marcas', marcasPct: Math.min(100, sp.marcas / 3 * 100) + '%', marcasC: sp.marcas >= 3 ? '#EF4444' : sp.marcas > 0 ? '#F59E0B' : '#10B981' };
+    const canChat = sel.estado === 'pendiente';
+
+    // Dashboard
+    const kpis = [
+      { l: 'Préstamos activos', v: '48', d: '+6 respecto a ayer', i: 'assignment_turned_in', bg: '#DBEAFE', fg: '#1E40AF', dc: '#047857' },
+      { l: 'Solicitudes pendientes', v: '12', d: '2 con conflicto de horario', i: 'pending_actions', bg: '#FEF3C7', fg: '#92400E', dc: '#92400E' },
+      { l: 'Vencidos sin devolver', v: '3', d: 'Generan marcas automáticamente', i: 'assignment_late', bg: '#FEE2E2', fg: '#991B1B', dc: '#6B7280' },
+      { l: 'Recursos disponibles', v: '214', d: 'de 268 en inventario · 80 %', i: 'inventory_2', bg: '#D1FAE5', fg: '#065F46', dc: '#6B7280' },
+    ];
+    const series = [[10, 8], [11, 4], [12, 31], [13, 35], [14, 38], [15, 33], [16, 29], [17, 9], [18, 3], [19, 36], [20, 41], [21, 44], [22, 39], [23, 27]];
+    const bars = series.map(([d, v], i) => ({ d: String(d), v: String(v), h: (v / 50 * 100) + '%', c: i === series.length - 1 ? '#3B82F6' : '#BFDBFE', fw: i === series.length - 1 ? '700' : '400' }));
+    const invTot = 268;
+    const inv = [['Disponible', 214, '#10B981'], ['Prestado', 38, '#3B82F6'], ['Bloqueado', 9, '#F59E0B'], ['Mantenimiento', 7, '#9CA3AF']].map(([l, v, c]) => ({ l, v: String(v), c, w: (v / invTot * 100) + '%', p: Math.round(v / invTot * 100) + ' %' }));
+    const pend = rows.filter(p => p.estado === 'pendiente').map(p => ({ ...p, rec1: p.recursos.join(', '), hasConf: !!p.conflicto && p.sub === 'Por aprobar', review: () => this.go('prestamos', { selId: p.id, ptab: 'todos' }) }));
+
+    // Recursos
+    const rchipsDef = [['todos', 'Todos', '268'], ['disponible', 'Disponibles', '214'], ['prestado', 'Prestados', '38'], ['bloqueado', 'Bloqueados', '9'], ['mantenimiento', 'Mantenimiento', '7']];
+    const rchips = rchipsDef.map(([k, l, c]) => ({ l, c, bg: S.rFilter === k ? '#1F2937' : '#FFFFFF', fg: S.rFilter === k ? '#FFFFFF' : '#1F2937', bd: S.rFilter === k ? '#1F2937' : '#CBD5E1', click: () => this.setState({ rFilter: k }) }));
+    const rcards = RECURSOS.filter(r => S.rFilter === 'todos' || r.estado === S.rFilter).map(r => {
+      const b = EST[r.estado];
+      return { ...r, bl: b.l, bbg: b.bg, bfg: b.fg, tipoL: r.tipo === 'espacio' ? 'Espacio' : 'Equipo físico', ph: r.tipo === 'espacio' ? 'foto del espacio' : 'foto del equipo',
+        canReq: r.estado === 'disponible' || r.estado === 'bloqueado', open: () => this.go('recurso', { recId: r.id }),
+        req: (e) => { if (e && e.stopPropagation) e.stopPropagation(); this.go('solicitud', { step: 1 }); } };
+    });
+    const isGrid = S.rView === 'grid';
+    const rr = RECURSOS.find(r => r.id === S.recId) || RECURSOS[0];
+    const rb = EST[rr.estado];
+    const rec = { ...rr, bl: rb.l, bbg: rb.bg, bfg: rb.bg && rb.fg, tipoL: rr.tipo === 'espacio' ? 'Espacio' : 'Equipo físico', ph: rr.tipo === 'espacio' ? 'foto principal del espacio' : 'foto principal del equipo',
+      specs: [['Área responsable', rr.area], ['Número de inventario', rr.inv], ['Número de serie', rr.serie], ['Tipo de recurso', rr.tipo === 'espacio' ? 'Espacio' : 'Equipo físico'], ['Año de adquisición', rr.anio], ['Responsable de área', 'Laura Campos Rivas']].map(([k, v]) => ({ k, v })),
+      isMant: rr.estado === 'mantenimiento', notMant: rr.estado !== 'mantenimiento' };
+    const days = [
+      { d: 'Vie 23', today: true, blocks: [{ l: 9, w: 3, t: 'PR-0470' }, { l: 12, w: 2, t: 'PR-0478' }] },
+      { d: 'Sáb 24', blocks: [] },
+      { d: 'Lun 26', blocks: [{ l: 10, w: 2, t: 'Solicitud pendiente', pend: true }, { l: 15, w: 3, t: 'PR-0484' }] },
+      { d: 'Mar 27', blocks: [{ l: 8, w: 4, t: 'PR-0485' }] },
+      { d: 'Mié 28', blocks: [{ l: 13, w: 2, t: 'PR-0486' }, { l: 17, w: 3, t: 'PR-0487' }] },
+    ].map(d => ({ ...d, fw: d.today ? '700' : '400', fc: d.today ? '#1D4ED8' : '#1F2937', blocks: d.blocks.map(b => ({ ...b, left: ((b.l - 7) / 15 * 100) + '%', width: (b.w / 15 * 100) + '%', bg: b.pend ? '#FEF3C7' : '#DBEAFE', bd: b.pend ? '#F59E0B' : '#3B82F6', fg: b.pend ? '#92400E' : '#1E40AF' })) }));
+    const hours = ['07:00', '10:00', '13:00', '16:00', '19:00', '22:00'].map(h => ({ h }));
+    const recHist = [['PR-2026-0470', 'Jorge Ramírez', '23 oct', 'devuelto'], ['PR-2026-0455', 'Ana Sofía Méndez', '19 oct', 'devuelto'], ['PR-2026-0431', 'Diego Hernández', '14 oct', 'devuelto'], ['PR-2026-0402', 'Carlos Aguilar', '08 oct', 'vencido']].map(([f, u, d, e]) => ({ f, u, d, bl: EST[e].l, bbg: EST[e].bg, bfg: EST[e].fg }));
+
+    // Nueva solicitud
+    const steps = [['Recursos', 'Qué necesitas'], ['Fecha y hora', 'Cuándo lo usarás'], ['Confirmar', 'Revisa y envía']].map(([l, s], i) => {
+      const n = i + 1, done = S.step > n, on = S.step === n;
+      return { n: String(n), l, s, done, notDone: !done, cbg: done ? '#10B981' : on ? '#2563EB' : '#FFFFFF', cfg: done || on ? '#FFFFFF' : '#6B7280', cbd: done ? '#10B981' : on ? '#2563EB' : '#CBD5E1', lfg: on || done ? '#1F2937' : '#6B7280', line: i < 2, lineC: done ? '#10B981' : '#E5E7EB' };
+    });
+    const cal = [];
+    for (let i = 0; i < 3; i++) cal.push({ n: '', blank: true, bg: 'transparent', fg: 'transparent', bd: 'transparent', cur: 'default', click: () => {} });
+    for (let d = 1; d <= 31; d++) {
+      const dow = (3 + d - 1) % 7; const sun = dow === 6; const past = d < 23; const dis = past || sun; const on = S.day === d; const today = d === 23;
+      cal.push({ n: String(d), bg: on ? '#2563EB' : 'transparent', fg: on ? '#FFFFFF' : dis ? '#C0C6CF' : '#1F2937', bd: today && !on ? '#3B82F6' : 'transparent', cur: dis ? 'not-allowed' : 'pointer', fw: on || today ? '700' : '400', click: () => { if (!dis) this.setState({ day: d }); } });
+    }
+    const dayNames = ['', 'jueves', 'viernes', 'sábado', 'domingo', 'lunes', 'martes', 'miércoles'];
+    const dname = dayNames[((S.day - 1) % 7) + 1];
+    const conflictDay = S.day === 27;
+    const fecha = dname + ' ' + S.day + ' de octubre';
+    const solRecs = [{ n: 'Proyector Epson PowerLite X49', a: 'Audiovisual · INV-AV-0032' }, { n: 'Cable HDMI 3 m', a: 'Audiovisual · INV-AV-0105' }];
+
+    // Mis préstamos
+    const mis = [
+      { id: 'PR-2026-0474', estado: 'activo', bl: 'Activo', bbg: EST.activo.bg, bfg: EST.activo.fg, n: 'Adaptador USB-C a HDMI', when: 'Hoy · 09:00 – 13:00', note: 'Devuélvelo antes de las 13:00 en Mostrador central.', icon: 'schedule',
+        qr: true, qrL: 'QR de devolución', qrT: 'devolucion', msg: false, cancel: false },
+      { id: 'PR-2026-0476', estado: 'pendiente', bl: 'Aprobada', bbg: '#DBEAFE', bfg: '#1E40AF', n: 'Sala de juntas B2', when: 'Hoy · 16:00 – 18:00', note: 'Recoge dentro de los 15 min de tolerancia o se cancelará automáticamente.', icon: 'timer',
+        qr: true, qrL: 'QR de entrega', qrT: 'entrega', msg: false, cancel: true },
+      { id: 'PR-2026-0482', estado: 'pendiente', bl: 'Por aprobar', bbg: EST.pendiente.bg, bfg: EST.pendiente.fg, n: 'Proyector Epson PowerLite X49 + Cable HDMI 3 m', when: 'Lun 26 oct · 10:00 – 12:00', note: 'El responsable de Audiovisual respondió a tu mensaje.', icon: 'forum',
+        qr: false, msg: true, cancel: true },
+    ].map(m => ({ ...m, showQR: () => this.setState({ modal: 'qr', qrLeft: 45, qrSeed: Math.floor(Math.random() * 9999) + 1, qrTipo: m.qrT, qrFolio: m.id }),
+      doCancel: () => this.toast('Solicitud ' + m.id + ' cancelada. Los recursos quedaron liberados.') }));
+    const misHist = [['PR-2026-0451', 'Cámara Canon EOS R50', '16 oct · 10:00 – 14:00', 'Devuelto a tiempo'], ['PR-2026-0433', 'Auditorio principal', '09 oct · 17:00 – 20:00', 'Devuelto a tiempo'], ['PR-2026-0410', 'Laptop Dell Latitude 5440', '02 oct · 08:00 – 12:00', 'Devuelto a tiempo']].map(([f, n, w, s]) => ({ f, n, w, s, dl: () => this.toast('Comprobante ' + f + '.pdf descargado.') }));
+    const misTabs = [['activos', 'Activos y próximos', '3'], ['historial', 'Historial', '27']].map(([k, l, c]) => ({ l, c, fg: S.misTab === k ? '#1D4ED8' : '#4B5563', bd: S.misTab === k ? '#3B82F6' : 'transparent', cbg: S.misTab === k ? '#DBEAFE' : '#F1F5F9', click: () => this.setState({ misTab: k }) }));
+
+    // QR
+    const qrCells = mkQR(S.qrSeed);
+    const qrExpired = S.qrLeft <= 0;
+    const qr = { cells: qrCells, left: '0:' + String(Math.max(0, S.qrLeft)).padStart(2, '0'), pct: (Math.max(0, S.qrLeft) / 45 * 100) + '%', barC: S.qrLeft <= 10 ? '#EF4444' : '#3B82F6',
+      title: S.qrTipo === 'entrega' ? 'QR de entrega' : 'QR de devolución', folio: S.qrFolio, expired: qrExpired, live: !qrExpired,
+      regen: () => this.setState({ qrLeft: 45, qrSeed: Math.floor(Math.random() * 9999) + 1 }) };
+
+    // Mostrador
+    const condL = ['Bueno', 'Regular', 'Malo'];
+    const scanItems = [{ n: 'Laptop Dell Latitude 5440', inv: 'INV-CO-0117' }, { n: 'Mouse inalámbrico Logitech', inv: 'INV-CO-0233' }].map((it, idx) => ({ ...it,
+      opts: condL.map((l, k) => { const on = S.conds[idx] === k; return { l, bg: on ? '#1F2937' : '#FFFFFF', fg: on ? '#FFFFFF' : '#1F2937', click: () => this.setState(s => { const c = s.conds.slice(); c[idx] = k; return { conds: c }; }) }; }) }));
+    const incOpts = INC_TIPOS.map((t, k) => { const on = S.incTipo === k; const m = S.matriz[k]; return { ...t, m: '+' + m + (m === 1 ? ' marca' : ' marcas'), bd: on ? '#3B82F6' : '#E5E7EB', bg: on ? '#EFF6FF' : '#FFFFFF', ic: on ? '#2563EB' : '#6B7280', ring: on ? '0 0 0 1px #3B82F6' : 'none', click: () => this.setState({ incTipo: k }) }; });
+    const incM = S.matriz[S.incTipo];
+
+    // Usuarios
+    const utabsDef = [['todos', 'Todos', '1,264'], ['resp', 'Responsables de área', '8'], ['asis', 'Asistentes', '6'], ['bloq', 'Bloqueados', '4']];
+    const utabs = utabsDef.map(([k, l, c]) => ({ l, c, fg: S.utab === k ? '#1D4ED8' : '#4B5563', bd: S.utab === k ? '#3B82F6' : 'transparent', cbg: S.utab === k ? '#DBEAFE' : '#F1F5F9', click: () => this.setState({ utab: k }) }));
+    const urows = USERS.filter(u => S.utab === 'todos' || u.g === S.utab).map(u => ({ ...u, sbg: u.g === 'bloq' ? '#FEE2E2' : '#D1FAE5', sfg: u.g === 'bloq' ? '#991B1B' : '#065F46',
+      rbg: ['Alumno', 'Docente'].includes(u.rol) ? '#F1F5F9' : '#DBEAFE', rfg: ['Alumno', 'Docente'].includes(u.rol) ? '#374151' : '#1E40AF' }));
+
+    // Sanciones
+    const matriz = INC_TIPOS.map((t, k) => ({ ...t, v: String(S.matriz[k]), dec: () => this.setState(s => { const m = s.matriz.slice(); m[k] = Math.max(0, m[k] - 1); return { matriz: m }; }), inc: () => this.setState(s => { const m = s.matriz.slice(); m[k] = Math.min(5, m[k] + 1); return { matriz: m }; }) }));
+    const sancRec = SANC_REC.map(s => { const ex = s.exento || S.exentos[s.id]; return { ...s, st: ex ? 'Exentada' : s.st, sbg: ex ? '#F3F4F6' : s.st.startsWith('Bloq') ? '#FEE2E2' : '#FEF3C7', sfg: ex ? '#4B5563' : s.st.startsWith('Bloq') ? '#991B1B' : '#92400E', canEx: !ex, exentar: () => this.setState({ modal: 'exe', exeId: s.id, exeDraft: '' }) }; });
+    const exeS = SANC_REC.find(s => s.id === S.exeId) || SANC_REC[0];
+
+    // Reportes
+    const top = [['Proyector Epson PowerLite X49', 64], ['Laptop Dell Latitude 5440', 58], ['Sala de juntas B2', 41], ['Cámara Canon EOS R50', 37], ['Micrófono Shure BLX24', 29], ['Tablet Galaxy Tab S9', 22], ['Auditorio principal', 18]].map(([n, v], i) => ({ n, v: String(v), w: (v / 64 * 100) + '%', c: i === 0 ? '#2563EB' : '#93C5FD', r: String(i + 1) }));
+    const tiempos = [['Espacios', '3 h 15 min', 82], ['Cómputo', '2 h 40 min', 67], ['Audiovisual', '2 h 05 min', 52], ['Laboratorio', '1 h 50 min', 46]].map(([n, v, p]) => ({ n, v, w: p + '%' }));
+    const incid = [['Retraso en devolución', '23', 'schedule'], ['Mal estado', '7', 'build'], ['Dañado', '3', 'heart_broken'], ['No entregado', '1', 'block']].map(([l, v, i]) => ({ l, v, i }));
+    const cTot = 80;
+    const canc = [['Voluntaria del usuario', 46, '#1E40AF'], ['Automática por no recoger', 21, '#3B82F6'], ['Administrativa', 9, '#93C5FD'], ['Prioridad institucional', 4, '#DBEAFE']].map(([l, v, c]) => ({ l, v: String(v), c, w: (v / cTot * 100) + '%', p: Math.round(v / cTot * 100) + ' %' }));
+    const periodos = ['Últimos 7 días', 'Últimos 30 días', 'Semestre'].map((l, k) => ({ l, bg: S.periodo === k ? '#FFFFFF' : 'transparent', fg: S.periodo === k ? '#1F2937' : '#4B5563', sh: S.periodo === k ? '0 1px 3px rgba(31,41,55,0.15)' : 'none', click: () => this.setState({ periodo: k }) }));
+
+    const audit = AUDIT.map(([f, u, a, t, r, d, st]) => ({ f, u, a, t, r, d, sl: ST_AUD[st].l, sbg: ST_AUD[st].bg, sfg: ST_AUD[st].fg }));
+
+    // Suscripción
+    const plans = [
+      { n: 'Básico', a: 'Hasta 5 áreas', r: 'Hasta 100 recursos', x: 'Soporte por correo', cur: false },
+      { n: 'Pro', a: 'Hasta 15 áreas', r: 'Hasta 500 recursos', x: 'Reportes y exportación', cur: true },
+      { n: 'Enterprise', a: 'Áreas ilimitadas', r: 'Recursos ilimitados', x: 'SSO institucional', cur: false },
+    ].map(p => ({ ...p, notCur: !p.cur, bd: p.cur ? '#3B82F6' : 'rgba(31,41,55,0.08)', ring: p.cur ? '0 0 0 2px #3B82F6' : '0 0 0 1px rgba(31,41,55,0.08)' }));
+    const admins = [['Helen Chávez Neri', 'HC', 'helen.chavez@utvalle.edu.mx', 'Administradora del sistema', 'Todas las áreas'], ['Laura Campos Rivas', 'LC', 'laura.campos@utvalle.edu.mx', 'Responsable de área', 'Audiovisual'], ['Joshua Bonilla López', 'JB', 'joshua.bonilla@utvalle.edu.mx', 'Responsable de área', 'Cómputo']].map(([n, ini, m, r, a]) => ({ n, ini, m, r, a }));
+
+    const modal = S.modal;
+    const prioOk = S.prioDraft.trim().length >= 20;
+    const exeOk = S.exeDraft.trim().length >= 10;
+
+    return {
+      isLogin: !S.logged, isApp: S.logged,
+      doLogin: () => this.setState({ logged: true }), doLogout: () => this.setState({ logged: false, menuOpen: false }),
+      roleItems, nav, notCollapsed: !collapsed, sideW: collapsed ? '64px' : '240px', collapseJc: collapsed ? 'center' : 'flex-start', collapseIcon: collapsed ? 'left_panel_open' : 'left_panel_close',
+      toggleCollapse: () => this.setState({ collapsed: !collapsed }),
+      title, crumb, searchPh: isFinal ? 'Buscar recursos' : 'Buscar folio, recurso o usuario',
+      user: { name: R.name, ini: R.ini, label: R.label },
+      menuOpen: S.menuOpen, notifOpen: S.notifOpen, notifs: NOTIFS,
+      toggleMenu: () => this.setState(s => ({ menuOpen: !s.menuOpen, notifOpen: false })), toggleNotif: () => this.setState(s => ({ notifOpen: !s.notifOpen, menuOpen: false })),
+      readOnly: !!this.props.soloLectura, mainRef: this.mainRef,
+      is: { dashboard: screen === 'dashboard', prestamos: screen === 'prestamos', recursos: screen === 'recursos', recurso: screen === 'recurso', solicitud: screen === 'solicitud', mis: screen === 'mis', mostrador: screen === 'mostrador', usuarios: screen === 'usuarios', sanciones: screen === 'sanciones', reportes: screen === 'reportes', auditoria: screen === 'auditoria', suscripcion: screen === 'suscripcion' },
+      isAdmin, isFinal, notFinal: !isFinal, isStaff: !isFinal,
+      // dashboard
+      kpis, bars, inv, pend, agenda: AGENDA, goPrestamos: () => this.go('prestamos', { ptab: 'pendiente' }), goReportes: () => this.go('reportes'),
+      // prestamos
+      ptabs, prows, sel, msgs, canChat, msgDraft: S.msgDraft,
+      onMsg: e => this.setState({ msgDraft: e.target.value }),
+      sendMsg: () => { const t = S.msgDraft.trim(); if (!t) return; this.setState(s => ({ msgDraft: '', extra: { ...s.extra, [sp.id]: [...(s.extra[sp.id] || []), { me: true, t, h: 'Ahora' }] } })); },
+      approve: () => { this.setState(s => ({ over: { ...s.over, [sp.id]: { sub: 'Aprobada · por recoger' } } })); this.toast('Solicitud aprobada. Se notificó a ' + sp.user.split(' ')[0] + ' por push y correo.'); },
+      reject: () => { this.setState(s => ({ over: { ...s.over, [sp.id]: { estado: 'cancelado', sub: 'Rechazada' } } })); this.toast('Solicitud rechazada. Los recursos quedaron liberados.', 'info'); },
+      openPrio: () => this.setState({ modal: 'prio', prioDraft: '' }),
+      // recursos
+      rchips, rcards, isGrid, isList: !isGrid, setGrid: () => this.setState({ rView: 'grid' }), setList: () => this.setState({ rView: 'list' }),
+      gridBg: isGrid ? '#FFFFFF' : 'transparent', listBg: !isGrid ? '#FFFFFF' : 'transparent', gridSh: isGrid ? '0 1px 3px rgba(31,41,55,0.15)' : 'none', listSh: !isGrid ? '0 1px 3px rgba(31,41,55,0.15)' : 'none',
+      noResults: rcards.length === 0,
+      rec, days, hours, recHist, backRecursos: () => this.go('recursos'), goSolicitud: () => this.go('solicitud', { step: 1 }),
+      toggleMant: () => this.toast(rec.isMant ? 'Recurso reactivado y disponible en el catálogo.' : 'Recurso marcado en mantenimiento. Se ocultó del catálogo de solicitudes.', 'info'),
+      // solicitud
+      steps, cal, step1: S.step === 1, step2: S.step === 2, step3: S.step === 3, notStep1: S.step > 1, notStep3: S.step < 3, solRecs, fecha, conflictDay, okDay: !conflictDay,
+      nextStep: () => this.setState(s => ({ step: Math.min(3, s.step + 1) })), prevStep: () => this.setState(s => ({ step: Math.max(1, s.step - 1) })),
+      submitSol: () => { this.go('mis', { step: 1, misTab: 'activos' }); this.toast('Solicitud enviada. Te avisaremos cuando el responsable la revise.'); },
+      cancelSol: () => this.go('recursos'),
+      // mis
+      mis, misHist, misTabs, misAct: S.misTab === 'activos', misHistOn: S.misTab === 'historial', goChat: () => this.toast('Abriendo conversación de PR-2026-0482…', 'info'),
+      // qr
+      qr,
+      // mostrador
+      offline: S.offline, online: !S.offline, pending: String(S.pending), hasPending: S.pending > 0, scanned: S.scanned, notScanned: !S.scanned, scanItems, incOpts, incM: String(incM), incMtxt: incM === 1 ? 'marca' : 'marcas',
+      connBg: S.offline ? '#FEF3C7' : '#D1FAE5', connFg: S.offline ? '#92400E' : '#065F46', connI: S.offline ? 'cloud_off' : 'cloud_done', connL: S.offline ? 'Sin conexión · los escaneos se guardan localmente' : 'En línea · sincronizado con el servidor',
+      swBg: S.offline ? '#F59E0B' : '#CBD5E1', swX: S.offline ? '26px' : '4px',
+      toggleOffline: () => this.setState(s => ({ offline: !s.offline })),
+      doSync: () => { if (S.offline) { this.toast('No hay conexión. Se reintentará en 15 s.', 'warn'); return; } this.setState({ pending: 0 }); this.toast('Sincronización completada: eventos aplicados sin duplicados.'); },
+      doScan: () => this.setState({ scanned: true, conds: [0, 0] }),
+      cancelScan: () => this.setState({ scanned: false }),
+      confirmScan: () => { if (S.offline) { this.setState(s => ({ scanned: false, pending: s.pending + 1 })); this.toast('Entrega guardada localmente · pendiente de sincronización.', 'warn'); } else { this.setState({ scanned: false }); this.toast('Entrega confirmada. Custodia asignada a Jorge Ramírez.'); } },
+      openInc: () => this.setState({ modal: 'inc', incTipo: 0 }),
+      // usuarios
+      utabs, urows,
+      // sanciones
+      matriz, umbral: String(S.umbral), dias: String(S.dias), sancRec, exeS, exeDraft: S.exeDraft, exeOk, exeNo: !exeOk,
+      umbralDec: () => this.setState(s => ({ umbral: Math.max(1, s.umbral - 1) })), umbralInc: () => this.setState(s => ({ umbral: Math.min(10, s.umbral + 1) })),
+      diasDec: () => this.setState(s => ({ dias: Math.max(1, s.dias - 1) })), diasInc: () => this.setState(s => ({ dias: Math.min(30, s.dias + 1) })),
+      saveMatriz: () => this.toast('Matriz de sanciones guardada. El cambio quedó registrado en auditoría.'),
+      onExe: e => this.setState({ exeDraft: e.target.value }),
+      confirmExe: () => { if (!exeOk) return; this.setState(s => ({ modal: null, exentos: { ...s.exentos, [s.exeId]: true } })); this.toast('Sanción exentada. Se notificó al usuario.'); },
+      // reportes
+      top, tiempos, incid, canc, periodos, exportPdf: () => this.toast('Reporte exportado: reporte_operativo_oct2026.pdf'), exportCsv: () => this.toast('Reporte exportado: reporte_operativo_oct2026.csv'),
+      audit,
+      plans, admins, crearAdmin: () => this.toast('Invitación enviada al nuevo administrador del sistema.'),
+      // modals
+      mPrio: modal === 'prio', mInc: modal === 'inc', mExe: modal === 'exe', mQR: modal === 'qr', hasModal: !!modal,
+      closeModal: () => this.setState({ modal: null }), stop: e => e.stopPropagation(),
+      prioDraft: S.prioDraft, onPrio: e => this.setState({ prioDraft: e.target.value }), prioOk, prioNo: !prioOk, prioCount: String(S.prioDraft.trim().length),
+      prioBg: prioOk ? '#DC2626' : '#FCA5A5',
+      confirmPrio: () => { if (!prioOk) return; this.setState(s => ({ modal: null, over: { ...s.over, [sp.id]: { estado: 'cancelado', sub: 'Prioridad institucional', nota: 'Cancelada por prioridad institucional: ' + s.prioDraft.trim() } } })); this.toast('Solicitud cancelada por prioridad. Se notificó la justificación al usuario.'); },
+      exeBg: exeOk ? '#2563EB' : '#93C5FD',
+      confirmInc: () => { this.setState({ modal: null }); this.toast('Incidencia registrada: +' + incM + ' ' + (incM === 1 ? 'marca' : 'marcas') + ' a Jorge Ramírez.'); },
+      hasToast: !!S.toast, toast: S.toast || { bg: '#047857', i: 'check_circle', msg: '' }, closeToast: () => this.setState({ toast: null }),
+    };
+  }
+}
+</script>
+</body>
+</html>

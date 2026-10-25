@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-23
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -70,17 +70,17 @@ enum EstadoRecurso: string
     }
 
     /**
-     * Devuelve la clase CSS de la etiqueta de estado (paleta MP cap. 2, CU-009).
+     * Devuelve la clase CSS del badge de estado (colores del prototipo, DT-028).
      *
      * @return string
      */
-    public function obtenerClaseEtiqueta(): string
+    public function obtenerClaseInsignia(): string
     {
         return match ($this) {
-            self::Disponible => 'etiqueta--exito',
-            self::Prestado => 'etiqueta--informacion',
-            self::Bloqueado => 'etiqueta--advertencia',
-            self::Mantenimiento => 'etiqueta--error',
+            self::Disponible => 'insignia--exito',
+            self::Prestado => 'insignia--activo',
+            self::Bloqueado => 'insignia--pendiente',
+            self::Mantenimiento => 'insignia--neutra',
         };
     }
 }

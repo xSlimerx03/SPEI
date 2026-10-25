@@ -7,7 +7,7 @@
  * @path         tests/Feature/PantallasPublicasTest.php
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  * @license      Propietario - BigBitByte / Institución Educativa
  * @description  Regresión HTTP de las pantallas públicas y sus límites de seguridad.
@@ -100,7 +100,10 @@ it('contrata con límites del plan y contraseña exacta sin aceptar un rol envia
     $this->get(route('suscripcion.show'))->assertOk();
 });
 
-it('rechaza datos de contratación sin crear registros ni conservar contraseñas', function (array $cambio, string $campo): void {
+it('rechaza datos de contratación sin crear registros ni conservar contraseñas', function (
+    array $cambio,
+    string $campo,
+): void {
     /** @var TestCase $this */
     Plan::factory()->create();
     $datos = array_replace([
@@ -235,7 +238,11 @@ it('genera la invitación desde el formulario y permite abrir el enlace del corr
 });
 
 it('renderiza los correos con datos escapados sin enviar mensajes reales', function (): void {
-    $invitacion = new InvitacionAdministradorMail('<script>nombre</script>', 'Institución', 'https://example.test/registro');
+    $invitacion = new InvitacionAdministradorMail(
+        '<script>nombre</script>',
+        'Institución',
+        'https://example.test/registro',
+    );
     expect($invitacion->render())->toContain('&lt;script&gt;nombre&lt;/script&gt;');
     expect(str_contains($invitacion->render(), '<script>'))->toBeFalse();
     $alerta = new AlertaVencimientoMail('Administrador', 'Su suscripción vence en tres días.');

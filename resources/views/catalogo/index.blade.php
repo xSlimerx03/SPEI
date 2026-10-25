@@ -10,82 +10,58 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
- * @version      v1.0.0
+ * @lastModified 2026-10-25
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
- * @description  Catálogo del usuario final en grid de tarjetas (4, 2 o 1
- *               columnas según el dispositivo) con búsqueda y filtros.
+ * @description  Catálogo del usuario final (prototipo hi-fi): filtros y
+ *               cuadrícula de tarjetas disponibles (RN-002) con "Solicitar".
  *
- * @requisitos   RF-015, RN-002, RNF-009
+ * @requisitos   RF-015, RF-022, RN-002, RNF-009
  *
- * @see          docs/requisitos/BBB_CU010_ConsultarCatalogo_v1.0.md; MP sección 2.4.5 (layout 2)
+ * @see          docs/requisitos/BBB_CU010_ConsultarCatalogo_v1.0.md; DT-028
  * ============================================================================
 --}}
 @extends('layouts.app')
 
-@section('titulo', 'Catálogo de recursos')
+@section('titulo', 'Catálogo')
 
 @section('contenido')
-    <form method="GET" action="{{ route('catalogo.index') }}" class="filtros tarjeta">
-        <div class="campo">
-            <label for="texto" class="campo__etiqueta">Buscar por nombre o marca</label>
-            <input type="search" id="texto" name="texto" class="control" value="{{ request('texto') }}" maxlength="100">
+    <div class="pila--20 titulos">
+        <div class="encabezado-pagina encabezado-pagina--centro">
+            <div class="titulos">
+                <span class="subtitulo-pagina">Recursos disponibles</span>
+                <span class="texto-13 texto-sec">Solo se muestran los recursos que puedes solicitar ahora.</span>
+            </div>
+            <a href="{{ route('prestamos.create') }}" class="boton boton--primario">
+                <span class="icono" aria-hidden="true">add_circle</span>Solicitar préstamo
+            </a>
         </div>
-        <div class="campo">
-            <label for="tipo_recurso" class="campo__etiqueta">Tipo</label>
-            <select id="tipo_recurso" name="tipo_recurso" class="control">
-                <option value="">Todos</option>
-                @foreach ($tipos as $tipo)
-                    <option value="{{ $tipo->value }}" @selected(request('tipo_recurso') === $tipo->value)>
-                        {{ $tipo->obtenerEtiqueta() }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <div class="campo">
-            <label for="id_area" class="campo__etiqueta">Área</label>
-            <select id="id_area" name="id_area" class="control">
-                <option value="">Todas</option>
-                @foreach ($areas as $area)
-                    <option value="{{ $area->id_area }}" @selected((int) request('id_area') === $area->id_area)>
-                        {{ $area->nombre_area }}
-                    </option>
-                @endforeach
-            </select>
-        </div>
-        <button type="submit" class="boton">
-            <span class="icono icono--boton" aria-hidden="true">search</span>Buscar
-        </button>
-    </form>
 
-    @if ($recursos->isEmpty())
-        <div class="tarjeta estado-vacio">
-            <span class="icono icono--vacio" aria-hidden="true">inbox</span>
-            <p>No hay recursos disponibles</p>
-        </div>
-    @else
-        <div class="cuadricula">
-            @foreach ($recursos as $recurso)
-                <article class="tarjeta recurso-tarjeta">
-                    <div class="recurso-tarjeta__cabecera">
-                        <span class="icono icono--tarjeta" aria-hidden="true">
-                            {{ $recurso->tipo_recurso === \App\Enums\TipoRecurso::Espacio ? 'meeting_room' : 'devices' }}
-                        </span>
-                        <h2 class="tarjeta__titulo">{{ $recurso->nombre_recurso }}</h2>
-                    </div>
-                    <span class="etiqueta {{ $recurso->estado->obtenerClaseEtiqueta() }}">
-                        {{ $recurso->estado->obtenerEtiqueta() }}
-                    </span>
-                    <span class="texto-secundario">{{ $recurso->area->nombre_area }}</span>
-                    @if ($recurso->marca)
-                        <span class="texto-secundario">{{ $recurso->marca }}</span>
-                    @endif
-                </article>
-            @endforeach
-        </div>
-        {{ $recursos->links('partials.paginacion') }}
-    @endif
+        @include('recursos.filtros', ['ruta' => 'catalogo.index'])
+
+        @if ($recursos->isEmpty())
+            <div class="tarjeta vacio">
+                <span class="icono" aria-hidden="true">inbox</span>
+                <span class="vacio__titulo">No hay recursos disponibles</span>
+                <span class="vacio__texto">Prueba con otro filtro o vuelve más tarde.</span>
+            </div>
+        @elseif ($vistaLista)
+            @include('recursos.lista', ['rutaDetalle' => 'catalogo.show'])
+        @else
+            <div class="cuadricula-recursos">
+                @foreach ($recursos as $recurso)
+                    @include('recursos.tarjeta', [
+                        'recurso' => $recurso,
+                        'disponibilidad' => $disponibilidad[$recurso->id_recurso] ?? '',
+                        'enlace' => route('catalogo.show', $recurso->id_recurso),
+                        'solicitable' => true,
+                    ])
+                @endforeach
+            </div>
+        @endif
+        {{ $recursos->links('partials.paginacion', ['suelta' => true]) }}
+    </div>
 @endsection

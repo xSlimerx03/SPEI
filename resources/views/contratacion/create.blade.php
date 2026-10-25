@@ -10,105 +10,139 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
- * @version      v1.0.0
+ * @lastModified 2026-10-23
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
- * @description  Landing de contratación: planes activos con precio y límites
- *               y formulario de alta de la institución y su administrador.
+ * @description  Landing de contratación con el lenguaje visual del prototipo:
+ *               planes activos seleccionables, datos de la institución y del
+ *               administrador institucional.
  *
  * @requisitos   RF-001, RF-002
  *
- * @see          docs/requisitos/BBB_CU001_ContratarSuscripcion_v1.0.md
+ * @see          docs/requisitos/BBB_CU001_ContratarSuscripcion_v1.0.md; DT-028
  * ============================================================================
 --}}
 @extends('layouts.publico')
 
 @section('titulo', 'Contratar servicio')
-@section('clase_tarjeta', 'publico__tarjeta--ancha')
+@section('columna_ancha', '1')
 
 @section('contenido')
-    <div class="publico__encabezado">
-        <h1 class="titulo-pantalla">Contratar el SPEI</h1>
-        <p class="texto-secundario">Préstamo de equipo institucional para su escuela, en minutos.</p>
-    </div>
+    <div class="acceso__tarjeta">
+        <div class="encabezado-pagina encabezado-pagina--centro">
+            @include('partials.marca-acceso')
+            <a href="{{ route('login') }}" class="boton boton--secundario">
+                <span class="icono" aria-hidden="true">login</span>Iniciar sesión
+            </a>
+        </div>
 
-    <form method="POST" action="{{ route('contratacion.store') }}" novalidate>
-        @csrf
-        <fieldset class="tarjeta" style="border: 0;">
-            <legend class="subtitulo">1. Elija un plan</legend>
-            @if ($planes->isEmpty())
-                <div class="estado-vacio">
-                    <span class="icono icono--vacio" aria-hidden="true">inbox</span>
-                    <p>No hay planes disponibles por el momento.</p>
+        <div class="pila--4 titulos">
+            <h1 class="acceso__titulo">Contratar el SPEI</h1>
+            <p class="texto-sec">Préstamo de equipo institucional para tu escuela: elige un plan y crea tu cuenta de administración.</p>
+        </div>
+
+        @if (session('error'))
+            <div class="alerta alerta--error" role="alert">
+                <span class="icono" aria-hidden="true">error</span><span>{{ session('error') }}</span>
+            </div>
+        @endif
+
+        <form method="POST" action="{{ route('contratacion.store') }}" class="pila" novalidate>
+            @csrf
+            <fieldset class="grupo-campos">
+                <legend class="subtitulo-pagina">1. Elige un plan</legend>
+                @if ($planes->isEmpty())
+                    <div class="vacio vacio--compacto tarjeta">
+                        <span class="icono" aria-hidden="true">inbox</span>
+                        <span class="vacio__titulo">No hay planes disponibles por el momento.</span>
+                    </div>
+                @endif
+                <div class="cuadricula-220">
+                    @foreach ($planes as $plan)
+                        <label class="tarjeta plan-opcion plan-elegible">
+                            <input type="radio" name="plan" value="{{ $plan->clave->value }}" required
+                                   @error('plan') aria-invalid="true" aria-describedby="plan-error" @enderror
+                                   @checked(old('plan', $planes->first()?->clave->value) === $plan->clave->value)>
+                            <span class="plan-opcion__nombre">{{ $plan->nombre }}</span>
+                            <span><span class="plan-opcion__precio">${{ number_format((float) $plan->monto_mensual, 2) }}</span>
+                                <span class="texto-13 texto-sec">MXN / mes</span></span>
+                            <span class="pila--8 titulos">
+                                <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ $plan->limite_areas }} áreas</span>
+                                <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ number_format($plan->limite_recursos) }} recursos</span>
+                                <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ $plan->duracion_dias }} días por periodo</span>
+                            </span>
+                        </label>
+                    @endforeach
                 </div>
-            @endif
-            <div class="cuadricula cuadricula--planes">
-                @foreach ($planes as $plan)
-                    <label class="tarjeta plan-opcion">
-                        <input type="radio" name="plan" value="{{ $plan->clave->value }}" class="visualmente-oculto" required
-                               @error('plan') aria-invalid="true" aria-describedby="plan-error" @enderror
-                               @checked(old('plan', $planes->first()?->clave->value) === $plan->clave->value)>
-                        <span class="tarjeta__titulo">{{ $plan->nombre }}</span>
-                        <span class="plan-opcion__precio">${{ number_format((float) $plan->monto_mensual, 2) }}</span>
-                        <span class="texto-secundario"> MXN / mes</span>
-                        <ul class="texto-secundario">
-                            <li>{{ $plan->limite_areas }} áreas</li>
-                            <li>{{ number_format($plan->limite_recursos) }} recursos</li>
-                            <li>{{ $plan->duracion_dias }} días por periodo</li>
-                        </ul>
-                    </label>
-                @endforeach
-            </div>
-            @error('plan')
-                <p id="plan-error" class="campo__error">{{ $message }}</p>
-            @enderror
-        </fieldset>
+                @error('plan')
+                    <p id="plan-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</p>
+                @enderror
+            </fieldset>
 
-        <fieldset class="tarjeta" style="border: 0;">
-            <legend class="subtitulo">2. Datos de la institución</legend>
-            <div class="fila-campos">
-                @include('partials.campo', ['nombre' => 'nombre_institucion', 'etiqueta' => 'Nombre de la institución'])
-                @include('partials.campo', [
-                    'nombre' => 'dominio_correo',
-                    'etiqueta' => 'Dominio de correo',
-                    'ayuda' => 'Sin arroba, por ejemplo universidad.edu.mx',
-                ])
-            </div>
-        </fieldset>
+            <fieldset class="grupo-campos">
+                <legend class="subtitulo-pagina">2. Datos de la institución</legend>
+                <div class="cuadricula-campos">
+                    @include('partials.campo', [
+                        'nombre' => 'nombre_institucion',
+                        'etiqueta' => 'Nombre de la institución',
+                        'icono' => 'account_balance',
+                        'atributos' => 'maxlength="150"',
+                    ])
+                    @include('partials.campo', [
+                        'nombre' => 'dominio_correo',
+                        'etiqueta' => 'Dominio de correo',
+                        'icono' => 'alternate_email',
+                        'marcador' => 'universidad.edu.mx',
+                        'ayuda' => 'Sin arroba. Define quién puede entrar a tu institución.',
+                        'atributos' => 'maxlength="100"',
+                    ])
+                </div>
+            </fieldset>
 
-        <fieldset class="tarjeta" style="border: 0;">
-            <legend class="subtitulo">3. Administrador institucional</legend>
-            <div class="fila-campos">
-                @include('partials.campo', ['nombre' => 'nombre_completo', 'etiqueta' => 'Nombre completo'])
-                @include('partials.campo', [
-                    'nombre' => 'correo_institucional',
-                    'etiqueta' => 'Correo institucional',
-                    'tipo' => 'email',
-                    'atributos' => 'autocomplete="username" maxlength="150"',
-                ])
-                @include('partials.campo', [
-                    'nombre' => 'contrasena',
-                    'etiqueta' => 'Contraseña',
-                    'tipo' => 'password',
-                    'ayuda' => 'Mínimo 10 caracteres con letras y números.',
-                    'atributos' => 'autocomplete="new-password" minlength="10"',
-                ])
-                @include('partials.campo', [
-                    'nombre' => 'contrasena_confirmation',
-                    'etiqueta' => 'Confirmar contraseña',
-                    'tipo' => 'password',
-                    'atributos' => 'autocomplete="new-password" minlength="10"',
-                ])
-            </div>
-            <div class="acciones">
-                <button type="submit" class="boton" @disabled($planes->isEmpty())>
-                    <span class="icono icono--boton" aria-hidden="true">check</span>Contratar
+            <fieldset class="grupo-campos">
+                <legend class="subtitulo-pagina">3. Administrador institucional</legend>
+                <div class="cuadricula-campos">
+                    @include('partials.campo', [
+                        'nombre' => 'nombre_completo',
+                        'etiqueta' => 'Nombre completo',
+                        'icono' => 'person',
+                        'atributos' => 'autocomplete="name" maxlength="150"',
+                    ])
+                    @include('partials.campo', [
+                        'nombre' => 'correo_institucional',
+                        'etiqueta' => 'Correo institucional',
+                        'tipo' => 'email',
+                        'icono' => 'mail',
+                        'marcador' => 'nombre@universidad.edu.mx',
+                        'atributos' => 'autocomplete="username" maxlength="150"',
+                    ])
+                    @include('partials.campo', [
+                        'nombre' => 'contrasena',
+                        'etiqueta' => 'Contraseña',
+                        'tipo' => 'password',
+                        'icono' => 'lock',
+                        'ayuda' => 'Mínimo 10 caracteres con letras y números.',
+                        'atributos' => 'autocomplete="new-password" minlength="10"',
+                    ])
+                    @include('partials.campo', [
+                        'nombre' => 'contrasena_confirmation',
+                        'etiqueta' => 'Confirmar contraseña',
+                        'tipo' => 'password',
+                        'icono' => 'lock',
+                        'atributos' => 'autocomplete="new-password" minlength="10"',
+                    ])
+                </div>
+            </fieldset>
+
+            <div class="pie-pasos">
+                <span class="texto-13 texto-sec centrado-vertical">La vigencia inicia hoy y se calcula con la duración del plan.</span>
+                <button type="submit" class="boton boton--primario boton--grande" @disabled($planes->isEmpty())>
+                    <span class="icono" aria-hidden="true">check</span>Contratar
                 </button>
-                <a href="{{ route('login') }}" class="boton boton--secundario">Iniciar sesión</a>
             </div>
-        </fieldset>
-    </form>
+        </form>
+    </div>
 @endsection

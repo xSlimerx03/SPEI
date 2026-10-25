@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -46,6 +46,11 @@ use Symfony\Component\HttpFoundation\Response;
  */
 class TenantMiddleware
 {
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  ContextoInstitucional  $contexto  Institución activa de la petición.
+     */
     public function __construct(
         private ContextoInstitucional $contexto,
     ) {}

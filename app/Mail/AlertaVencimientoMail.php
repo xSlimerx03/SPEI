@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -50,6 +50,12 @@ class AlertaVencimientoMail extends Mailable implements ShouldQueue
     use Queueable;
     use SerializesModels;
 
+    /**
+     * Recibe los datos del correo.
+     *
+     * @param  string  $nombreDestinatario  Nombre de quien recibe el correo.
+     * @param  string  $mensaje  Texto principal del aviso.
+     */
     public function __construct(
         public string $nombreDestinatario,
         public string $mensaje,

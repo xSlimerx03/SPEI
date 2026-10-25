@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -51,6 +51,12 @@ use Illuminate\Support\Facades\Gate;
  */
 class RecursoController extends Controller
 {
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  CatalogoService  $catalogoService  Dependencia inyectada.
+     * @param  RecursoService  $recursoService  Dependencia inyectada.
+     */
     public function __construct(
         private CatalogoService $catalogoService,
         private RecursoService $recursoService,

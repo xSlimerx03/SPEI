@@ -59,7 +59,7 @@ class ReglaNegocioException extends RuntimeException
         }
 
         return back()->withInput($request->except([
-            'contrasena', 'contrasena_confirmation', 'password', 'password_confirmation',
+            'contrasena', 'contrasena_confirmation', 'password', 'password_confirmation', 'codigo',
         ]))->with('error', $this->getMessage());
     }
 }

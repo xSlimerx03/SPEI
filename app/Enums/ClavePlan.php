@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -43,4 +43,18 @@ enum ClavePlan: string
     case Basico = 'basico';
     case Pro = 'pro';
     case Enterprise = 'enterprise';
+
+    /**
+     * Nombre del plan para mostrarlo en pantalla.
+     *
+     * @return string
+     */
+    public function obtenerEtiqueta(): string
+    {
+        return match ($this) {
+            self::Basico => 'Básico',
+            self::Pro => 'Pro',
+            self::Enterprise => 'Enterprise',
+        };
+    }
 }

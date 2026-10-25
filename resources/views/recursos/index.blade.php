@@ -10,126 +10,114 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
- * @version      v1.0.0
+ * @lastModified 2026-10-25
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
- * @description  Inventario del administrador con filtros, etiqueta de color
- *               por estado y acciones de mantenimiento y desactivación.
+ * @description  Recursos del administrador (prototipo hi-fi): chips por
+ *               estado con conteo, "Escanear código", "Importar CSV" y
+ *               "Crear", filtros y cuadrícula o lista con disponibilidad.
  *
- * @requisitos   RF-011, RF-013, RF-014, RF-015
+ * @requisitos   RF-010, RF-011, RF-012, RF-013, RF-015
  *
- * @see          docs/requisitos/BBB_CU009_CambiarEstadoRecurso_v1.0.md; BBB_CU010
+ * @see          Prototipo interactivo SPEI/design_handoff_spei_web/README.md (Recursos); DT-028
  * ============================================================================
 --}}
 @extends('layouts.app')
 
-@section('titulo', 'Inventario')
+@section('titulo', 'Recursos')
+
+@php
+    $estadoActual = $filtros['estado'] ?? null;
+    $consulta = array_filter(\Illuminate\Support\Arr::except($filtros, ['estado', 'page']), fn (mixed $v): bool => $v !== null && $v !== '')
+        + ($vistaLista ? ['vista' => 'lista'] : []);
+    $chips = [
+        '' => ['Todos', 'todos'],
+        'disponible' => ['Disponibles', 'disponible'],
+        'prestado' => ['Prestados', 'prestado'],
+        'bloqueado' => ['Bloqueados', 'bloqueado'],
+        'mantenimiento' => ['Mantenimiento', 'mantenimiento'],
+    ];
+@endphp
 
 @section('contenido')
-    <div class="acciones" style="margin-bottom: 24px;">
-        <a href="{{ route('recursos.create') }}" class="boton">
-            <span class="icono icono--boton" aria-hidden="true">add</span>Crear
-        </a>
-        <a href="{{ route('recursos.importar') }}" class="boton boton--secundario">
-            <span class="icono icono--boton" aria-hidden="true">upload_file</span>Importar CSV
-        </a>
-    </div>
+    <div class="pila--20 titulos">
+        <div class="encabezado-pagina encabezado-pagina--centro">
+            <nav class="chips" aria-label="Estados de recurso">
+                @foreach ($chips as $clave => [$texto, $contador])
+                    @php($activo = ($estadoActual ?? '') === $clave)
+                    <a href="{{ route('recursos.index', $consulta + ($clave === '' ? [] : ['estado' => $clave])) }}"
+                       class="chip {{ $activo ? 'chip--activo' : '' }}" @if ($activo) aria-current="page" @endif>
+                        {{ $texto }}<span class="chip__contador">{{ $conteo[$contador] }}</span>
+                    </a>
+                @endforeach
+            </nav>
+            <div class="acciones">
+                <button type="button" class="boton boton--secundario" data-abrir-modal="modal-codigo">
+                    <span class="icono" aria-hidden="true">barcode_scanner</span>Escanear código
+                </button>
+                <a href="{{ route('recursos.importar') }}" class="boton boton--secundario">
+                    <span class="icono" aria-hidden="true">upload_file</span>Importar CSV
+                </a>
+                <a href="{{ route('recursos.create') }}" class="boton boton--primario">
+                    <span class="icono" aria-hidden="true">add</span>Crear
+                </a>
+            </div>
+        </div>
 
-    @include('recursos.buscar-codigo')
-
-    <section class="tarjeta" aria-label="Recursos">
-        <form method="GET" action="{{ route('recursos.index') }}" class="filtros">
-            <div class="campo">
-                <label for="texto" class="campo__etiqueta">Buscar</label>
-                <input type="search" id="texto" name="texto" class="control" value="{{ request('texto') }}" maxlength="100">
-            </div>
-            <div class="campo">
-                <label for="estado" class="campo__etiqueta">Estado</label>
-                <select id="estado" name="estado" class="control">
-                    <option value="">Todos</option>
-                    @foreach ($estados as $estado)
-                        <option value="{{ $estado->value }}" @selected(request('estado') === $estado->value)>
-                            {{ $estado->obtenerEtiqueta() }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="campo">
-                <label for="id_area" class="campo__etiqueta">Área</label>
-                <select id="id_area" name="id_area" class="control">
-                    <option value="">Todas</option>
-                    @foreach ($areas as $area)
-                        <option value="{{ $area->id_area }}" @selected((int) request('id_area') === $area->id_area)>
-                            {{ $area->nombre_area }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <div class="campo">
-                <label for="tipo_recurso" class="campo__etiqueta">Tipo</label>
-                <select id="tipo_recurso" name="tipo_recurso" class="control">
-                    <option value="">Todos</option>
-                    @foreach ($tipos as $tipo)
-                        <option value="{{ $tipo->value }}" @selected(request('tipo_recurso') === $tipo->value)>
-                            {{ $tipo->obtenerEtiqueta() }}
-                        </option>
-                    @endforeach
-                </select>
-            </div>
-            <button type="submit" class="boton boton--secundario">
-                <span class="icono icono--boton" aria-hidden="true">filter_list</span>Filtrar
-            </button>
-        </form>
+        @include('recursos.filtros', ['ruta' => 'recursos.index'])
 
         @if ($recursos->isEmpty())
-            <div class="estado-vacio">
-                <span class="icono icono--vacio" aria-hidden="true">inbox</span>
-                <p>No hay recursos registrados.</p>
+            <div class="tarjeta vacio">
+                <span class="icono" aria-hidden="true">inventory_2</span>
+                <span class="vacio__titulo">Sin recursos en este estado</span>
+                <span class="vacio__texto">Prueba con otro filtro o limpia la búsqueda.</span>
             </div>
+        @elseif ($vistaLista)
+            @include('recursos.lista', ['rutaDetalle' => 'recursos.show'])
         @else
-            <div class="tabla-contenedor">
-                <table class="tabla">
-                    <thead>
-                        <tr>
-                            <th scope="col">Recurso</th>
-                            <th scope="col">Inventario</th>
-                            <th scope="col">Área</th>
-                            <th scope="col">Estado</th>
-                            <th scope="col"><span class="visualmente-oculto">Acciones</span></th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($recursos as $recurso)
-                            <tr>
-                                <td>
-                                    <strong>{{ $recurso->nombre_recurso }}</strong>
-                                    <div class="texto-secundario">
-                                        {{ $recurso->tipo_recurso->obtenerEtiqueta() }}{{ $recurso->marca ? ' · ' . $recurso->marca : '' }}
-                                        @unless ($recurso->activo) · Inactivo @endunless
-                                    </div>
-                                </td>
-                                <td>{{ $recurso->numero_inventario }}</td>
-                                <td>{{ $recurso->area->nombre_area }}</td>
-                                <td>
-                                    <span class="etiqueta {{ $recurso->estado->obtenerClaseEtiqueta() }}">
-                                        {{ $recurso->estado->obtenerEtiqueta() }}
-                                    </span>
-                                </td>
-                                <td class="tabla__acciones">
-                                    <a href="{{ route('recursos.edit', $recurso) }}" class="boton boton--pequeno">
-                                        <span class="icono icono--boton" aria-hidden="true">edit</span>Editar
-                                    </a>
-                                    @include('recursos.acciones-estado', ['recurso' => $recurso])
-                                </td>
-                            </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+            <div class="cuadricula-recursos">
+                @foreach ($recursos as $recurso)
+                    @include('recursos.tarjeta', [
+                        'recurso' => $recurso,
+                        'disponibilidad' => $disponibilidad[$recurso->id_recurso] ?? '',
+                        'enlace' => route('recursos.show', $recurso),
+                        'solicitable' => false,
+                    ])
+                @endforeach
             </div>
-            {{ $recursos->links('partials.paginacion') }}
         @endif
-    </section>
+        {{ $recursos->links('partials.paginacion', ['suelta' => true]) }}
+    </div>
+
+    @push('modales')
+        <dialog id="modal-codigo" class="modal" aria-labelledby="modal-codigo-titulo">
+            <form method="GET" action="{{ route('recursos.buscar') }}" class="modal__contenido">
+                <div class="modal__cabecera">
+                    <span class="icono-tile icono-tile--44 icono-tile--azul" aria-hidden="true"><span class="icono">barcode_scanner</span></span>
+                    <div class="pila--4 titulos crece">
+                        <h2 id="modal-codigo-titulo" class="modal__titulo">Escanear código</h2>
+                        <p class="modal__descripcion">Coloca el cursor en el campo y escanea la etiqueta con el lector. Si el código no existe, abrimos el alta con el número precargado.</p>
+                    </div>
+                    <button type="button" class="modal__cerrar" data-cerrar-modal aria-label="Cerrar">
+                        <span class="icono" aria-hidden="true">close</span>
+                    </button>
+                </div>
+                @include('partials.campo', [
+                    'nombre' => 'codigo',
+                    'etiqueta' => 'Número de inventario o de serie',
+                    'icono' => 'barcode',
+                    'atributos' => 'maxlength="100" autocomplete="off" autofocus',
+                ])
+                <div class="acciones acciones--fin">
+                    <button type="button" class="boton boton--secundario boton--grande" data-cerrar-modal>Cancelar</button>
+                    <button type="submit" class="boton boton--primario boton--grande">
+                        <span class="icono" aria-hidden="true">search</span>Buscar
+                    </button>
+                </div>
+            </form>
+        </dialog>
+    @endpush
 @endsection

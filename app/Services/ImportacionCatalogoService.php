@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -37,6 +37,7 @@ use App\Models\Area;
 use App\Models\Institucion;
 use App\Models\Recurso;
 use App\Models\Usuario;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
@@ -65,6 +66,12 @@ class ImportacionCatalogoService
         'nombre_area',
     ];
 
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  AuditoriaService  $auditoriaService  Dependencia inyectada.
+     * @param  RecursoService  $recursoService  Dependencia inyectada.
+     */
     public function __construct(
         private AuditoriaService $auditoriaService,
         private RecursoService $recursoService,
@@ -176,7 +183,10 @@ class ImportacionCatalogoService
     {
         return Area::query()
             ->activas()
-            ->when($actor->esResponsableDeArea(), fn ($consulta) => $consulta->whereKey($actor->id_area_asignada))
+            ->when(
+                $actor->esResponsableDeArea(),
+                fn (Builder $consulta): Builder => $consulta->whereKey($actor->id_area_asignada),
+            )
             ->get(['id_area', 'nombre_area'])
             ->mapWithKeys(fn (Area $area): array => [mb_strtolower($area->nombre_area) => $area->id_area])
             ->all();

@@ -10,18 +10,18 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
- * @version      v1.0.0
+ * @lastModified 2026-10-25
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
  * @description  Listado de áreas con número de recursos, activación y
- *               eliminación.
+ *               eliminación, con el lenguaje visual del prototipo.
  *
  * @requisitos   RF-009
  *
- * @see          docs/requisitos/BBB_CU006_GestionarAreas_v1.0.md
+ * @see          docs/requisitos/BBB_CU006_GestionarAreas_v1.0.md; DT-028
  * ============================================================================
 --}}
 @extends('layouts.app')
@@ -29,20 +29,25 @@
 @section('titulo', 'Áreas')
 
 @section('contenido')
-    <div class="acciones" style="margin-bottom: 24px;">
-        <a href="{{ route('areas.create') }}" class="boton">
-            <span class="icono icono--boton" aria-hidden="true">add</span>Crear
-        </a>
-    </div>
-    <div class="tarjeta">
+    <section class="tarjeta tarjeta--recortada" aria-labelledby="titulo-areas">
+        <div class="tarjeta__cabecera">
+            <div class="titulos">
+                <h2 id="titulo-areas" class="tarjeta__titulo">Áreas y departamentos</h2>
+                <span class="tarjeta__subtitulo">Un área inactiva oculta sus recursos del catálogo.</span>
+            </div>
+            <a href="{{ route('areas.create') }}" class="boton boton--primario">
+                <span class="icono" aria-hidden="true">add</span>Crear
+            </a>
+        </div>
         @if ($areas->isEmpty())
-            <div class="estado-vacio">
-                <span class="icono icono--vacio" aria-hidden="true">inbox</span>
-                <p>Aún no hay áreas registradas.</p>
+            <div class="vacio">
+                <span class="icono" aria-hidden="true">apartment</span>
+                <span class="vacio__titulo">Aún no hay áreas registradas</span>
+                <span class="vacio__texto">Crea la primera para empezar a registrar recursos.</span>
             </div>
         @else
             <div class="tabla-contenedor">
-                <table class="tabla">
+                <table class="tabla tabla--720">
                     <thead>
                         <tr>
                             <th scope="col">Área</th>
@@ -55,39 +60,44 @@
                         @foreach ($areas as $area)
                             <tr>
                                 <td>
-                                    <strong>{{ $area->nombre_area }}</strong>
-                                    @if ($area->descripcion)
-                                        <div class="texto-secundario">{{ $area->descripcion }}</div>
-                                    @endif
+                                    <div class="celda-persona">
+                                        <span class="icono-tile" aria-hidden="true"><span class="icono">apartment</span></span>
+                                        <div class="celda-doble">
+                                            <span class="negrita">{{ $area->nombre_area }}</span>
+                                            @if ($area->descripcion)
+                                                <span class="celda-doble__secundaria">{{ \Illuminate\Support\Str::limit($area->descripcion, 90) }}</span>
+                                            @endif
+                                        </div>
+                                    </div>
                                 </td>
                                 <td>{{ $area->recursos_count }}</td>
                                 <td>
-                                    <span class="etiqueta {{ $area->activo ? 'etiqueta--exito' : 'etiqueta--neutra' }}">
-                                        {{ $area->activo ? 'Activa' : 'Inactiva' }}
-                                    </span>
+                                    <span class="insignia {{ $area->activo ? 'insignia--exito' : 'insignia--neutra' }}">{{ $area->activo ? 'Activa' : 'Inactiva' }}</span>
                                 </td>
-                                <td class="tabla__acciones">
-                                    <a href="{{ route('areas.edit', $area) }}" class="boton boton--pequeno">
-                                        <span class="icono icono--boton" aria-hidden="true">edit</span>Editar
-                                    </a>
-                                    <form method="POST" action="{{ route('areas.activo', $area) }}" class="formulario-en-linea">
-                                        @csrf
-                                        @method('PATCH')
-                                        <input type="hidden" name="activo" value="{{ $area->activo ? 0 : 1 }}">
-                                        <button type="submit" class="boton boton--pequeno boton--secundario">
-                                            {{ $area->activo ? 'Desactivar' : 'Activar' }}
-                                        </button>
-                                    </form>
-                                    @if ($area->recursos_count === 0)
-                                        <form method="POST" action="{{ route('areas.destroy', $area) }}" class="formulario-en-linea"
-                                              onsubmit="return confirm('¿Está seguro de eliminar el área?');">
+                                <td>
+                                    <div class="tabla__acciones">
+                                        <a href="{{ route('areas.edit', $area) }}" class="boton boton--secundario boton--pequeno">
+                                            <span class="icono" aria-hidden="true">edit</span>Editar
+                                        </a>
+                                        <form method="POST" action="{{ route('areas.activo', $area) }}" class="formulario-en-linea">
                                             @csrf
-                                            @method('DELETE')
-                                            <button type="submit" class="boton boton--pequeno boton--secundario boton--peligro">
-                                                <span class="icono icono--boton" aria-hidden="true">delete</span>Eliminar
+                                            @method('PATCH')
+                                            <input type="hidden" name="activo" value="{{ $area->activo ? 0 : 1 }}">
+                                            <button type="submit" class="boton boton--fantasma boton--pequeno">
+                                                <span class="icono" aria-hidden="true">{{ $area->activo ? 'visibility_off' : 'visibility' }}</span>{{ $area->activo ? 'Desactivar' : 'Activar' }}
                                             </button>
                                         </form>
-                                    @endif
+                                        @if ($area->recursos_count === 0)
+                                            <form method="POST" action="{{ route('areas.destroy', $area) }}" class="formulario-en-linea"
+                                                  data-confirmar="¿Está seguro de eliminar el área {{ $area->nombre_area }}?">
+                                                @csrf
+                                                @method('DELETE')
+                                                <button type="submit" class="boton boton--peligro-texto boton--pequeno">
+                                                    <span class="icono" aria-hidden="true">delete</span>Eliminar
+                                                </button>
+                                            </form>
+                                        @endif
+                                    </div>
                                 </td>
                             </tr>
                         @endforeach
@@ -96,5 +106,5 @@
             </div>
             {{ $areas->links('partials.paginacion') }}
         @endif
-    </div>
+    </section>
 @endsection

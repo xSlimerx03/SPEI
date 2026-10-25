@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -44,7 +44,7 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('logs_auditoria', function (Blueprint $table) {
+        Schema::create('logs_auditoria', function (Blueprint $table): void {
             $table->engine('InnoDB');
             $table->comment('Bitácora inalterable de transacciones críticas (RNF-005).');
 

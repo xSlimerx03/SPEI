@@ -12,19 +12,21 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
- * @version      v1.0.0
+ * @lastModified 2026-10-25
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
- * @description  Inventario del administrador del sistema: listado con
- *               filtros, alta, edición, búsqueda por código de barras, cambio
- *               de estado y desactivación.
+ * @description  Inventario del administrador del sistema (prototipo hi-fi):
+ *               chips por estado, filtros, cuadrícula o lista con
+ *               disponibilidad, detalle con línea de tiempo e historial, alta,
+ *               edición, búsqueda por código de barras, mantenimiento y
+ *               desactivación.
  *
  * @requisitos   RF-010, RF-011, RF-013, RF-014, RF-015, RS-006
  *
- * @see          docs/requisitos/BBB_CU007_RegistrarRecurso_v1.0.md; BBB_CU009; BBB_CU010
+ * @see          docs/requisitos/BBB_CU007_RegistrarRecurso_v1.0.md; BBB_CU009; BBB_CU010; DT-028
  * ============================================================================
  */
 
@@ -43,7 +45,9 @@ use App\Models\Institucion;
 use App\Models\Recurso;
 use App\Models\Usuario;
 use App\Services\CatalogoService;
+use App\Services\DisponibilidadRecursoService;
 use App\Services\RecursoService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Collection;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -59,13 +63,21 @@ use Illuminate\View\View;
  */
 class RecursoController extends Controller
 {
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  RecursoService  $recursoService  Dependencia inyectada.
+     * @param  CatalogoService  $catalogoService  Dependencia inyectada.
+     * @param  DisponibilidadRecursoService  $disponibilidadService  Dependencia inyectada.
+     */
     public function __construct(
         private RecursoService $recursoService,
         private CatalogoService $catalogoService,
+        private DisponibilidadRecursoService $disponibilidadService,
     ) {}
 
     /**
-     * Lista el inventario con los cuatro estados y filtros.
+     * Lista el inventario con chips por estado, filtros y vista de cuadrícula o lista.
      *
      * @param  FiltrarRecursosRequest  $request  Filtros validados.
      * @return View
@@ -75,12 +87,37 @@ class RecursoController extends Controller
         Gate::authorize('gestionar', Recurso::class);
         /** @var Usuario $usuario */
         $usuario = $request->user();
+        $filtros = $request->validated();
+        $recursos = $this->catalogoService->listarInventario($usuario, $filtros);
 
         return view('recursos.index', [
-            'recursos' => $this->catalogoService->listarInventario($usuario, $request->validated()),
+            'recursos' => $recursos,
+            'disponibilidad' => $this->disponibilidadService->describir($recursos->items()),
+            'conteo' => $this->catalogoService->contarInventario($usuario, $filtros),
             'areas' => $this->obtenerAreas($usuario),
-            'estados' => EstadoRecurso::cases(),
             'tipos' => TipoRecurso::cases(),
+            'filtros' => $filtros,
+            'vistaLista' => $request->query('vista') === 'lista',
+        ]);
+    }
+
+    /**
+     * Detalle del recurso con disponibilidad semanal, especificaciones e historial.
+     *
+     * @param  Recurso  $recurso  Recurso de la propia institución.
+     * @return View
+     */
+    public function show(Recurso $recurso): View
+    {
+        Gate::authorize('modificar', $recurso);
+        $recurso->load('area');
+
+        return view('recursos.show', [
+            'recurso' => $recurso,
+            'disponibilidad' => $this->disponibilidadService->describir([$recurso])[$recurso->id_recurso],
+            'semana' => $this->disponibilidadService->obtenerSemana($recurso),
+            'historial' => $this->disponibilidadService->obtenerHistorial($recurso),
+            'esAdministrador' => true,
         ]);
     }
 
@@ -109,9 +146,9 @@ class RecursoController extends Controller
     public function store(GuardarRecursoRequest $request): RedirectResponse
     {
         $institucion = Institucion::query()->findOrFail($request->user()?->getAttribute('id_institucion'));
-        $this->recursoService->crear($institucion, $request->validated());
+        $recurso = $this->recursoService->crear($institucion, $request->validated());
 
-        return redirect()->route('recursos.index')->with('success', 'Recurso registrado correctamente.');
+        return redirect()->route('recursos.show', $recurso)->with('success', 'Recurso registrado correctamente.');
     }
 
     /**
@@ -141,7 +178,7 @@ class RecursoController extends Controller
     {
         $this->recursoService->actualizar($recurso, $request->validated());
 
-        return redirect()->route('recursos.index')->with('success', 'Recurso actualizado correctamente.');
+        return redirect()->route('recursos.show', $recurso)->with('success', 'Recurso actualizado correctamente.');
     }
 
     /**
@@ -188,7 +225,7 @@ class RecursoController extends Controller
         $recurso = $this->recursoService->buscarPorCodigo($codigo);
 
         if ($recurso instanceof Recurso) {
-            return redirect()->route('recursos.edit', $recurso);
+            return redirect()->route('recursos.show', $recurso);
         }
 
         return redirect()->route('recursos.create', ['codigo' => $codigo])
@@ -220,7 +257,10 @@ class RecursoController extends Controller
     private function obtenerAreas(Usuario $usuario): Collection
     {
         return Area::query()
-            ->when($usuario->esResponsableDeArea(), fn ($q) => $q->whereKey($usuario->id_area_asignada))
+            ->when(
+                $usuario->esResponsableDeArea(),
+                fn (Builder $q): Builder => $q->whereKey($usuario->id_area_asignada),
+            )
             ->orderBy('nombre_area')
             ->get();
     }

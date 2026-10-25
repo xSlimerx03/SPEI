@@ -60,7 +60,8 @@ aplica) → 6. auditor → 7. RT-01.
 | Laravel 11.x sin parches de seguridad | Alta | Media | **Cerrado**: migrado a 12.70 (DT-019) |
 | Concurrencia en reservas | Media | Alta | Transacción + `lockForUpdate` + lock Redis + prueba concurrente desde el bloque B |
 | QR temporal sin app móvil | Media | Alta | Escáner web (cámara del navegador, HTTPS) y captura manual del código; modo sin conexión pendiente de decisión (DT-022) |
-| ERS no disponible en el repositorio | Media | Alta | Copiar la ERS vigente a `docs/requisitos/` antes del bloque A |
+| Formatos DDL del bloque A sin elaborar (7 migraciones, triggers `trg_usuarios_*`) | Alta | Media | Abierto (RED-01 25/10/2026): elaborar DDL-03/04/06/07/08 del bloque A con `spei-datos` antes de cerrar el EI-01 del bloque A; los de préstamos ya existen en `docs/bd/` |
+| ERS no disponible en el repositorio | — | — | **Cerrado 18/10/2026:** SRS v1.0 copiado a `docs/requisitos/` y línea base fijada en DT-023 (`BBB_REQ01_LineaBase_v1.0.md`) |
 
 ## 6. Indicadores (MC Tabla 18)
 Requisitos implementados (meta 100 % por bloque), casos de prueba superados (≥ 95 %), cobertura

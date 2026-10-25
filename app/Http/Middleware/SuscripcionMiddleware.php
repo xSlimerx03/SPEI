@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -54,8 +54,18 @@ class SuscripcionMiddleware
     /**
      * Rutas de escritura que se permiten aun en solo lectura.
      */
-    private const RUTAS_PERMITIDAS = ['sesion.destroy', 'api.sesiones.destroy', 'notificaciones.leida'];
+    private const RUTAS_PERMITIDAS = [
+        'sesion.destroy',
+        'api.sesiones.destroy',
+        'notificaciones.leida',
+        'notificaciones.leidas',
+    ];
 
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  AutenticacionService  $autenticacionService  Dependencia inyectada.
+     */
     public function __construct(
         private AutenticacionService $autenticacionService,
     ) {}

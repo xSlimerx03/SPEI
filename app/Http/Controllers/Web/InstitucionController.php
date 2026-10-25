@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -32,14 +32,19 @@ declare(strict_types=1);
 namespace App\Http\Controllers\Web;
 
 use App\Enums\EstadoSuscripcion;
+use App\Enums\Rol;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\CambiarEstadoSuscripcionRequest;
 use App\Http\Requests\CambiarPlanRequest;
 use App\Models\Institucion;
 use App\Models\Plan;
+use App\Models\Usuario;
 use App\Services\SuscripcionService;
+use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Gate;
+use Illuminate\Validation\Rule;
 use Illuminate\View\View;
 
 /**
@@ -51,19 +56,43 @@ use Illuminate\View\View;
  */
 class InstitucionController extends Controller
 {
+    /**
+     * Recibe las dependencias por inyección del contenedor.
+     *
+     * @param  SuscripcionService  $suscripcionService  Dependencia inyectada.
+     */
     public function __construct(
         private SuscripcionService $suscripcionService,
     ) {}
 
     /**
-     * Lista las instituciones ordenadas por fecha de corte.
+     * Lista las instituciones ordenadas por fecha de corte, con búsqueda por nombre o dominio y estado.
      *
+     * @param  Request  $request  Filtros.
      * @return View
      */
-    public function index(): View
+    public function index(Request $request): View
     {
+        $filtros = $request->validate([
+            'texto' => ['nullable', 'string', 'max:100'],
+            'estado' => ['nullable', Rule::enum(EstadoSuscripcion::class)],
+        ]);
+
         return view('instituciones.index', [
-            'instituciones' => Institucion::query()->orderBy('fecha_corte')->paginate(15),
+            'instituciones' => Institucion::query()
+                ->when($filtros['texto'] ?? null, function (Builder $consulta, string $texto): void {
+                    $patron = '%' . addcslashes($texto, '%_\\') . '%';
+                    $consulta->where(fn (Builder $q): Builder => $q->where('nombre_institucion', 'like', $patron)
+                        ->orWhere('dominio_correo', 'like', $patron));
+                })
+                ->when(
+                    $filtros['estado'] ?? null,
+                    fn (Builder $consulta, string $estado): Builder => $consulta->where('estado_suscripcion', $estado),
+                )
+                ->orderBy('fecha_corte')
+                ->paginate(15)
+                ->withQueryString(),
+            'filtros' => $filtros,
         ]);
     }
 
@@ -78,6 +107,10 @@ class InstitucionController extends Controller
         return view('instituciones.show', [
             'institucion' => $institucion,
             'uso' => $this->suscripcionService->obtenerUso($institucion),
+            'administradores' => Usuario::withoutGlobalScopes()
+                ->where('id_institucion', $institucion->id_institucion)
+                ->where('rol', Rol::AdminSistema)
+                ->count(),
             'planes' => Plan::query()->activos()->orderBy('monto_mensual')->get(),
             'estados' => array_filter(
                 EstadoSuscripcion::cases(),
