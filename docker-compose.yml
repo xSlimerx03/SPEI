@@ -7,15 +7,17 @@
 # @path         docker-compose.yml
 # @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
 # @date         2026-10-18
-# @lastModified 2026-10-18
-# @version      v1.0.0
+# @lastModified 2026-10-27
+# @version      v1.1.0
 # @license      Propietario - BigBitByte / Institución Educativa
 #               Todos los derechos reservados.
 # @description  Entorno contenerizado del SPEI (MP 3.5). Imágenes fijadas por
 #               etiqueta y digest (MD 6.1); credenciales tomadas de .env
 #               (MD 7.1); phpMyAdmin y MailHog solo en el perfil "dev".
+#               vendor/ vive en un volumen nombrado y la cola y el
+#               planificador corren en servicios propios (DT-031).
 # @requisitos   RS-001, RS-003, RNF-009, RNF-011
-# @see          docs/decisiones/BBB_DT_Registro_v1.0.md (DT-002, DT-003, DT-006, DT-017, DT-026)
+# @see          docs/decisiones/BBB_DT_Registro_v1.0.md (DT-002, DT-003, DT-006, DT-017, DT-026, DT-031)
 # ============================================================================
 
 name: spei
@@ -27,13 +29,30 @@ services:
       dockerfile: docker/Dockerfile
       target: dev
     image: spei-app:dev
-    volumes:
+    volumes: &volumenes-app
       - .:/var/www/html
-    depends_on:
+      # DT-031: vendor/ en el sistema de archivos de Docker; leerlo desde el montaje de Windows costaba ~1.5 s
+      # por petición (549 de 581 archivos incluidos vienen de vendor/).
+      - vendor:/var/www/html/vendor
+    depends_on: &dependencias-app
       db:
         condition: service_healthy
       redis:
         condition: service_started
+
+  cola:
+    image: spei-app:dev
+    command: ["php", "artisan", "queue:work", "--sleep=3", "--tries=3", "--max-time=3600"]
+    restart: unless-stopped
+    volumes: *volumenes-app
+    depends_on: *dependencias-app
+
+  programador:
+    image: spei-app:dev
+    command: ["php", "artisan", "schedule:work"]
+    restart: unless-stopped
+    volumes: *volumenes-app
+    depends_on: *dependencias-app
 
   web:
     image: nginx:1.27-alpine@sha256:65645c7bb6a0661892a8b03b89d0743208a18dd2f3f17a54ef4b76fb8e2f2a10
@@ -97,3 +116,4 @@ services:
 volumes:
   db_data:
   redis_data:
+  vendor:

@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-25
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -71,12 +71,15 @@ it('recorre solicitud, QR, entrega y devolución desde las pantallas', function 
     $this->actingAs($e->alumno)->get(route('prestamos.create', ['recurso' => $e->recurso->id_recurso]))
         ->assertOk()->assertSee('¿Qué recursos necesitas?')->assertSee('Proyector Epson');
     $prestamo = solicitarComoAlumno($this, $e->alumno, $e->recurso);
+    // DT-033: la reserva futura no bloquea el recurso hasta que empieza su ventana de recogida.
     expect($prestamo->estado)->toBe('pendiente')
-        ->and($e->recurso->fresh()->estado)->toBe(EstadoRecurso::Bloqueado);
+        ->and($e->recurso->fresh()->estado)->toBe(EstadoRecurso::Disponible);
 
     $this->get(route('prestamos.mis'))->assertOk()->assertSee($prestamo->obtenerFolio())->assertSee('QR de entrega');
 
     $this->travelTo(today()->setTime(10, 5));
+    $this->artisan('spei:activar-reservas')->assertSuccessful();
+    expect($e->recurso->fresh()->estado)->toBe(EstadoRecurso::Bloqueado);
     $token = $this->postJson(route('prestamos.token', $prestamo))->assertOk()
         ->assertHeader('Cache-Control', 'no-store, private')
         ->assertJsonStructure(['codigo', 'svg', 'expira_en', 'ttl', 'tipo'])->json();

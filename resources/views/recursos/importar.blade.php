@@ -41,7 +41,9 @@
             <label for="archivo" class="zona-archivo">
                 <span class="icono icono--40 icono--azul" aria-hidden="true">upload_file</span>
                 <span class="texto-15 negrita">Selecciona tu archivo CSV</span>
-                <span class="texto-13 texto-sec">UTF-8 separado por comas · máx. 2 MB y {{ number_format($maximoFilas, 0, '.', ',') }} filas</span>
+                <span class="texto-13 texto-sec">
+                    UTF-8 separado por comas · máx. 2 MB y {{ number_format($maximoFilas, 0, '.', ',') }} filas
+                </span>
                 <input type="file" id="archivo" name="archivo" class="control" accept=".csv,text/csv" required
                        @error('archivo') aria-invalid="true" aria-describedby="archivo-error" @enderror>
             </label>
@@ -68,10 +70,22 @@
             <span class="campo__etiqueta">Encabezado (primera fila, en este orden)</span>
             <code class="bloque-codigo">{{ $encabezado }}</code>
             <div class="reglas">
-                <div class="reglas__item"><span class="icono" aria-hidden="true">category</span><span><code class="mono">tipo_recurso</code>: <code class="mono">equipo_fisico</code> o <code class="mono">espacio</code>.</span></div>
-                <div class="reglas__item"><span class="icono" aria-hidden="true">apartment</span><span><code class="mono">nombre_area</code> debe coincidir con un área activa.</span></div>
-                <div class="reglas__item"><span class="icono" aria-hidden="true">tag</span><span>Inventario y serie no se pueden repetir en el archivo ni en la institución.</span></div>
-                <div class="reglas__item"><span class="icono" aria-hidden="true">event</span><span><code class="mono">anio_adquisicion</code> es opcional, entre 1990 y {{ now()->year }}.</span></div>
+                <div class="reglas__item">
+                    <span class="icono" aria-hidden="true">category</span><span><code class="mono">tipo_recurso</code>:
+                    <code class="mono">equipo_fisico</code> o <code class="mono">espacio</code>.</span>
+                </div>
+                <div class="reglas__item">
+                    <span class="icono" aria-hidden="true">apartment</span><span><code class="mono">nombre_area</code>
+                    debe coincidir con un área activa.</span>
+                </div>
+                <div class="reglas__item">
+                    <span class="icono" aria-hidden="true">tag</span><span>Inventario y serie no se pueden repetir en el
+                    archivo ni en la institución.</span>
+                </div>
+                <div class="reglas__item">
+                    <span class="icono" aria-hidden="true">event</span><span><code class="mono">anio_adquisicion</code>
+                    es opcional, entre 1990 y {{ now()->year }}.</span>
+                </div>
             </div>
         </section>
     </div>

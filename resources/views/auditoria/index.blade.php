@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -33,7 +33,10 @@
     <div class="pila--20 titulos">
         <div class="alerta alerta--blanca alerta--grande">
             <span class="icono" aria-hidden="true">shield_lock</span>
-            <span class="crece"><strong>Registro inalterable.</strong> Los eventos no se pueden modificar ni borrar; la base de datos rechaza cualquier cambio.</span>
+            <span class="crece">
+                <strong>Registro inalterable.</strong> Los eventos no se pueden modificar ni borrar; la base de datos
+                rechaza cualquier cambio.
+            </span>
             <a href="{{ route('auditoria.exportar', array_filter($filtros)) }}" class="boton boton--secundario">
                 <span class="icono" aria-hidden="true">download</span>Exportar
             </a>
@@ -44,7 +47,8 @@
                 <div class="control-icono control-icono--con-icono control-icono--compacto barra-filtros__busqueda">
                     <span class="icono" aria-hidden="true">search</span>
                     <label for="filtro-texto" class="visualmente-oculto">Buscar</label>
-                    <input type="search" id="filtro-texto" name="texto" class="control control--compacto" maxlength="100"
+                    <input type="search" id="filtro-texto" name="texto" class="control control--compacto"
+                           maxlength="100"
                            placeholder="Buscar por usuario, acción o registro" value="{{ $filtros['texto'] ?? '' }}">
                 </div>
                 <div class="selector selector--150">
@@ -52,7 +56,8 @@
                     <select id="filtro-accion" name="accion" class="control control--compacto" data-autoenvio>
                         <option value="">Todas las acciones</option>
                         @foreach ($acciones as $accion)
-                            <option value="{{ $accion }}" @selected(($filtros['accion'] ?? '') === $accion)>{{ $accion }}</option>
+                            <option value="{{ $accion }}"
+                                    @selected(($filtros['accion'] ?? '') === $accion)>{{ $accion }}</option>
                         @endforeach
                     </select>
                     <span class="icono icono-flecha" aria-hidden="true">expand_more</span>
@@ -62,7 +67,8 @@
                     <select id="filtro-tabla" name="tabla" class="control control--compacto" data-autoenvio>
                         <option value="">Todas las tablas</option>
                         @foreach ($tablas as $tabla)
-                            <option value="{{ $tabla }}" @selected(($filtros['tabla'] ?? '') === $tabla)>{{ $tabla }}</option>
+                            <option value="{{ $tabla }}"
+                                    @selected(($filtros['tabla'] ?? '') === $tabla)>{{ $tabla }}</option>
                         @endforeach
                     </select>
                     <span class="icono icono-flecha" aria-hidden="true">expand_more</span>
@@ -102,7 +108,9 @@
                             @foreach ($eventos as $evento)
                                 <tr>
                                     <td class="mono texto-apoyo">{{ $evento->fecha_hora?->format('Y-m-d H:i:s') }}</td>
-                                    <td class="negrita">{{ $evento->usuario?->nombre_completo ?? 'Sistema · tarea' }}</td>
+                                    <td class="negrita">
+                                        {{ $evento->usuario?->nombre_completo ?? 'Sistema · tarea' }}
+                                    </td>
                                     <td><span class="insignia insignia--accion">{{ $evento->accion }}</span></td>
                                     <td class="mono">{{ $evento->tabla_afectada }}</td>
                                     <td class="folio">{{ \App\Support\ResumenAuditoria::registro($evento) }}</td>

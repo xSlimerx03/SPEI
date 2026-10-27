@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -23,7 +23,7 @@
  *               confirmación de entrega o devolución desde el mostrador;
  *               cancelación justificada y exportación CSV del ámbito visible.
  *
- * @requisitos   RF-028, RF-029, RF-034, RF-036, RF-051, RF-058, RS-006
+ * @requisitos   RF-028, RF-029, RF-033, RF-034, RF-036, RF-042, RF-051, RF-058, RS-006
  *
  * @see          docs/plan/BBB_MVP_v1.0.md; app/Policies/PrestamoPolicy.php; DT-028
  * ============================================================================
@@ -40,9 +40,11 @@ use App\Http\Requests\ConfirmarMovimientoRequest;
 use App\Http\Requests\FiltrarPrestamosRequest;
 use App\Models\Area;
 use App\Models\DetallePrestamo;
+use App\Models\Penalizacion;
 use App\Models\Prestamo;
 use App\Models\Usuario;
 use App\Services\ConsultaPrestamoService;
+use App\Services\ConversacionService;
 use App\Services\PrestamoService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\RedirectResponse;
@@ -70,10 +72,12 @@ class PrestamoController extends Controller
      *
      * @param  PrestamoService  $prestamoService  Dependencia inyectada.
      * @param  ConsultaPrestamoService  $consultaPrestamoService  Dependencia inyectada.
+     * @param  ConversacionService  $conversacionService  Dependencia inyectada.
      */
     public function __construct(
         private PrestamoService $prestamoService,
         private ConsultaPrestamoService $consultaPrestamoService,
+        private ConversacionService $conversacionService,
     ) {}
 
     /**
@@ -128,11 +132,58 @@ class PrestamoController extends Controller
      * @param  Prestamo  $prestamo  Préstamo del tenant.
      * @return View
      */
-    public function show(Prestamo $prestamo): View
+    public function show(Request $request, Prestamo $prestamo): View
     {
         Gate::authorize('view', $prestamo);
+        /** @var Usuario $usuario */
+        $usuario = $request->user();
+        $this->conversacionService->marcarLeidos($usuario, $prestamo);
 
-        return view('prestamos.show', ['prestamo' => $prestamo->load(self::RELACIONES)]);
+        return view('prestamos.show', [
+            'prestamo' => $prestamo->load(self::RELACIONES),
+            'mensajes' => $this->conversacionService->listar($prestamo),
+            'puedeConversar' => $usuario->can('conversar', $prestamo),
+            'penalizaciones' => Penalizacion::query()->where('id_prestamo', $prestamo->id_prestamo)->get(),
+        ]);
+    }
+
+    /**
+     * Envía un mensaje de la conversación previa a la entrega (RF-033).
+     *
+     * @param  Request  $request  Texto del mensaje.
+     * @param  Prestamo  $prestamo  Préstamo pendiente.
+     * @return RedirectResponse
+     */
+    public function enviarMensaje(Request $request, Prestamo $prestamo): RedirectResponse
+    {
+        /** @var Usuario $usuario */
+        $usuario = $request->user();
+        $datos = $request->validateWithBag('mensaje', [
+            'mensaje' => ['required', 'string', 'min:2', 'max:1000'],
+        ]);
+        $this->conversacionService->enviar($usuario, $prestamo, trim($datos['mensaje']));
+
+        return redirect()->route('prestamos.show', $prestamo)->with('success', 'Mensaje enviado.');
+    }
+
+    /**
+     * Cierra un préstamo atrasado como no devuelto, con justificación y sanción automática (RF-042).
+     *
+     * @param  Request  $request  Justificación.
+     * @param  Prestamo  $prestamo  Préstamo activo con devolución vencida.
+     * @return RedirectResponse
+     */
+    public function cerrarNoDevuelto(Request $request, Prestamo $prestamo): RedirectResponse
+    {
+        Gate::authorize('cerrarNoDevuelto', $prestamo);
+        /** @var Usuario $usuario */
+        $usuario = $request->user();
+        $datos = $request->validateWithBag('noDevuelto', [
+            'motivo' => ['required', 'string', 'min:20', 'max:1000'],
+        ], [], ['motivo' => 'justificación']);
+        $this->prestamoService->cerrarNoDevuelto($usuario, $prestamo, trim($datos['motivo']));
+
+        return back()->with('success', 'Préstamo cerrado como no devuelto; se aplicó la sanción correspondiente.');
     }
 
     /**

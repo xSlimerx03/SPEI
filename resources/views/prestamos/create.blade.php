@@ -73,7 +73,8 @@
                 <a href="{{ route('catalogo.index') }}" class="boton boton--secundario">Ver catálogo</a>
             </div>
         @else
-            <form method="POST" action="{{ route('prestamos.store') }}" class="tarjeta tarjeta--relleno-24 pila--20 titulos"
+            <form method="POST" action="{{ route('prestamos.store') }}"
+                  class="tarjeta tarjeta--relleno-24 pila--20 titulos"
                   data-solicitud data-paso-inicial="{{ $pasoInicial }}" novalidate>
                 @csrf
 
@@ -81,36 +82,51 @@
                 <section class="pila--20 titulos" data-paso="1" aria-labelledby="paso-1-titulo">
                     <div class="pila--4 titulos">
                         <h2 id="paso-1-titulo" class="subtitulo-pagina">¿Qué recursos necesitas?</h2>
-                        <p class="texto-sec">Puedes incluir hasta diez recursos de una misma área en una sola solicitud.</p>
+                        <p class="texto-sec">
+                            Puedes incluir hasta diez recursos de una misma área en una sola solicitud.
+                        </p>
                     </div>
                     <div class="control-icono control-icono--con-icono" data-filtro-contenedor hidden>
                         <span class="icono" aria-hidden="true">search</span>
                         <label for="filtro-recursos" class="visualmente-oculto">Buscar recurso</label>
-                        <input type="search" id="filtro-recursos" class="control" placeholder="Buscar recurso por nombre o inventario"
+                        <input type="search" id="filtro-recursos" class="control"
+                               placeholder="Buscar recurso por nombre o inventario"
                                data-filtro-recursos hidden>
                     </div>
                     @error('recursos')
-                        <p id="recursos-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</p>
+                        <p id="recursos-error"
+                           class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</p>
                     @enderror
                     @foreach ($recursosPorArea as $nombreArea => $recursos)
                         <fieldset class="grupo-campos" data-grupo-area>
                             <legend class="grupo-area__titulo">{{ $nombreArea }}</legend>
                             @foreach ($recursos as $recurso)
                                 <label class="recurso-elegible" data-recurso-elegible
-                                       data-buscar="{{ mb_strtolower($recurso->nombre_recurso . ' ' . $recurso->numero_inventario . ' ' . $recurso->marca) }}">
-                                    <input type="checkbox" name="recursos[]" value="{{ $recurso->id_recurso }}" class="visualmente-oculto"
-                                           data-area="{{ $recurso->id_area }}" data-area-nombre="{{ $recurso->area->nombre_area }}"
+                                       data-buscar="{{ mb_strtolower($recurso->nombre_recurso . ' '
+                                           . $recurso->numero_inventario . ' ' . $recurso->marca) }}">
+                                    <input type="checkbox" name="recursos[]" value="{{ $recurso->id_recurso }}"
+                                           class="visualmente-oculto"
+                                           data-area="{{ $recurso->id_area }}"
+                                           data-area-nombre="{{ $recurso->area->nombre_area }}"
                                            data-nombre="{{ $recurso->nombre_recurso }}"
                                            @checked(in_array($recurso->id_recurso, $seleccionados, true))>
-                                    <span class="imagen-pendiente imagen-pendiente--miniatura imagen-pendiente--56" aria-hidden="true">
-                                        <span class="icono">{{ $recurso->tipo_recurso === \App\Enums\TipoRecurso::Espacio ? 'meeting_room' : 'devices' }}</span>
+                                    <span class="imagen-pendiente imagen-pendiente--miniatura imagen-pendiente--56"
+                                          aria-hidden="true">
+                                        <span class="icono">
+                                            {{ $recurso->tipo_recurso === \App\Enums\TipoRecurso::Espacio
+                                                ? 'meeting_room' : 'devices' }}
+                                        </span>
                                     </span>
                                     <span class="titulos crece">
                                         <span class="recurso-elegible__nombre">{{ $recurso->nombre_recurso }}</span>
-                                        <span class="texto-13 texto-sec">{{ $recurso->area->nombre_area }} · <span class="mono">{{ $recurso->numero_inventario }}</span></span>
+                                        <span class="texto-13 texto-sec">
+                                            {{ $recurso->area->nombre_area }} ·
+                                            <span class="mono">{{ $recurso->numero_inventario }}</span>
+                                        </span>
                                     </span>
                                     <span class="insignia insignia--exito">Disponible</span>
-                                    <span class="icono icono--azul casilla-visual" aria-hidden="true">check_circle</span>
+                                    <span class="icono icono--azul casilla-visual"
+                                          aria-hidden="true">check_circle</span>
                                 </label>
                             @endforeach
                         </fieldset>
@@ -128,16 +144,19 @@
                             <div class="calendario__cabecera">
                                 <span class="calendario__mes" data-calendario-mes></span>
                                 <div class="en-linea en-linea--8">
-                                    <button type="button" class="calendario__navegar" data-calendario-previo aria-label="Mes anterior">
+                                    <button type="button" class="calendario__navegar" data-calendario-previo
+                                            aria-label="Mes anterior">
                                         <span class="icono" aria-hidden="true">chevron_left</span>
                                     </button>
-                                    <button type="button" class="calendario__navegar" data-calendario-proximo aria-label="Mes siguiente">
+                                    <button type="button" class="calendario__navegar" data-calendario-proximo
+                                            aria-label="Mes siguiente">
                                         <span class="icono" aria-hidden="true">chevron_right</span>
                                     </button>
                                 </div>
                             </div>
                             <div class="calendario__semana" aria-hidden="true">
-                                <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+                                <span>L</span><span>M</span><span>M</span><span>J</span>
+                                <span>V</span><span>S</span><span>D</span>
                             </div>
                             <div class="calendario__dias" data-calendario-dias></div>
                         </div>
@@ -150,23 +169,34 @@
                                        @error('fecha') aria-invalid="true" aria-describedby="fecha-error" @enderror>
                             </div>
                             @error('fecha')
-                                <p id="fecha-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</p>
+                                <p id="fecha-error"
+                                   class="campo__error">
+                                       <span class="icono" aria-hidden="true">error</span>{{ $message }}
+                                   </p>
                             @enderror
                             <div class="dos-columnas">
-                                @foreach (['hora_inicio' => ['Hora de inicio', '10:00'], 'hora_fin' => ['Hora de fin', '12:00']] as $campo => [$etiqueta, $omision])
+                                @foreach (['hora_inicio' => ['Hora de inicio', '10:00'],
+                                    'hora_fin' => ['Hora de fin', '12:00']] as $campo => [$etiqueta, $omision])
                                     <div class="campo">
                                         <label for="{{ $campo }}" class="campo__etiqueta">{{ $etiqueta }}</label>
                                         <div class="selector">
                                             <select id="{{ $campo }}" name="{{ $campo }}" class="control"
-                                                    @error($campo) aria-invalid="true" aria-describedby="{{ $campo }}-error" @enderror>
+                                                    @error($campo) aria-invalid="true"
+                                                    aria-describedby="{{ $campo }}-error" @enderror>
                                                 @foreach ($horas as $hora)
-                                                    <option value="{{ $hora }}" @selected(old($campo, $omision) === $hora)>{{ $hora }}</option>
+                                                    <option value="{{ $hora }}"
+                                                            @selected(old($campo, $omision) === $hora)>
+                                                        {{ $hora }}
+                                                    </option>
                                                 @endforeach
                                             </select>
                                             <span class="icono icono-flecha" aria-hidden="true">expand_more</span>
                                         </div>
                                         @error($campo)
-                                            <span id="{{ $campo }}-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</span>
+                                            <span id="{{ $campo }}-error"
+                                                  class="campo__error">
+                                                      <span class="icono" aria-hidden="true">error</span>{{ $message }}
+                                                  </span>
                                         @enderror
                                     </div>
                                 @endforeach
@@ -175,16 +205,24 @@
                                 <label for="motivo" class="campo__etiqueta">Motivo de uso</label>
                                 <textarea id="motivo" name="motivo" class="control" maxlength="1000" required
                                           placeholder="Describe brevemente para qué usarás los recursos"
-                                          @error('motivo') aria-invalid="true" aria-describedby="motivo-error" @enderror>{{ old('motivo') }}</textarea>
+                                          @error('motivo') aria-invalid="true" aria-describedby="motivo-error"
+                                          @enderror>{{ old('motivo') }}</textarea>
                                 @error('motivo')
-                                    <span id="motivo-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</span>
+                                    <span id="motivo-error"
+                                          class="campo__error">
+                                              <span class="icono" aria-hidden="true">error</span>{{ $message }}
+                                          </span>
                                 @enderror
                             </div>
                             <div class="alerta alerta--exito">
                                 <span class="icono" aria-hidden="true">check_circle</span>
                                 <div class="pila--2 titulos">
                                     <span class="alerta__titulo">Disponible</span>
-                                    <span><span data-resumen="cantidad">Los recursos elegidos están</span> libres ahora; al enviar quedan reservados para ti hasta la devolución.</span>
+                                    <span>
+                                        <span data-resumen="cantidad">Los recursos elegidos están</span> disponibles;
+                                        al enviar quedan reservados para ti en ese horario y nadie más
+                                        podrá tomarlos.
+                                    </span>
                                 </div>
                             </div>
                         </div>
@@ -195,7 +233,9 @@
                 <section class="pila--20 titulos" data-paso="3" aria-labelledby="paso-3-titulo">
                     <div class="pila--4 titulos">
                         <h2 id="paso-3-titulo" class="subtitulo-pagina">Revisa tu solicitud</h2>
-                        <p class="texto-sec">Al enviarla, los recursos quedan reservados y te notificaremos cada cambio en el sistema.</p>
+                        <p class="texto-sec">
+                            Al enviarla, los recursos quedan reservados y te notificaremos cada cambio en el sistema.
+                        </p>
                     </div>
                     <div class="resumen-solicitud">
                         <div class="resumen-solicitud__fila">
@@ -222,18 +262,31 @@
                     </div>
                     <div class="reglas">
                         <span class="negrita">Antes de enviar</span>
-                        <div class="reglas__item"><span class="icono" aria-hidden="true">timer</span>Tienes {{ $tolerancia }} minutos de tolerancia para recoger; después la reserva se cancela automáticamente.</div>
-                        <div class="reglas__item"><span class="icono" aria-hidden="true">qr_code_2</span>La entrega y la devolución se confirman con un código QR de un solo uso.</div>
-                        <div class="reglas__item"><span class="icono" aria-hidden="true">block</span>No se permiten prórrogas; si necesitas más tiempo, crea una nueva solicitud.</div>
+                        <div class="reglas__item">
+                            <span class="icono" aria-hidden="true">timer</span>Tienes {{ $tolerancia }} minutos de
+                            tolerancia para recoger; después la reserva se cancela automáticamente.
+                        </div>
+                        <div class="reglas__item">
+                            <span class="icono" aria-hidden="true">qr_code_2</span>La entrega y la devolución se
+                            confirman con un código QR de un solo uso.
+                        </div>
+                        <div class="reglas__item">
+                            <span class="icono" aria-hidden="true">block</span>No se permiten prórrogas; si necesitas
+                            más tiempo, crea una nueva solicitud.
+                        </div>
                     </div>
                     <div class="campo">
                         <label class="casilla">
                             <input type="checkbox" name="acepta_reglamento" value="1" @checked(old('acepta_reglamento'))
-                                   @error('acepta_reglamento') aria-invalid="true" aria-describedby="acepta_reglamento-error" @enderror>
+                                   @error('acepta_reglamento') aria-invalid="true"
+                                   aria-describedby="acepta_reglamento-error" @enderror>
                             Acepto el reglamento de préstamo de la institución.
                         </label>
                         @error('acepta_reglamento')
-                            <span id="acepta_reglamento-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</span>
+                            <span id="acepta_reglamento-error"
+                                  class="campo__error">
+                                      <span class="icono" aria-hidden="true">error</span>{{ $message }}
+                                  </span>
                         @enderror
                     </div>
                 </section>

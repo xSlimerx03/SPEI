@@ -7,7 +7,7 @@
  * @path         tests/Feature/PantallasPublicasTest.php
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  * @license      Propietario - BigBitByte / Institución Educativa
  * @description  Regresión HTTP de las pantallas públicas y sus límites de seguridad.
@@ -27,10 +27,10 @@ use App\Models\LogAuditoria;
 use App\Models\Plan;
 use App\Models\Usuario;
 use App\Services\AdministradorService;
+use App\Services\InvitacionService;
 use Database\Factories\UsuarioFactory;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Mail;
-use Illuminate\Support\Facades\URL;
 use Tests\TestCase;
 
 beforeEach(function (): void {
@@ -186,7 +186,7 @@ it('limita el sexto intento aunque cambien espacios y mayúsculas del correo', f
 it('completa una invitación válida y rechaza su reutilización', function (): void {
     /** @var TestCase $this */
     $usuario = Usuario::factory()->conRol(Rol::AdminSistema)->inactivo()->create();
-    $enlace = URL::temporarySignedRoute('registro.completar', now()->addHours(72), ['usuario' => $usuario]);
+    $enlace = app(InvitacionService::class)->generarEnlace($usuario);
     $this->get($enlace)->assertOk()->assertSee($usuario->correo_institucional);
     $datos = ['contrasena' => 'NuevaClave2026', 'contrasena_confirmation' => 'NuevaClave2026'];
     $this->post($enlace, $datos)->assertRedirect(route('login'));
@@ -202,8 +202,7 @@ it('completa una invitación válida y rechaza su reutilización', function (): 
 it('rechaza enlaces de invitación caducados o alterados sin activar al usuario', function (bool $caducado): void {
     /** @var TestCase $this */
     $usuario = Usuario::factory()->conRol(Rol::AdminSistema)->inactivo()->create();
-    $enlace = URL::temporarySignedRoute('registro.completar',
-        $caducado ? now()->subMinute() : now()->addHours(72), ['usuario' => $usuario]);
+    $enlace = app(InvitacionService::class)->generarEnlace($usuario, $caducado ? now()->subMinute() : null);
     $enlace .= $caducado ? '' : '&alterado=1';
     $this->get($enlace)->assertForbidden()->assertSee('El enlace no es válido o ha caducado.');
     $this->post($enlace, ['contrasena' => 'NuevaClave2026', 'contrasena_confirmation' => 'NuevaClave2026'])
@@ -252,7 +251,7 @@ it('renderiza los correos con datos escapados sin enviar mensajes reales', funct
 it('conserva el enlace firmado tras una contraseña inválida sin guardarla en sesión', function (): void {
     /** @var TestCase $this */
     $usuario = Usuario::factory()->conRol(Rol::AdminSistema)->inactivo()->create();
-    $enlace = URL::temporarySignedRoute('registro.completar', now()->addHours(72), ['usuario' => $usuario]);
+    $enlace = app(InvitacionService::class)->generarEnlace($usuario);
     $this->from($enlace)->post($enlace, ['contrasena' => 'Corta1', 'contrasena_confirmation' => 'Corta1'])
         ->assertRedirect($enlace)->assertSessionHasErrors('contrasena')
         ->assertSessionMissing('_old_input.contrasena')->assertSessionMissing('_old_input.contrasena_confirmation');

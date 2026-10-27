@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -37,25 +37,31 @@
         @if ($paginator->hasPages())
             <div class="paginacion__botones">
                 @if ($paginator->onFirstPage())
-                    <span class="paginacion__boton paginacion__boton--inactivo" aria-hidden="true"><span class="icono">chevron_left</span></span>
+                    <span class="paginacion__boton paginacion__boton--inactivo"
+                          aria-hidden="true"><span class="icono">chevron_left</span></span>
                 @else
-                    <a href="{{ $paginator->previousPageUrl() }}" class="paginacion__boton" rel="prev" aria-label="Página anterior">
+                    <a href="{{ $paginator->previousPageUrl() }}" class="paginacion__boton" rel="prev"
+                       aria-label="Página anterior">
                         <span class="icono" aria-hidden="true">chevron_left</span>
                     </a>
                 @endif
                 @for ($pagina = $desde; $pagina <= $hasta; $pagina++)
                     @if ($pagina === $actual)
-                        <span class="paginacion__boton paginacion__boton--actual" aria-current="page">{{ $pagina }}</span>
+                        <span class="paginacion__boton paginacion__boton--actual"
+                              aria-current="page">{{ $pagina }}</span>
                     @else
-                        <a href="{{ $paginator->url($pagina) }}" class="paginacion__boton" aria-label="Página {{ $pagina }}">{{ $pagina }}</a>
+                        <a href="{{ $paginator->url($pagina) }}" class="paginacion__boton"
+                           aria-label="Página {{ $pagina }}">{{ $pagina }}</a>
                     @endif
                 @endfor
                 @if ($paginator->hasMorePages())
-                    <a href="{{ $paginator->nextPageUrl() }}" class="paginacion__boton" rel="next" aria-label="Página siguiente">
+                    <a href="{{ $paginator->nextPageUrl() }}" class="paginacion__boton" rel="next"
+                       aria-label="Página siguiente">
                         <span class="icono" aria-hidden="true">chevron_right</span>
                     </a>
                 @else
-                    <span class="paginacion__boton paginacion__boton--inactivo" aria-hidden="true"><span class="icono">chevron_right</span></span>
+                    <span class="paginacion__boton paginacion__boton--inactivo"
+                          aria-hidden="true"><span class="icono">chevron_right</span></span>
                 @endif
             </div>
         @endif

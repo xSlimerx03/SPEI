@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -89,7 +89,10 @@ class ConsultaPrestamoService
     {
         return $consulta
             ->when($filtros['estado'] ?? null, fn (Builder $q, string $estado): Builder => $q->where('estado', $estado))
-            ->when($filtros['texto'] ?? null, fn (Builder $q, string $texto): Builder => $this->filtrarTexto($q, $texto))
+            ->when(
+                $filtros['texto'] ?? null,
+                fn (Builder $q, string $texto): Builder => $this->filtrarTexto($q, $texto),
+            )
             ->when($filtros['id_area'] ?? null, fn (Builder $q, int|string $area): Builder => $q->whereHas(
                 'detalles.recurso',
                 fn (Builder $r): Builder => $r->where('id_area', (int) $area),

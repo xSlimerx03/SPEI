@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -41,7 +41,9 @@
 
         <div class="pila--4 titulos">
             <h1 class="acceso__titulo">Contratar el SPEI</h1>
-            <p class="texto-sec">Préstamo de equipo institucional para tu escuela: elige un plan y crea tu cuenta de administración.</p>
+            <p class="texto-sec">
+                Préstamo de equipo institucional para tu escuela: elige un plan y crea tu cuenta de administración.
+            </p>
         </div>
 
         @if (session('error'))
@@ -67,18 +69,31 @@
                                    @error('plan') aria-invalid="true" aria-describedby="plan-error" @enderror
                                    @checked(old('plan', $planes->first()?->clave->value) === $plan->clave->value)>
                             <span class="plan-opcion__nombre">{{ $plan->nombre }}</span>
-                            <span><span class="plan-opcion__precio">${{ number_format((float) $plan->monto_mensual, 2) }}</span>
+                            <span>
+                                <span class="plan-opcion__precio">
+                                    ${{ number_format((float) $plan->monto_mensual, 2) }}
+                                </span>
                                 <span class="texto-13 texto-sec">MXN / mes</span></span>
                             <span class="pila--8 titulos">
-                                <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ $plan->limite_areas }} áreas</span>
-                                <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ number_format($plan->limite_recursos) }} recursos</span>
-                                <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ $plan->duracion_dias }} días por periodo</span>
+                                <span class="plan-opcion__caracteristica">
+                                    <span class="icono" aria-hidden="true">check</span>{{ $plan->limite_areas }} áreas
+                                </span>
+                                <span class="plan-opcion__caracteristica">
+                                    <span class="icono"
+                                          aria-hidden="true">check</span>{{ number_format($plan->limite_recursos) }}
+                                    recursos
+                                </span>
+                                <span class="plan-opcion__caracteristica">
+                                    <span class="icono" aria-hidden="true">check</span>{{ $plan->duracion_dias }} días
+                                    por periodo
+                                </span>
                             </span>
                         </label>
                     @endforeach
                 </div>
                 @error('plan')
-                    <p id="plan-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</p>
+                    <p id="plan-error"
+                       class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</p>
                 @enderror
             </fieldset>
 
@@ -138,7 +153,9 @@
             </fieldset>
 
             <div class="pie-pasos">
-                <span class="texto-13 texto-sec centrado-vertical">La vigencia inicia hoy y se calcula con la duración del plan.</span>
+                <span class="texto-13 texto-sec centrado-vertical">
+                    La vigencia inicia hoy y se calcula con la duración del plan.
+                </span>
                 <button type="submit" class="boton boton--primario boton--grande" @disabled($planes->isEmpty())>
                     <span class="icono" aria-hidden="true">check</span>Contratar
                 </button>

@@ -36,21 +36,27 @@
             <span class="icono" aria-hidden="true">arrow_back</span>Ver instituciones
         </a>
 
-        @include('suscripcion.plan-actual', ['institucion' => $institucion, 'uso' => $uso, 'administradores' => $administradores])
+        @include('suscripcion.plan-actual',
+            ['institucion' => $institucion, 'uso' => $uso, 'administradores' => $administradores])
 
         <div class="cuadricula-360">
             <section class="tarjeta tarjeta--relleno-24 pila--16 titulos" aria-labelledby="titulo-renovar">
                 <div class="en-linea">
-                    <span class="icono-tile icono-tile--40 icono-tile--azul" aria-hidden="true"><span class="icono">autorenew</span></span>
+                    <span class="icono-tile icono-tile--40 icono-tile--azul"
+                          aria-hidden="true"><span class="icono">autorenew</span></span>
                     <div class="titulos crece">
                         <h2 id="titulo-renovar" class="tarjeta__titulo">Renovar periodo</h2>
-                        <span class="tarjeta__subtitulo">Extiende la fecha de corte por la duración del plan y reactiva una suscripción en solo lectura.</span>
+                        <span class="tarjeta__subtitulo">
+                            Extiende la fecha de corte por la duración del plan y reactiva una suscripción en solo
+                            lectura.
+                        </span>
                     </div>
                 </div>
                 <form method="POST" action="{{ route('instituciones.renovar', $institucion) }}"
                       data-confirmar="¿Registrar la renovación de {{ $institucion->nombre_institucion }}?">
                     @csrf
-                    <button type="submit" class="boton boton--primario" @disabled($institucion->estado_suscripcion === \App\Enums\EstadoSuscripcion::Cancelada)>
+                    <button type="submit" class="boton boton--primario"
+                            @disabled($institucion->estado_suscripcion === \App\Enums\EstadoSuscripcion::Cancelada)>
                         <span class="icono" aria-hidden="true">check</span>Renovar
                     </button>
                 </form>
@@ -58,10 +64,13 @@
 
             <section class="tarjeta tarjeta--relleno-24 pila--16 titulos" aria-labelledby="titulo-estado">
                 <div class="en-linea">
-                    <span class="icono-tile icono-tile--40 icono-tile--ambar" aria-hidden="true"><span class="icono">swap_horiz</span></span>
+                    <span class="icono-tile icono-tile--40 icono-tile--ambar"
+                          aria-hidden="true"><span class="icono">swap_horiz</span></span>
                     <div class="titulos crece">
                         <h2 id="titulo-estado" class="tarjeta__titulo">Cambiar estado</h2>
-                        <span class="tarjeta__subtitulo">Suspendida o cancelada cierra las sesiones de la institución.</span>
+                        <span class="tarjeta__subtitulo">
+                            Suspendida o cancelada cierra las sesiones de la institución.
+                        </span>
                     </div>
                 </div>
                 @if (count($estados) === 0)
@@ -100,7 +109,9 @@
                                 <span class="insignia insignia--activo">Plan actual</span>
                             @endif
                         </div>
-                        <span class="texto-13 texto-sec">{{ $plan->limite_areas }} áreas · {{ number_format($plan->limite_recursos) }} recursos</span>
+                        <span class="texto-13 texto-sec">
+                            {{ $plan->limite_areas }} áreas · {{ number_format($plan->limite_recursos) }} recursos
+                        </span>
                         @unless ($esActual)
                             <form method="POST" action="{{ route('instituciones.plan', $institucion) }}">
                                 @csrf

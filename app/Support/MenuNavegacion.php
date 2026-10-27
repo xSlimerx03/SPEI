@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -139,6 +139,14 @@ class MenuNavegacion
             $administracion[] = $this->enlace('areas.index', 'apartment', 'Áreas', ['areas.*']);
         }
 
+        // RF-016 a RF-021: el responsable de un área solo gestiona a los asistentes de su área.
+        $administracion[] = $this->enlace(
+            'usuarios.index',
+            'group',
+            $usuario->esResponsableDeArea() ? 'Asistentes' : 'Usuarios',
+            ['usuarios.*', 'dominios.*'],
+        );
+        $administracion[] = $this->enlace('sanciones.index', 'gavel', 'Sanciones', ['sanciones.*']);
         $administracion[] = $this->enlace('reportes.index', 'bar_chart', 'Reportes', ['reportes.*']);
 
         // La bitácora completa del tenant no se expone al responsable de una sola área.

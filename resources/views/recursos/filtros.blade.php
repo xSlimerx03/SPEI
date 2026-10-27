@@ -48,7 +48,8 @@
         <select id="filtro-area" name="id_area" class="control" data-autoenvio>
             <option value="">Todas las áreas</option>
             @foreach ($areas as $area)
-                <option value="{{ $area->id_area }}" @selected((int) ($filtros['id_area'] ?? 0) === $area->id_area)>{{ $area->nombre_area }}</option>
+                <option value="{{ $area->id_area }}"
+                        @selected((int) ($filtros['id_area'] ?? 0) === $area->id_area)>{{ $area->nombre_area }}</option>
             @endforeach
         </select>
         <span class="icono icono-flecha" aria-hidden="true">expand_more</span>
@@ -59,7 +60,10 @@
         <select id="filtro-tipo" name="tipo_recurso" class="control" data-autoenvio>
             <option value="">Equipos y espacios</option>
             @foreach ($tipos as $tipo)
-                <option value="{{ $tipo->value }}" @selected(($filtros['tipo_recurso'] ?? '') === $tipo->value)>{{ $tipo->obtenerEtiqueta() }}</option>
+                <option value="{{ $tipo->value }}"
+                        @selected(($filtros['tipo_recurso'] ?? '') === $tipo->value)>
+                    {{ $tipo->obtenerEtiqueta() }}
+                </option>
             @endforeach
         </select>
         <span class="icono icono-flecha" aria-hidden="true">expand_more</span>

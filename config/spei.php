@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -42,6 +42,35 @@ return [
         // Minutos de espera antes de cancelar por no recoger (MD Tabla 25).
         'tolerancia_recogida' => (int) env('SPEI_TOLERANCIA_RECOGIDA', 15),
         'tolerancia_maxima' => 20,
+        // DT-033: minutos en que dos solicitudes del mismo recurso y periodo se consideran concurrentes y se
+        // resuelven con RN-008; fuera de esa ventana se respeta la reserva ya registrada.
+        'ventana_prioridad_minutos' => (int) env('SPEI_VENTANA_PRIORIDAD', 5),
+    ],
+
+    'notificaciones' => [
+        // RF-048: además del aviso en el sistema, se envía correo por la cola de Redis.
+        'correo' => (bool) env('SPEI_NOTIFICAR_CORREO', true),
+        // RF-046: minutos de anticipación de los recordatorios de entrega y devolución (MBD Tabla 7).
+        'recordatorio_minutos' => (int) env('SPEI_RECORDATORIO_MINUTOS', 10),
+    ],
+
+    'sanciones' => [
+        // RF-041 y RN-005: valores con los que se crea la matriz de cada institución.
+        'marcas_por_incidente' => [
+            'retraso' => 1,
+            'mal_estado' => 1,
+            'danado' => 2,
+            'no_entregado' => 3,
+        ],
+        'umbral_bloqueo' => 3,
+        'dias_sancion' => 7,
+    ],
+
+    'historial' => [
+        // RN-012: el historial se comprime al año y el archivo se elimina tres años después (cuatro en total).
+        'meses_compresion' => 12,
+        'anios_conservacion_archivo' => 3,
+        'disco' => env('SPEI_HISTORIAL_DISCO', 'local'),
     ],
 
     'suscripcion' => [

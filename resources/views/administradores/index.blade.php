@@ -34,7 +34,9 @@
         <div class="tarjeta__cabecera">
             <div class="titulos">
                 <h2 id="titulo-administradores" class="tarjeta__titulo">Administradores del sistema</h2>
-                <span class="tarjeta__subtitulo">Sin área asignada administran todo el inventario; con área, solo esa área.</span>
+                <span class="tarjeta__subtitulo">
+                    Sin área asignada administran todo el inventario; con área, solo esa área.
+                </span>
             </div>
             <a href="{{ route('administradores.create') }}" class="boton boton--primario">
                 <span class="icono" aria-hidden="true">person_add</span>Crear

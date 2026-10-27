@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -42,7 +42,8 @@
 @endphp
 <div class="campo">
     <label for="{{ $nombre }}" class="campo__etiqueta">{{ $etiqueta }}</label>
-    <div class="control-icono {{ $icono ? 'control-icono--con-icono' : '' }} {{ $conAccion ? 'control-icono--accion' : '' }}">
+    <div class="control-icono {{ $icono ? 'control-icono--con-icono' : '' }} {{ $conAccion ? 'control-icono--accion'
+        : '' }}">
         @if ($icono)
             <span class="icono" aria-hidden="true">{{ $icono }}</span>
         @endif

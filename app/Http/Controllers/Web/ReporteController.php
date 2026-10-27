@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-25
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -35,11 +35,14 @@ namespace App\Http\Controllers\Web;
 use App\Http\Controllers\Controller;
 use App\Models\Area;
 use App\Models\Usuario;
+use App\Services\AuditoriaService;
+use App\Services\ReporteDetalleService;
 use App\Services\ReporteService;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Illuminate\View\View;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 /**
  * Reportes operativos.
@@ -54,9 +57,13 @@ class ReporteController extends Controller
      * Recibe las dependencias por inyección del contenedor.
      *
      * @param  ReporteService  $reporteService  Dependencia inyectada.
+     * @param  ReporteDetalleService  $reporteDetalleService  Dependencia inyectada.
+     * @param  AuditoriaService  $auditoriaService  Dependencia inyectada.
      */
     public function __construct(
         private ReporteService $reporteService,
+        private ReporteDetalleService $reporteDetalleService,
+        private AuditoriaService $auditoriaService,
     ) {}
 
     /**
@@ -69,17 +76,13 @@ class ReporteController extends Controller
     {
         /** @var Usuario $usuario */
         $usuario = $request->user();
-        $datos = $request->validate([
-            'periodo' => ['nullable', 'integer', Rule::in(ReporteService::PERIODOS)],
-            'id_area' => ['nullable', 'integer', 'min:1'],
-        ]);
-        $dias = (int) ($datos['periodo'] ?? 30);
-        $idArea = isset($datos['id_area']) ? (int) $datos['id_area'] : null;
+        [$dias, $idArea] = $this->validarFiltros($request);
 
         return view('reportes.index', [
             'dias' => $dias,
             'idArea' => $idArea,
             'reporte' => $this->reporteService->generar($usuario, $dias, $idArea),
+            'detalle' => $this->reporteDetalleService->generar($usuario, $dias, $idArea),
             'areas' => Area::query()
                 ->when(
                     $usuario->id_area_asignada !== null,
@@ -88,5 +91,66 @@ class ReporteController extends Controller
                 ->orderBy('nombre_area')
                 ->get(),
         ]);
+    }
+
+    /**
+     * Exporta una sección del reporte a CSV UTF-8 con BOM; neutraliza fórmulas y deja registro (RF-058).
+     *
+     * @param  Request  $request  Sección, periodo y área.
+     * @return StreamedResponse
+     */
+    public function exportar(Request $request): StreamedResponse
+    {
+        /** @var Usuario $usuario */
+        $usuario = $request->user();
+        [$dias, $idArea] = $this->validarFiltros($request);
+        $seccion = (string) $request->validate([
+            'seccion' => ['required', Rule::in(ReporteDetalleService::SECCIONES)],
+        ])['seccion'];
+        [$encabezado, $filas] = $this->reporteDetalleService->obtenerFilas($seccion, $usuario, $dias, $idArea);
+        $this->auditoriaService->registrarMasivo('EXPORTAR_REPORTE', 'prestamos', 0, (int) $usuario->id_institucion, [
+            'seccion' => $seccion,
+            'periodo_dias' => $dias,
+            'id_area' => $idArea,
+            'filas' => count($filas),
+        ]);
+
+        return response()->streamDownload(function () use ($encabezado, $filas): void {
+            $salida = fopen('php://output', 'w');
+
+            if ($salida === false) {
+                return;
+            }
+
+            fwrite($salida, "\xEF\xBB\xBF");
+            fputcsv($salida, $encabezado, ',', '"', '');
+
+            foreach ($filas as $fila) {
+                fputcsv($salida, array_map(
+                    fn (string $valor): string => preg_match('/^[=+@\-\t\r\n]/u', $valor) === 1 ? "'" . $valor : $valor,
+                    $fila,
+                ), ',', '"', '');
+            }
+
+            fclose($salida);
+        }, 'reporte-' . $seccion . '-' . today()->format('Y-m-d') . '.csv', [
+            'Content-Type' => 'text/csv; charset=UTF-8',
+        ]);
+    }
+
+    /**
+     * Periodo (7, 30 o 90 días) y área opcional validados.
+     *
+     * @param  Request  $request  Petición.
+     * @return array{0: int, 1: int|null}
+     */
+    private function validarFiltros(Request $request): array
+    {
+        $datos = $request->validate([
+            'periodo' => ['nullable', 'integer', Rule::in(ReporteService::PERIODOS)],
+            'id_area' => ['nullable', 'integer', 'min:1'],
+        ]);
+
+        return [(int) ($datos['periodo'] ?? 30), isset($datos['id_area']) ? (int) $datos['id_area'] : null];
     }
 }

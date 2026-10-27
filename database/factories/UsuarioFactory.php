@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -70,6 +70,7 @@ class UsuarioFactory extends Factory
             'rol' => Rol::Alumno,
             'id_area_asignada' => null,
             'activo' => true,
+            'fecha_registro' => now(),
         ];
     }
 
@@ -131,7 +132,7 @@ class UsuarioFactory extends Factory
      */
     public function inactivo(): static
     {
-        return $this->state(['activo' => false]);
+        return $this->state(['activo' => false, 'fecha_registro' => null]);
     }
 
     /**

@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -42,7 +42,10 @@
             <p class="qr__codigo">{{ $codigo }}</p>
             <div class="alerta alerta--fondo">
                 <span class="icono icono--18" aria-hidden="true">shield</span>
-                <span>Válido hasta las {{ \Illuminate\Support\Carbon::parse($expira_en)->format('H:i:s') }}. Es de un solo uso; si vence, vuelve a generarlo desde Mis préstamos.</span>
+                <span>
+                    Válido hasta las {{ \Illuminate\Support\Carbon::parse($expira_en)->format('H:i:s') }}. Es de un solo
+                    uso; si vence, vuelve a generarlo desde Mis préstamos.
+                </span>
             </div>
             <a href="{{ route('prestamos.mis') }}" class="boton boton--secundario alinear-inicio">
                 <span class="icono" aria-hidden="true">arrow_back</span>Volver

@@ -34,7 +34,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('titulo') · SPEI</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo-bigbitbyte.png') }}">
-    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2"
+          crossorigin>
     <link rel="stylesheet" href="{{ asset('css/spei.css') }}?v={{ filemtime(public_path('css/spei.css')) }}">
     <script>
         // Aplica el sidebar contraído antes de pintar para evitar parpadeo.
@@ -64,7 +65,8 @@
                     <span class="lateral__tenant-textos">
                         <span class="lateral__tenant-nombre">{{ $institucionActual->nombre_institucion }}</span>
                         <span class="lateral__tenant-detalle">
-                            Plan {{ $institucionActual->plan_suscripcion->obtenerEtiqueta() }} · {{ $institucionActual->dominio_correo }}
+                            Plan {{ $institucionActual->plan_suscripcion->obtenerEtiqueta() }} ·
+                            {{ $institucionActual->dominio_correo }}
                         </span>
                     </span>
                 </div>
@@ -81,7 +83,8 @@
                             <span class="icono" aria-hidden="true">{{ $enlace['icono'] }}</span>
                             <span class="lateral__texto">{{ $enlace['texto'] }}</span>
                             @if ($enlace['contador'])
-                                <span class="lateral__contador" aria-label="{{ $enlace['contador'] }} pendientes">{{ $enlace['contador'] }}</span>
+                                <span class="lateral__contador"
+                                      aria-label="{{ $enlace['contador'] }} pendientes">{{ $enlace['contador'] }}</span>
                             @endif
                         </a>
                     @endforeach
@@ -121,7 +124,9 @@
                                 aria-label="Notificaciones, {{ $notificacionesSinLeer }} sin leer">
                             <span class="icono" aria-hidden="true">notifications</span>
                             @if ($notificacionesSinLeer > 0)
-                                <span class="boton-campana__contador">{{ $notificacionesSinLeer > 99 ? '99+' : $notificacionesSinLeer }}</span>
+                                <span class="boton-campana__contador">
+                                    {{ $notificacionesSinLeer > 99 ? '99+' : $notificacionesSinLeer }}
+                                </span>
                             @endif
                         </button>
                         <div id="panel-notificaciones" class="desplegable__panel desplegable__panel--notificaciones"
@@ -129,10 +134,12 @@
                             <div class="desplegable__cabecera">
                                 <span class="desplegable__titulo">Notificaciones</span>
                                 @if ($notificacionesSinLeer > 0)
-                                    <form method="POST" action="{{ route('notificaciones.leidas') }}" class="formulario-en-linea">
+                                    <form method="POST" action="{{ route('notificaciones.leidas') }}"
+                                          class="formulario-en-linea">
                                         @csrf
                                         @method('PATCH')
-                                        <button type="submit" class="boton boton--enlace boton--pequeno">Marcar leídas</button>
+                                        <button type="submit"
+                                                class="boton boton--enlace boton--pequeno">Marcar leídas</button>
                                     </form>
                                 @endif
                             </div>
@@ -156,14 +163,18 @@
                 <div class="desplegable" data-desplegable>
                     <button type="button" class="boton-perfil" data-desplegable-boton aria-expanded="false"
                             aria-controls="panel-perfil">
-                        <span class="avatar avatar--azul" aria-hidden="true">{{ \App\Support\Iniciales::de($usuarioActual->nombre_completo) }}</span>
+                        <span class="avatar avatar--azul"
+                              aria-hidden="true">
+                                  {{ \App\Support\Iniciales::de($usuarioActual->nombre_completo) }}
+                              </span>
                         <span class="boton-perfil__textos">
                             <span class="boton-perfil__nombre">{{ $usuarioActual->nombre_completo }}</span>
                             <span class="boton-perfil__rol">{{ $usuarioActual->rol->obtenerEtiqueta() }}</span>
                         </span>
                         <span class="icono icono--20 icono--gris" aria-hidden="true">expand_more</span>
                     </button>
-                    <div id="panel-perfil" class="desplegable__panel desplegable__panel--perfil" data-desplegable-panel hidden>
+                    <div id="panel-perfil" class="desplegable__panel desplegable__panel--perfil" data-desplegable-panel
+                         hidden>
                         <div class="desplegable__seccion">{{ $usuarioActual->correo_institucional }}</div>
                         @unless ($usuarioActual->esSuperadmin())
                             <a href="{{ route('notificaciones.index') }}" class="desplegable__opcion">
@@ -189,7 +200,8 @@
                         Puedes consultar la información, pero no crear ni modificar registros hasta renovar el plan.
                     </span>
                     @if ($usuarioActual->rol === \App\Enums\Rol::AdminInstitucional)
-                        <a href="{{ route('suscripcion.show') }}" class="boton boton--pequeno boton--ambar">Ver suscripción</a>
+                        <a href="{{ route('suscripcion.show') }}"
+                           class="boton boton--pequeno boton--ambar">Ver suscripción</a>
                     @endif
                 </div>
             @endif

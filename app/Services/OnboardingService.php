@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -93,6 +93,7 @@ class OnboardingService
                 'contrasena_hash' => $datos['contrasena'],
                 'rol' => Rol::AdminInstitucional,
                 'activo' => true,
+                'fecha_registro' => now(),
             ]);
 
             $institucion->refresh();

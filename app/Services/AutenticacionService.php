@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -35,6 +35,7 @@ namespace App\Services;
 use App\Enums\EstadoSuscripcion;
 use App\Models\Institucion;
 use App\Models\Usuario;
+use App\Support\DominioCorreo;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Validation\ValidationException;
 
@@ -148,6 +149,7 @@ class AutenticacionService
      */
     private function perteneceAlDominio(Usuario $usuario, Institucion $institucion): bool
     {
-        return str_ends_with($usuario->correo_institucional, '@' . $institucion->dominio_correo);
+        // RF-017: se aceptan el dominio contratado y sus subdominios (p. ej. alumnos.escuela.mx).
+        return DominioCorreo::perteneceA($usuario->correo_institucional, $institucion->dominio_correo);
     }
 }

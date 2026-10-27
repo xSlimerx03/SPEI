@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -34,6 +34,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests\CompletarRegistroRequest;
 use App\Models\Usuario;
 use App\Services\AdministradorService;
+use App\Services\InvitacionService;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
 use Illuminate\View\View;
@@ -54,6 +55,7 @@ class RegistroController extends Controller
      */
     public function __construct(
         private AdministradorService $administradorService,
+        private InvitacionService $invitacionService,
     ) {}
 
     /**
@@ -65,7 +67,9 @@ class RegistroController extends Controller
      */
     public function edit(Request $request, Usuario $usuario): View|RedirectResponse
     {
-        if ($usuario->activo) {
+        $this->validarHuella($request, $usuario);
+
+        if ($usuario->activo || $usuario->completoRegistro()) {
             return redirect()->route('login')->with('error', 'El registro ya fue completado.');
         }
 
@@ -84,8 +88,31 @@ class RegistroController extends Controller
      */
     public function update(CompletarRegistroRequest $request, Usuario $usuario): RedirectResponse
     {
+        $this->validarHuella($request, $usuario);
         $this->administradorService->completarRegistro($usuario, $request->string('contrasena')->toString());
 
         return redirect()->route('login')->with('success', 'Registro completado. Ya puede iniciar sesión.');
+    }
+
+    /**
+     * Rechaza enlaces emitidos antes del último cambio de contraseña de una cuenta inactiva (cuenta dada de
+     * baja o invitación reemplazada). Las cuentas activas siguen su flujo y reciben "registro completado".
+     *
+     * @param  Request  $request  Petición firmada.
+     * @param  Usuario  $usuario  Invitado.
+     * @return void
+     */
+    private function validarHuella(Request $request, Usuario $usuario): void
+    {
+        // Las cuentas ya registradas (activas o dadas de baja) reciben "registro completado" más adelante.
+        if ($usuario->activo || $usuario->completoRegistro()) {
+            return;
+        }
+
+        abort_unless(
+            $this->invitacionService->validarHuella($usuario, (string) $request->query('huella')),
+            403,
+            'El enlace no es válido o ha caducado.',
+        );
     }
 }

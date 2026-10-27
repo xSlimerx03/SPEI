@@ -53,10 +53,14 @@
                 <div class="pila--2 titulos crece-220">
                     <span class="negrita">{{ $notificacion->titulo }}</span>
                     <span class="texto-13 texto-apoyo">{{ $notificacion->mensaje }}</span>
-                    <span class="texto-12 texto-sec">{{ $notificacion->fecha_creacion?->diffForHumans() }} · {{ $notificacion->fecha_creacion?->format('d/m/Y H:i') }}</span>
+                    <span class="texto-12 texto-sec">
+                        {{ $notificacion->fecha_creacion?->diffForHumans() }} ·
+                        {{ $notificacion->fecha_creacion?->format('d/m/Y H:i') }}
+                    </span>
                 </div>
                 @unless ($notificacion->leida)
-                    <form method="POST" action="{{ route('notificaciones.leida', $notificacion) }}" class="formulario-en-linea">
+                    <form method="POST" action="{{ route('notificaciones.leida', $notificacion) }}"
+                          class="formulario-en-linea">
                         @csrf
                         @method('PATCH')
                         <button type="submit" class="boton boton--fantasma boton--pequeno">

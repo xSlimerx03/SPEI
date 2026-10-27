@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-25
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -74,10 +74,7 @@ class ReporteService
      */
     public function generar(Usuario $actor, int $dias, ?int $idArea): array
     {
-        $base = $this->consultaPrestamoService->filtrar(
-            $this->consultaPrestamoService->paraUsuario($actor),
-            ['id_area' => $idArea],
-        )->where('fecha_hora_inicio', '>=', today()->subDays($dias - 1));
+        $base = $this->consultarBase($actor, $dias, $idArea);
         // NOTE: las consultas con DB::table no pasan por el Global Scope; el filtro de tenant se repite explícito.
         $idInstitucion = (int) $actor->id_institucion;
 
@@ -89,6 +86,22 @@ class ReporteService
             'condiciones' => $this->contarCondiciones(clone $base, $idInstitucion),
             'cierres' => $this->desglosarCierres(clone $base),
         ];
+    }
+
+    /**
+     * Préstamos del ámbito del usuario (institución y área) que iniciaron en el periodo.
+     *
+     * @param  Usuario  $actor  Administrador del sistema.
+     * @param  int  $dias  Periodo en días.
+     * @param  int|null  $idArea  Área opcional.
+     * @return Builder<Prestamo>
+     */
+    public function consultarBase(Usuario $actor, int $dias, ?int $idArea): Builder
+    {
+        return $this->consultaPrestamoService->filtrar(
+            $this->consultaPrestamoService->paraUsuario($actor),
+            ['id_area' => $idArea],
+        )->where('fecha_hora_inicio', '>=', today()->subDays($dias - 1));
     }
 
     /**
@@ -186,7 +199,7 @@ class ReporteService
             ->pluck('total', 'condicion');
         $conteo = [];
 
-        foreach (['bueno', 'regular', 'malo', 'danado'] as $condicion) {
+        foreach (['bueno', 'regular', 'malo', 'danado', 'no_entregado'] as $condicion) {
             $conteo[$condicion] = (int) ($porCondicion[$condicion] ?? 0);
         }
 
@@ -197,7 +210,7 @@ class ReporteService
      * Préstamos cerrados sin entrega: cancelados por el solicitante, por un operador y vencidos.
      *
      * @param  Builder<Prestamo>  $base  Préstamos del periodo.
-     * @return array{solicitante: int, operador: int, vencidos: int}
+     * @return array{solicitante: int, prioridad: int, operador: int, vencidos: int}
      */
     private function desglosarCierres(Builder $base): array
     {
@@ -211,10 +224,18 @@ class ReporteService
         $porSolicitante = $cancelados->filter(
             fn (int $idUsuario, int $idPrestamo): bool => (int) ($actores[$idPrestamo] ?? 0) === $idUsuario,
         )->count();
+        // RN-008: las reservas desplazadas por una solicitud de mayor prioridad se cuentan aparte.
+        $porPrioridad = LogAuditoria::query()
+            ->where('tabla_afectada', 'prestamos')
+            ->where('accion', 'DESPLAZAR_PRESTAMO')
+            ->whereIn('registro_id', $cancelados->keys())
+            ->distinct()
+            ->count('registro_id');
 
         return [
             'solicitante' => $porSolicitante,
-            'operador' => $cancelados->count() - $porSolicitante,
+            'prioridad' => $porPrioridad,
+            'operador' => $cancelados->count() - $porSolicitante - $porPrioridad,
             'vencidos' => (clone $base)->where('estado', EstadoPrestamo::Vencido->value)->count(),
         ];
     }

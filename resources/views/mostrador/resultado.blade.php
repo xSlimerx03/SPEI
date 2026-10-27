@@ -36,15 +36,19 @@
     <div class="resultado-escaneo__cabecera">
         <span class="icono" aria-hidden="true">verified</span>
         <div class="titulos crece">
-            <h2 id="titulo-resultado" class="negrita texto-15">Código válido · {{ $esEntrega ? 'Entrega' : 'Devolución' }}</h2>
-            <span class="texto-13">{{ $prestamo->obtenerFolio() }} · vence a las {{ $token->fecha_expiracion->format('H:i:s') }}</span>
+            <h2 id="titulo-resultado"
+                class="negrita texto-15">Código válido · {{ $esEntrega ? 'Entrega' : 'Devolución' }}</h2>
+            <span class="texto-13">
+                {{ $prestamo->obtenerFolio() }} · vence a las {{ $token->fecha_expiracion->format('H:i:s') }}
+            </span>
         </div>
     </div>
     <form method="POST" action="{{ route('prestamos.confirmar', $prestamo) }}" class="pila--16 titulos relleno-20">
         @csrf
         <input type="hidden" name="codigo" value="{{ $codigo }}">
         <div class="en-linea">
-            <span class="avatar avatar--48 avatar--azul" aria-hidden="true">{{ \App\Support\Iniciales::de($solicitante->nombre_completo) }}</span>
+            <span class="avatar avatar--48 avatar--azul"
+                  aria-hidden="true">{{ \App\Support\Iniciales::de($solicitante->nombre_completo) }}</span>
             <div class="titulos crece">
                 <span class="negrita texto-16">{{ $solicitante->nombre_completo }}</span>
                 <span class="texto-13 texto-sec">
@@ -59,7 +63,8 @@
             <div class="condicion alinear-inicio" role="radiogroup">
                 @foreach ($condiciones as $valor => $texto)
                     <label>
-                        <input type="radio" name="condicion" value="{{ $valor }}" @checked(old('condicion', 'bueno') === $valor)>
+                        <input type="radio" name="condicion" value="{{ $valor }}"
+                               @checked(old('condicion', 'bueno') === $valor)>
                         <span>{{ $texto }}</span>
                     </label>
                 @endforeach
@@ -86,7 +91,8 @@
         </div>
 
         <div class="acciones">
-            <a href="{{ route('mostrador.index') }}" class="boton boton--secundario boton--grande boton--crece">Cancelar</a>
+            <a href="{{ route('mostrador.index') }}"
+               class="boton boton--secundario boton--grande boton--crece">Cancelar</a>
             <button type="submit" class="boton boton--primario boton--grande boton--crece-2">
                 <span class="icono" aria-hidden="true">check</span>Confirmar {{ $esEntrega ? 'entrega' : 'devolución' }}
             </button>

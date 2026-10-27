@@ -12,21 +12,22 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
- * @version      v1.1.0
+ * @lastModified 2026-10-27
+ * @version      v1.2.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
  *
- * @description  Reserva exclusiva de recursos, emisión de códigos QR de un solo
- *               uso, confirmación de entrega y devolución, cancelación y
- *               vencimiento de reservas. Cada movimiento se serializa por
- *               institución con un lock de Redis y se ejecuta en una
- *               transacción con lockForUpdate (MD 5.6).
+ * @description  Reserva de recursos por periodo con prioridad RN-008, emisión de
+ *               códigos QR de un solo uso, confirmación de entrega y
+ *               devolución, cancelación y vencimiento de reservas. Cada
+ *               movimiento se serializa por institución con un lock de Redis y
+ *               se ejecuta en una transacción con lockForUpdate (MD 5.6).
  *
- * @requisitos   RF-022, RF-025, RF-028, RF-032, RF-034, RF-035, RF-036, RF-037, RN-004, RS-006
+ * @requisitos   RF-022, RF-025, RF-026, RF-027, RF-028, RF-032, RF-034, RF-035, RF-036, RF-037, RF-047,
+ *               RF-042, RF-048, RF-049, RN-004, RN-008, RS-006
  *
- * @see          docs/plan/BBB_MVP_v1.0.md; RED-01 del 25/10/2026 (H-10, H-11)
+ * @see          docs/plan/BBB_MVP_v1.0.md; DT-033; RED-01 del 25/10/2026 (H-10, H-11)
  * ============================================================================
  */
 
@@ -37,9 +38,7 @@ namespace App\Services;
 use App\Enums\EstadoPrestamo;
 use App\Enums\EstadoRecurso;
 use App\Enums\Rol;
-use App\Enums\TipoNotificacion;
 use App\Exceptions\ReglaNegocioException;
-use App\Models\Notificacion;
 use App\Models\Prestamo;
 use App\Models\Recurso;
 use App\Models\TokenQr;
@@ -67,13 +66,20 @@ class PrestamoService
 
     /**
      * @param  AuditoriaService  $auditoria  Registro de la bitácora inalterable.
+     * @param  ReservaService  $reservaService  Disponibilidad por periodo y RN-008.
+     * @param  NotificadorService  $notificador  Avisos en el sistema y por correo.
+     * @param  SancionService  $sancionService  Marcas automáticas al cerrar con incidencias.
      */
     public function __construct(
         private AuditoriaService $auditoria,
+        private ReservaService $reservaService,
+        private NotificadorService $notificador,
+        private SancionService $sancionService,
     ) {}
 
     /**
-     * Registra una solicitud y bloquea los recursos para el horario elegido.
+     * Registra una solicitud y reserva los recursos para el periodo elegido (MD 5.6). Si el periodo choca con
+     * reservas concurrentes de menor prioridad (RN-008), estas se desplazan; si no, se rechaza.
      *
      * @param  Usuario  $actor  Alumno o docente que solicita.
      * @param  array{recursos: list<int|string>, fecha_hora_inicio: string, fecha_hora_fin: string,
@@ -98,23 +104,18 @@ class PrestamoService
                 ->lockForUpdate()
                 ->get();
             $this->validarRecursos($recursos, count($ids));
-            $prestamo = Prestamo::query()->create([
-                'id_institucion' => $actor->id_institucion,
-                'id_usuario' => $actor->id_usuario,
-                'fecha_hora_inicio' => $datos['fecha_hora_inicio'],
-                'fecha_hora_fin' => $datos['fecha_hora_fin'],
-                'motivo' => $datos['motivo'],
-                'estado' => EstadoPrestamo::Pendiente->value,
-            ]);
+            $conflictos = $this->reservaService->obtenerConflictos(
+                $ids,
+                Carbon::parse($datos['fecha_hora_inicio']),
+                Carbon::parse($datos['fecha_hora_fin']),
+            );
 
-            foreach ($recursos as $recurso) {
-                $prestamo->detalles()->create([
-                    'id_institucion' => $actor->id_institucion,
-                    'id_recurso' => $recurso->id_recurso,
-                ]);
-                $recurso->update(['estado' => EstadoRecurso::Bloqueado]);
+            foreach ($this->reservaService->arbitrar($usuario, $conflictos) as $desplazado) {
+                $this->desplazar($desplazado);
             }
 
+            $prestamo = $this->crearPrestamo($usuario, $datos, $recursos);
+            $this->reservaService->activarVentana($prestamo);
             $this->registrar($prestamo, 'SOLICITAR_PRESTAMO', 'Su solicitud quedó reservada.', $actor);
             $this->avisarOperadores($prestamo, (int) $recursos->firstOrFail()->id_area);
 
@@ -192,6 +193,50 @@ class PrestamoService
             $mensaje = $tipo === 'entrega' ? 'Se confirmó la entrega.' : 'Se confirmó la devolución.';
             $this->registrar($actual, strtoupper($tipo), $mensaje, $actor);
 
+            if ($tipo === 'devolucion') {
+                $this->sancionService->evaluarCierre($actual);
+            }
+
+            return $actual;
+        });
+    }
+
+    /**
+     * Cierra un préstamo atrasado cuyo recurso no se devolvió (RF-042): condición no_entregado, recursos fuera
+     * de servicio y sanción automática. Solo el administrador del sistema del área.
+     *
+     * @param  Usuario  $actor  Administrador del sistema.
+     * @param  Prestamo  $prestamo  Préstamo activo con devolución vencida.
+     * @param  string  $motivo  Justificación (≥ 20 caracteres, validada en el request).
+     * @return Prestamo
+     *
+     * @throws AuthorizationException Si el actor no puede cerrar el préstamo.
+     * @throws ReglaNegocioException Si el préstamo no está activo o aún no vence su devolución.
+     */
+    public function cerrarNoDevuelto(Usuario $actor, Prestamo $prestamo, string $motivo): Prestamo
+    {
+        Gate::forUser($actor)->authorize('cerrarNoDevuelto', $prestamo);
+
+        return $this->ejecutar($prestamo->id_institucion, function () use ($actor, $prestamo, $motivo): Prestamo {
+            $actual = Prestamo::query()->lockForUpdate()->findOrFail($prestamo->id_prestamo);
+
+            if ($actual->estado !== EstadoPrestamo::Activo->value || $actual->fecha_hora_fin->isFuture()) {
+                throw new ReglaNegocioException(
+                    'Solo se cierra como no devuelto un préstamo activo con devolución vencida.',
+                );
+            }
+
+            foreach ($actual->detalles()->orderBy('id_recurso')->get() as $detalle) {
+                Recurso::query()->lockForUpdate()->whereKey($detalle->id_recurso)
+                    ->update(['estado' => EstadoRecurso::Mantenimiento]);
+                $detalle->update(['condicion_devolucion' => 'no_entregado', 'incidencia' => $motivo]);
+            }
+
+            $actual->update(['estado' => EstadoPrestamo::Devuelto->value, 'fecha_hora_devolucion_real' => now()]);
+            TokenQr::query()->where('id_prestamo', $actual->id_prestamo)->update(['usado' => true]);
+            $this->registrar($actual, 'CERRAR_NO_DEVUELTO', 'El préstamo se cerró sin devolución: ' . $motivo, $actor);
+            $this->sancionService->evaluarCierre($actual);
+
             return $actual;
         });
     }
@@ -248,6 +293,67 @@ class PrestamoService
     }
 
     /**
+     * Abre la ventana de recogida de una reserva (tarea programada); idempotente.
+     *
+     * @param  Prestamo  $prestamo  Reserva pendiente.
+     * @return bool Verdadero si la ventana está abierta.
+     *
+     * @throws ReglaNegocioException Si el candado de la institución no se obtiene a tiempo.
+     */
+    public function activarReserva(Prestamo $prestamo): bool
+    {
+        return $this->ejecutar($prestamo->id_institucion, function () use ($prestamo): bool {
+            $actual = Prestamo::query()->lockForUpdate()->findOrFail($prestamo->id_prestamo);
+
+            return $this->reservaService->activarVentana($actual);
+        });
+    }
+
+    /**
+     * Crea el préstamo pendiente y sus detalles.
+     *
+     * @param  Usuario  $usuario  Solicitante.
+     * @param  array{recursos: list<int|string>, fecha_hora_inicio: string, fecha_hora_fin: string,
+     *     motivo: string}  $datos  Datos validados.
+     * @param  Collection<int, Recurso>  $recursos  Recursos bloqueados para escritura.
+     * @return Prestamo
+     */
+    private function crearPrestamo(Usuario $usuario, array $datos, Collection $recursos): Prestamo
+    {
+        $prestamo = Prestamo::query()->create([
+            'id_institucion' => $usuario->id_institucion,
+            'id_usuario' => $usuario->id_usuario,
+            'fecha_hora_inicio' => $datos['fecha_hora_inicio'],
+            'fecha_hora_fin' => $datos['fecha_hora_fin'],
+            'motivo' => $datos['motivo'],
+            'estado' => EstadoPrestamo::Pendiente->value,
+        ]);
+
+        foreach ($recursos as $recurso) {
+            $prestamo->detalles()->create([
+                'id_institucion' => $usuario->id_institucion,
+                'id_recurso' => $recurso->id_recurso,
+            ]);
+        }
+
+        return $prestamo;
+    }
+
+    /**
+     * Cancela una reserva desplazada por RN-008 y avisa a su titular con la razón (RN-014 por analogía).
+     *
+     * @param  Prestamo  $prestamo  Reserva pendiente de menor prioridad, bloqueada para escritura.
+     * @return void
+     */
+    private function desplazar(Prestamo $prestamo): void
+    {
+        $motivo = 'Reserva desplazada por prioridad (RN-008): otra solicitud concurrente del mismo horario tiene '
+            . 'precedencia por rol o historial.';
+        $this->liberar($prestamo, EstadoPrestamo::Cancelado->value, $motivo);
+        $this->registrar($prestamo, 'DESPLAZAR_PRESTAMO', $motivo . ' Puede solicitar otro horario.', null);
+    }
+
+    /**
      * Rechaza cuentas bloqueadas o inactivas y periodos pasados o invertidos.
      *
      * @param  Usuario  $usuario  Solicitante bloqueado para escritura.
@@ -288,7 +394,7 @@ class PrestamoService
         }
 
         foreach ($recursos as $recurso) {
-            if (! $recurso->activo || $recurso->estado !== EstadoRecurso::Disponible || ! $recurso->area->activo) {
+            if (! $recurso->activo || $recurso->estado === EstadoRecurso::Mantenimiento || ! $recurso->area->activo) {
                 throw new ReglaNegocioException('Uno de los recursos ya no está disponible. Actualice el catálogo.');
             }
         }
@@ -386,7 +492,10 @@ class PrestamoService
      */
     private function moverRecursos(Prestamo $prestamo, string $tipo, array $datos): void
     {
-        $esperado = $tipo === 'entrega' ? EstadoRecurso::Bloqueado : EstadoRecurso::Prestado;
+        // La ventana pudo abrirse sin que la tarea programada la marcara aún: disponible también es válido.
+        $esperados = $tipo === 'entrega'
+            ? [EstadoRecurso::Bloqueado, EstadoRecurso::Disponible]
+            : [EstadoRecurso::Prestado];
         $destino = match (true) {
             $tipo === 'entrega' => EstadoRecurso::Prestado,
             in_array($datos['condicion'], ['malo', 'danado'], true) => EstadoRecurso::Mantenimiento,
@@ -396,7 +505,7 @@ class PrestamoService
         foreach ($prestamo->detalles()->orderBy('id_recurso')->get() as $detalle) {
             $recurso = Recurso::query()->lockForUpdate()->findOrFail($detalle->id_recurso);
 
-            if ($recurso->estado !== $esperado) {
+            if (! in_array($recurso->estado, $esperados, true)) {
                 throw new ReglaNegocioException(
                     'El estado del inventario cambió. Revise el recurso antes de continuar.',
                 );
@@ -407,6 +516,7 @@ class PrestamoService
                 'condicion_' . $tipo => $datos['condicion'],
                 'incidencia' => $datos['incidencia'] ?? null,
             ]);
+            $this->reservaService->sincronizarRecurso($recurso->id_recurso);
         }
     }
 
@@ -420,9 +530,13 @@ class PrestamoService
      */
     private function liberar(Prestamo $prestamo, string $estado, string $motivo): void
     {
-        $ids = $prestamo->detalles()->pluck('id_recurso');
-        Recurso::query()->whereIn('id_recurso', $ids)->where('estado', EstadoRecurso::Bloqueado)
-            ->update(['estado' => EstadoRecurso::Disponible]);
+        // Una reserva futura no bloqueó nada: liberar sus recursos afectaría a la reserva que sí está en ventana.
+        if ($prestamo->fecha_hora_inicio->lte(now())) {
+            Recurso::query()->whereIn('id_recurso', $prestamo->detalles()->pluck('id_recurso'))
+                ->where('estado', EstadoRecurso::Bloqueado)
+                ->update(['estado' => EstadoRecurso::Disponible]);
+        }
+
         TokenQr::query()->where('id_prestamo', $prestamo->id_prestamo)->update(['usado' => true]);
         $prestamo->update(['estado' => $estado, 'motivo_cancelacion' => $motivo]);
     }
@@ -439,14 +553,12 @@ class PrestamoService
     private function registrar(Prestamo $prestamo, string $accion, string $mensaje, ?Usuario $actor): void
     {
         $this->auditoria->registrar($accion, $prestamo, null, $this->auditoria->capturar($prestamo), $actor);
-        Notificacion::query()->create([
-            'id_institucion' => $prestamo->id_institucion,
-            'id_usuario' => $prestamo->id_usuario,
-            'tipo_notificacion' => TipoNotificacion::Push,
-            'titulo' => 'Préstamo #' . $prestamo->id_prestamo,
-            'mensaje' => $mensaje,
-            'leida' => false,
-        ]);
+        $this->notificador->notificar(
+            Usuario::query()->findOrFail($prestamo->id_usuario),
+            'Préstamo ' . $prestamo->obtenerFolio(),
+            $mensaje,
+            route('prestamos.show', $prestamo),
+        );
     }
 
     /**
@@ -466,14 +578,14 @@ class PrestamoService
             ->get();
 
         foreach ($usuarios as $usuario) {
-            Notificacion::query()->create([
-                'id_institucion' => $prestamo->id_institucion,
-                'id_usuario' => $usuario->id_usuario,
-                'tipo_notificacion' => TipoNotificacion::Push,
-                'titulo' => 'Solicitud pendiente #' . $prestamo->id_prestamo,
-                'mensaje' => 'Hay una nueva solicitud de préstamo en su área.',
-                'leida' => false,
-            ]);
+            // RF-049: alerta en el sistema; el correo se reserva al solicitante para no saturar al operador.
+            $this->notificador->notificar(
+                $usuario,
+                'Solicitud pendiente ' . $prestamo->obtenerFolio(),
+                'Hay una nueva solicitud de préstamo en su área.',
+                route('prestamos.index', ['p' => $prestamo->id_prestamo]),
+                false,
+            );
         }
     }
 

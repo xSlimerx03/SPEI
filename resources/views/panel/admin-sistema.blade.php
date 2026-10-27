@@ -60,7 +60,8 @@
                 <a href="{{ route('reportes.index') }}" class="boton boton--secundario">
                     <span class="icono" aria-hidden="true">bar_chart</span>Ver reportes
                 </a>
-                <a href="{{ route('prestamos.index', ['estado' => \App\Enums\EstadoPrestamo::Pendiente->value]) }}" class="boton boton--primario">
+                <a href="{{ route('prestamos.index', ['estado' => \App\Enums\EstadoPrestamo::Pendiente->value]) }}"
+                   class="boton boton--primario">
                     <span class="icono" aria-hidden="true">pending_actions</span>Revisar solicitudes
                 </a>
             </div>
@@ -108,16 +109,23 @@
                     <div class="titulos">
                         <h2 id="titulo-serie" class="tarjeta__titulo">Préstamos por día</h2>
                         <span class="tarjeta__subtitulo">
-                            Últimos 14 días · {{ $serie[0]['fecha']->translatedFormat('j M') }} – {{ now()->translatedFormat('j M Y') }}
+                            Últimos 14 días · {{ $serie[0]['fecha']->translatedFormat('j M') }} –
+                            {{ now()->translatedFormat('j M Y') }}
                         </span>
                     </div>
                     <div class="leyenda" aria-hidden="true">
-                        <span class="leyenda__item"><span class="leyenda__muestra color-previo"></span>Días previos</span>
-                        <span class="leyenda__item"><span class="leyenda__muestra color-prestado"></span>Hoy (parcial)</span>
+                        <span class="leyenda__item">
+                            <span class="leyenda__muestra color-previo"></span>Días previos
+                        </span>
+                        <span class="leyenda__item">
+                            <span class="leyenda__muestra color-prestado"></span>Hoy (parcial)
+                        </span>
                     </div>
                 </div>
                 <div class="grafica-barras" role="img"
-                     aria-label="Préstamos por día: {{ collect($serie)->map(fn (array $d): string => $d['fecha']->format('d/m') . ' ' . $d['total'])->implode(', ') }}">
+                     aria-label="Préstamos por día: {{ collect($serie)
+                         ->map(fn (array $d): string => $d['fecha']->format('d/m') . ' ' . $d['total'])
+                         ->implode(', ') }}">
                     <div class="grafica-barras__eje" aria-hidden="true">
                         <span>{{ $maximo }}</span><span>{{ intdiv($maximo, 2) }}</span><span>0</span>
                     </div>
@@ -125,16 +133,20 @@
                         <div class="grafica-barras__guias"><div></div><div></div><div></div></div>
                         <div class="grafica-barras__columnas">
                             @foreach ($serie as $dia)
-                                <div class="grafica-barras__columna {{ $dia['hoy'] ? 'grafica-barras__columna--hoy' : '' }}"
+                                <div class="grafica-barras__columna {{ $dia['hoy']
+                                    ? 'grafica-barras__columna--hoy' : '' }}"
                                      title="{{ $dia['total'] }} préstamos">
                                     <span class="grafica-barras__valor">{{ $dia['total'] }}</span>
-                                    <div class="grafica-barras__barra" style="height: {{ round($dia['total'] * 100 / $maximo, 1) }}%"></div>
+                                    <div class="grafica-barras__barra"
+                                         style="height: {{ round($dia['total'] * 100 / $maximo, 1) }}%"></div>
                                 </div>
                             @endforeach
                         </div>
                         <div class="grafica-barras__etiquetas">
                             @foreach ($serie as $dia)
-                                <span class="{{ $dia['hoy'] ? 'grafica-barras__etiqueta--hoy' : '' }}">{{ $dia['fecha']->format('j') }}</span>
+                                <span class="{{ $dia['hoy'] ? 'grafica-barras__etiqueta--hoy' : '' }}">
+                                    {{ $dia['fecha']->format('j') }}
+                                </span>
                             @endforeach
                         </div>
                     </div>
@@ -157,26 +169,39 @@
                         <h2 id="titulo-atender" class="tarjeta__titulo">Solicitudes por atender</h2>
                         <span class="tarjeta__subtitulo">Reservas por recoger, de la más próxima a la más lejana</span>
                     </div>
-                    <a href="{{ route('prestamos.index', ['estado' => \App\Enums\EstadoPrestamo::Pendiente->value]) }}" class="texto-13 negrita">Ver todas</a>
+                    <a href="{{ route('prestamos.index', ['estado' => \App\Enums\EstadoPrestamo::Pendiente->value]) }}"
+                       class="texto-13 negrita">Ver todas</a>
                 </div>
                 @forelse ($porAtender as $prestamo)
                     @php($primero = $prestamo->detalles->first()?->recurso)
                     <div class="fila-lista">
-                        <span class="avatar" aria-hidden="true">{{ \App\Support\Iniciales::de($prestamo->usuario->nombre_completo) }}</span>
+                        <span class="avatar"
+                              aria-hidden="true">
+                                  {{ \App\Support\Iniciales::de($prestamo->usuario->nombre_completo) }}
+                              </span>
                         <div class="pila--2 titulos crece-220">
                             <div class="en-linea en-linea--8">
                                 <span class="negrita">{{ $prestamo->usuario->nombre_completo }}</span>
-                                <span class="insignia insignia--20 insignia--suave">{{ $prestamo->usuario->rol->obtenerEtiqueta() }}</span>
+                                <span class="insignia insignia--20 insignia--suave">
+                                    {{ $prestamo->usuario->rol->obtenerEtiqueta() }}
+                                </span>
                             </div>
                             <span class="texto-13 texto-apoyo truncar">
-                                {{ $primero?->nombre_recurso }}@if ($prestamo->detalles->count() > 1) · +{{ $prestamo->detalles->count() - 1 }} más @endif
+                                {{ $primero?->nombre_recurso }}@if ($prestamo->detalles->count() > 1) ·
+                                +{{ $prestamo->detalles->count() - 1 }} más @endif
                             </span>
                         </div>
                         <div class="titulos texto-13 alinear-fin">
-                            <span class="negrita">{{ \App\Support\FormatoFecha::dia($prestamo->fecha_hora_inicio) }}</span>
-                            <span class="texto-sec">{{ $prestamo->fecha_hora_inicio->format('H:i') }} – {{ $prestamo->fecha_hora_fin->format('H:i') }}</span>
+                            <span class="negrita">
+                                {{ \App\Support\FormatoFecha::dia($prestamo->fecha_hora_inicio) }}
+                            </span>
+                            <span class="texto-sec">
+                                {{ $prestamo->fecha_hora_inicio->format('H:i') }} –
+                                {{ $prestamo->fecha_hora_fin->format('H:i') }}
+                            </span>
                         </div>
-                        <a href="{{ route('prestamos.index', ['p' => $prestamo->id_prestamo, 'estado' => \App\Enums\EstadoPrestamo::Pendiente->value]) }}"
+                        <a href="{{ route('prestamos.index', ['p' => $prestamo->id_prestamo,
+                            'estado' => \App\Enums\EstadoPrestamo::Pendiente->value]) }}"
                            class="boton boton--secundario boton--pequeno">Revisar</a>
                     </div>
                 @empty

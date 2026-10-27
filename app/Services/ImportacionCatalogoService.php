@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -37,6 +37,7 @@ use App\Models\Area;
 use App\Models\Institucion;
 use App\Models\Recurso;
 use App\Models\Usuario;
+use App\Support\LectorCsv;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Http\UploadedFile;
 use Illuminate\Support\Facades\DB;
@@ -88,7 +89,7 @@ class ImportacionCatalogoService
      */
     public function importar(Usuario $actor, Institucion $institucion, UploadedFile $archivo): int
     {
-        $filas = $this->leerFilas($archivo);
+        $filas = LectorCsv::leer($archivo, self::ENCABEZADO);
         $areas = $this->obtenerAreasPermitidas($actor);
         $errores = $this->validarFilas($filas, $areas);
 
@@ -113,64 +114,6 @@ class ImportacionCatalogoService
 
             return count($ids);
         });
-    }
-
-    /**
-     * Lee el CSV, verifica el encabezado y devuelve las filas indexadas por número de línea.
-     *
-     * @param  UploadedFile  $archivo  Archivo recibido.
-     * @return array<int, array<string, string>>
-     * @throws ValidationException Si el encabezado no coincide, no hay filas o se excede el máximo.
-     */
-    private function leerFilas(UploadedFile $archivo): array
-    {
-        $contenido = (string) file_get_contents($archivo->getRealPath());
-        // Se quita el BOM que agregan algunas hojas de cálculo al exportar en UTF-8.
-        $contenido = preg_replace('/^\xEF\xBB\xBF/', '', $contenido) ?? $contenido;
-        $lineas = preg_split('/\r\n|\n|\r/', trim($contenido)) ?: [];
-        $encabezado = array_map('trim', str_getcsv((string) array_shift($lineas)));
-
-        if ($encabezado !== self::ENCABEZADO) {
-            throw ValidationException::withMessages(['archivo' => 'El encabezado del archivo no es válido.']);
-        }
-
-        $filas = [];
-
-        foreach ($lineas as $indice => $linea) {
-            if (trim($linea) === '') {
-                continue;
-            }
-
-            $valores = array_pad(array_map('trim', str_getcsv($linea)), count(self::ENCABEZADO), '');
-            // Línea del archivo tal como la ve el usuario en su hoja de cálculo (encabezado = 1).
-            $filas[$indice + 2] = array_combine(self::ENCABEZADO, array_slice($valores, 0, count(self::ENCABEZADO)));
-        }
-
-        $this->validarTamano(count($filas));
-
-        return $filas;
-    }
-
-    /**
-     * Rechaza archivos sin filas o con más filas de las permitidas.
-     *
-     * @param  int  $total  Filas de datos.
-     * @return void
-     * @throws ValidationException Si el total no es válido.
-     */
-    private function validarTamano(int $total): void
-    {
-        $maximo = (int) config('spei.importacion.maximo_filas');
-
-        if ($total === 0) {
-            throw ValidationException::withMessages(['archivo' => 'El archivo no contiene filas.']);
-        }
-
-        if ($total > $maximo) {
-            throw ValidationException::withMessages([
-                'archivo' => sprintf('El archivo supera el máximo de %s filas.', number_format($maximo, 0, '.', ' ')),
-            ]);
-        }
     }
 
     /**

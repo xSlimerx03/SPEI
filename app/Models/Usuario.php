@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-18
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -80,6 +80,7 @@ class Usuario extends Authenticatable
         'rol',
         'id_area_asignada',
         'activo',
+        'fecha_registro',
     ];
 
     /**
@@ -141,6 +142,30 @@ class Usuario extends Authenticatable
     }
 
     /**
+     * Indica si la cuenta ya completó su registro (DT-035): sin fecha, la invitación sigue pendiente.
+     *
+     * @return bool
+     */
+    public function completoRegistro(): bool
+    {
+        return $this->fecha_registro !== null;
+    }
+
+    /**
+     * Estado de la cuenta para mostrarlo: invitación pendiente, activa o dada de baja.
+     *
+     * @return string
+     */
+    public function obtenerEstadoCuenta(): string
+    {
+        return match (true) {
+            ! $this->completoRegistro() => 'pendiente',
+            $this->activo => 'activa',
+            default => 'baja',
+        };
+    }
+
+    /**
      * Conversión de tipos de las columnas.
      *
      * @return array<string, string>
@@ -157,6 +182,7 @@ class Usuario extends Authenticatable
             'fecha_bloqueo' => 'datetime',
             'fecha_fin_bloqueo' => 'datetime',
             'activo' => 'boolean',
+            'fecha_registro' => 'datetime',
         ];
     }
 }

@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -56,11 +56,13 @@ class InvitacionAdministradorMail extends Mailable implements ShouldQueue
      * @param  string  $nombreInvitado  Nombre del administrador invitado.
      * @param  string  $nombreInstitucion  Institución que invita.
      * @param  string  $enlace  Enlace firmado para completar el registro.
+     * @param  string  $proposito  Para qué se invita a la cuenta (depende del rol).
      */
     public function __construct(
         public string $nombreInvitado,
         public string $nombreInstitucion,
         public string $enlace,
+        public string $proposito = 'administrar su equipo institucional',
     ) {}
 
     /**

@@ -38,7 +38,8 @@
                 <span class="vacio__texto">Cada recurso se resguarda en un área.</span>
             </div>
         @else
-            <form method="POST" action="{{ $recurso->exists ? route('recursos.update', $recurso) : route('recursos.store') }}"
+            <form method="POST"
+                  action="{{ $recurso->exists ? route('recursos.update', $recurso) : route('recursos.store') }}"
                   class="tarjeta tarjeta--relleno-24 pila--20 titulos" novalidate>
                 @csrf
                 @if ($recurso->exists)
@@ -46,23 +47,32 @@
                 @endif
                 <div class="cuadricula-campos">
                     @foreach ([
-                        'id_area' => ['Área', 'apartment', $areas->map(fn (\App\Models\Area $a): array => [$a->id_area, $a->nombre_area]), (string) old('id_area', $recurso->id_area)],
-                        'tipo_recurso' => ['Tipo', 'category', collect($tipos)->map(fn (\App\Enums\TipoRecurso $t): array => [$t->value, $t->obtenerEtiqueta()]), (string) old('tipo_recurso', $recurso->tipo_recurso?->value)],
+                        'id_area' => ['Área', 'apartment',
+                            $areas->map(fn (\App\Models\Area $a): array => [$a->id_area, $a->nombre_area]),
+                            (string) old('id_area', $recurso->id_area)],
+                        'tipo_recurso' => ['Tipo', 'category', collect($tipos)
+                            ->map(fn (\App\Enums\TipoRecurso $t): array => [$t->value, $t->obtenerEtiqueta()]),
+                            (string) old('tipo_recurso', $recurso->tipo_recurso?->value)],
                     ] as $campo => [$etiqueta, $icono, $opciones, $elegido])
                         <div class="campo">
                             <label for="{{ $campo }}" class="campo__etiqueta">{{ $etiqueta }}</label>
                             <div class="selector selector--icono">
                                 <span class="icono icono-inicio" aria-hidden="true">{{ $icono }}</span>
                                 <select id="{{ $campo }}" name="{{ $campo }}" class="control" required
-                                        @error($campo) aria-invalid="true" aria-describedby="{{ $campo }}-error" @enderror>
+                                        @error($campo) aria-invalid="true" aria-describedby="{{ $campo }}-error"
+                                        @enderror>
                                     @foreach ($opciones as [$valor, $texto])
-                                        <option value="{{ $valor }}" @selected($elegido === (string) $valor)>{{ $texto }}</option>
+                                        <option value="{{ $valor }}"
+                                                @selected($elegido === (string) $valor)>{{ $texto }}</option>
                                     @endforeach
                                 </select>
                                 <span class="icono icono-flecha" aria-hidden="true">expand_more</span>
                             </div>
                             @error($campo)
-                                <span id="{{ $campo }}-error" class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</span>
+                                <span id="{{ $campo }}-error"
+                                      class="campo__error">
+                                          <span class="icono" aria-hidden="true">error</span>{{ $message }}
+                                      </span>
                             @enderror
                         </div>
                     @endforeach
@@ -111,9 +121,11 @@
                     <fieldset class="grupo-campos">
                         <legend class="campo__etiqueta">Estado inicial</legend>
                         <div class="condicion alinear-inicio">
-                            @foreach (['disponible' => 'Disponible', 'mantenimiento' => 'Mantenimiento'] as $valor => $texto)
+                            @foreach (['disponible' => 'Disponible',
+                                'mantenimiento' => 'Mantenimiento'] as $valor => $texto)
                                 <label>
-                                    <input type="radio" name="estado" value="{{ $valor }}" @checked(old('estado', 'disponible') === $valor)>
+                                    <input type="radio" name="estado" value="{{ $valor }}"
+                                           @checked(old('estado', 'disponible') === $valor)>
                                     <span>{{ $texto }}</span>
                                 </label>
                             @endforeach
@@ -121,7 +133,8 @@
                     </fieldset>
                 @endunless
                 <div class="pie-pasos">
-                    <a href="{{ $recurso->exists ? route('recursos.show', $recurso) : route('recursos.index') }}" class="boton boton--fantasma boton--grande">Cancelar</a>
+                    <a href="{{ $recurso->exists ? route('recursos.show', $recurso) : route('recursos.index') }}"
+                       class="boton boton--fantasma boton--grande">Cancelar</a>
                     <button type="submit" class="boton boton--primario boton--grande">
                         <span class="icono" aria-hidden="true">save</span>Guardar
                     </button>

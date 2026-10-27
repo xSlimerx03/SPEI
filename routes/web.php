@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-27
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -37,6 +37,7 @@ use App\Http\Controllers\Web\AreaController;
 use App\Http\Controllers\Web\AuditoriaController;
 use App\Http\Controllers\Web\CatalogoController;
 use App\Http\Controllers\Web\ContratacionController;
+use App\Http\Controllers\Web\DominioRolController;
 use App\Http\Controllers\Web\ImportacionController;
 use App\Http\Controllers\Web\InstitucionController;
 use App\Http\Controllers\Web\MostradorController;
@@ -47,9 +48,11 @@ use App\Http\Controllers\Web\PrestamoController;
 use App\Http\Controllers\Web\RecursoController;
 use App\Http\Controllers\Web\RegistroController;
 use App\Http\Controllers\Web\ReporteController;
+use App\Http\Controllers\Web\SancionController;
 use App\Http\Controllers\Web\SesionController;
 use App\Http\Controllers\Web\SolicitudController;
 use App\Http\Controllers\Web\SuscripcionController;
+use App\Http\Controllers\Web\UsuarioController;
 use Illuminate\Support\Facades\Route;
 
 Route::redirect('/', '/contratar');
@@ -100,6 +103,12 @@ Route::middleware(['auth', 'suscripcion'])->group(function (): void {
         Route::post('/administradores', [AdministradorController::class, 'store'])->name('administradores.store');
         Route::post('/administradores/{usuario}/reenvio', [AdministradorController::class, 'reenviar'])
             ->name('administradores.reenviar');
+        Route::get('/administradores/{usuario}/editar', [AdministradorController::class, 'edit'])
+            ->name('administradores.edit');
+        Route::put('/administradores/{usuario}', [AdministradorController::class, 'update'])
+            ->name('administradores.update');
+        Route::patch('/administradores/{usuario}/activo', [AdministradorController::class, 'cambiarActivo'])
+            ->name('administradores.activo');
     });
 
     Route::middleware('rol:admin_sistema,admin_institucional')->group(function (): void {
@@ -131,6 +140,42 @@ Route::middleware(['auth', 'suscripcion'])->group(function (): void {
             ->name('recursos.activo');
 
         Route::get('/reportes', [ReporteController::class, 'index'])->name('reportes.index');
+        Route::get('/reportes/exportar', [ReporteController::class, 'exportar'])->name('reportes.exportar');
+
+        // RF-016 a RF-021: usuarios finales, asistentes y reglas de dominio.
+        Route::get('/usuarios', [UsuarioController::class, 'index'])->name('usuarios.index');
+        Route::get('/usuarios/crear', [UsuarioController::class, 'create'])->name('usuarios.create');
+        Route::post('/usuarios', [UsuarioController::class, 'store'])->name('usuarios.store');
+        Route::get('/usuarios/importar', [UsuarioController::class, 'importar'])->name('usuarios.importar');
+        Route::post('/usuarios/importar', [UsuarioController::class, 'importarStore'])
+            ->name('usuarios.importar.store');
+        Route::get('/usuarios/{usuario}/editar', [UsuarioController::class, 'edit'])
+            ->whereNumber('usuario')
+            ->name('usuarios.edit');
+        Route::put('/usuarios/{usuario}', [UsuarioController::class, 'update'])
+            ->whereNumber('usuario')
+            ->name('usuarios.update');
+        Route::patch('/usuarios/{usuario}/activo', [UsuarioController::class, 'cambiarActivo'])
+            ->whereNumber('usuario')
+            ->name('usuarios.activo');
+        Route::post('/usuarios/{usuario}/reenvio', [UsuarioController::class, 'reenviar'])
+            ->whereNumber('usuario')
+            ->name('usuarios.reenviar');
+        Route::get('/dominios', [DominioRolController::class, 'index'])->name('dominios.index');
+        Route::post('/dominios', [DominioRolController::class, 'store'])->name('dominios.store');
+        Route::delete('/dominios/{dominio}', [DominioRolController::class, 'destroy'])->name('dominios.destroy');
+
+        // RF-041 a RF-044: sanciones, matriz y exenciones; RF-042: cierre de un préstamo no devuelto.
+        Route::get('/sanciones', [SancionController::class, 'index'])->name('sanciones.index');
+        Route::get('/sanciones/matriz', [SancionController::class, 'matriz'])->name('sanciones.matriz');
+        Route::put('/sanciones/matriz', [SancionController::class, 'actualizarMatriz'])
+            ->name('sanciones.matriz.update');
+        Route::post('/sanciones/{penalizacion}/exencion', [SancionController::class, 'exentar'])
+            ->whereNumber('penalizacion')
+            ->name('sanciones.exentar');
+        Route::post('/prestamos/{prestamo}/no-devuelto', [PrestamoController::class, 'cerrarNoDevuelto'])
+            ->whereNumber('prestamo')
+            ->name('prestamos.no-devuelto');
     });
 
     Route::middleware('rol:admin_sistema,asistente')->group(function (): void {
@@ -159,4 +204,9 @@ Route::middleware(['auth', 'suscripcion'])->group(function (): void {
         ->name('prestamos.show');
     Route::post('/prestamos/{prestamo}/cancelacion', [PrestamoController::class, 'cancelar'])
         ->name('prestamos.cancelar');
+    // RF-033: la PrestamoPolicy::conversar admite al propietario y a los operadores del área.
+    Route::post('/prestamos/{prestamo}/mensajes', [PrestamoController::class, 'enviarMensaje'])
+        ->whereNumber('prestamo')
+        ->middleware('throttle:30,1')
+        ->name('prestamos.mensajes');
 });

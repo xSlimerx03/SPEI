@@ -40,21 +40,27 @@
             <a href="{{ route('instituciones.index', array_filter(['texto' => $texto])) }}"
                class="pestana {{ $estadoActual === null ? 'pestana--activa' : '' }}">Todas</a>
             @foreach (\App\Enums\EstadoSuscripcion::cases() as $estado)
-                <a href="{{ route('instituciones.index', array_filter(['texto' => $texto, 'estado' => $estado->value])) }}"
+                <a href="{{ route('instituciones.index', array_filter([
+                    'texto' => $texto,
+                    'estado' => $estado->value,
+                ])) }}"
                    class="pestana {{ $estadoActual === $estado->value ? 'pestana--activa' : '' }}"
-                   @if ($estadoActual === $estado->value) aria-current="page" @endif>{{ $estado->obtenerEtiqueta() }}</a>
+                   @if ($estadoActual === $estado->value) aria-current="page"
+                   @endif>{{ $estado->obtenerEtiqueta() }}</a>
             @endforeach
         </nav>
 
         <section class="tarjeta tarjeta--recortada" aria-label="Instituciones">
-            <form method="GET" action="{{ route('instituciones.index') }}" class="barra-filtros barra-filtros--tabla" role="search">
+            <form method="GET" action="{{ route('instituciones.index') }}" class="barra-filtros barra-filtros--tabla"
+                  role="search">
                 @if ($estadoActual)
                     <input type="hidden" name="estado" value="{{ $estadoActual }}">
                 @endif
                 <div class="control-icono control-icono--con-icono control-icono--compacto barra-filtros__busqueda">
                     <span class="icono" aria-hidden="true">search</span>
                     <label for="filtro-texto" class="visualmente-oculto">Buscar institución</label>
-                    <input type="search" id="filtro-texto" name="texto" class="control control--compacto" maxlength="100"
+                    <input type="search" id="filtro-texto" name="texto" class="control control--compacto"
+                           maxlength="100"
                            placeholder="Buscar por nombre o dominio" value="{{ $texto }}">
                 </div>
                 <button type="submit" class="boton boton--secundario">
@@ -92,23 +98,34 @@
                                 <tr data-href="{{ route('instituciones.show', $institucion) }}">
                                     <td>
                                         <div class="celda-persona">
-                                            <span class="icono-tile" aria-hidden="true"><span class="icono">account_balance</span></span>
+                                            <span class="icono-tile"
+                                                  aria-hidden="true"><span class="icono">account_balance</span></span>
                                             <div class="celda-doble">
-                                                <a href="{{ route('instituciones.show', $institucion) }}" class="enlace-fila">{{ $institucion->nombre_institucion }}</a>
-                                                <span class="celda-doble__secundaria mono">{{ $institucion->dominio_correo }}</span>
+                                                <a href="{{ route('instituciones.show', $institucion) }}"
+                                                   class="enlace-fila">{{ $institucion->nombre_institucion }}</a>
+                                                <span class="celda-doble__secundaria mono">
+                                                    {{ $institucion->dominio_correo }}
+                                                </span>
                                             </div>
                                         </div>
                                     </td>
                                     <td>{{ $institucion->plan_suscripcion->obtenerEtiqueta() }}</td>
                                     <td>
                                         <div class="celda-doble">
-                                            <span class="negrita">{{ \App\Support\FormatoFecha::conAnio($institucion->fecha_corte) }}</span>
+                                            <span class="negrita">
+                                                {{ \App\Support\FormatoFecha::conAnio($institucion->fecha_corte) }}
+                                            </span>
                                             <span class="celda-doble__secundaria">
-                                                {{ $dias >= 0 ? 'En ' . $dias . ' días' : 'Vencida hace ' . abs($dias) . ' días' }}
+                                                {{ $dias >= 0 ? 'En ' . $dias . ' días' : 'Vencida hace ' . abs($dias)
+                                                    . ' días' }}
                                             </span>
                                         </div>
                                     </td>
-                                    <td><span class="insignia {{ $claseEstado }}">{{ $institucion->estado_suscripcion->obtenerEtiqueta() }}</span></td>
+                                    <td>
+                                        <span class="insignia {{ $claseEstado }}">
+                                            {{ $institucion->estado_suscripcion->obtenerEtiqueta() }}
+                                        </span>
+                                    </td>
                                 </tr>
                             @endforeach
                         </tbody>

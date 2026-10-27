@@ -38,7 +38,8 @@
             <p class="vacio__texto">{{ $mensaje }}</p>
         </div>
         <div class="acciones acciones--fin">
-            <a href="{{ url()->previous() !== url()->current() ? url()->previous() : url('/') }}" class="boton boton--secundario">
+            <a href="{{ url()->previous() !== url()->current() ? url()->previous() : url('/') }}"
+               class="boton boton--secundario">
                 <span class="icono" aria-hidden="true">arrow_back</span>Regresar
             </a>
             @auth

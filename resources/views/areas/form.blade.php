@@ -47,7 +47,8 @@
             <div class="campo">
                 <label for="descripcion" class="campo__etiqueta">Descripción (opcional)</label>
                 <textarea id="descripcion" name="descripcion" class="control" maxlength="1000"
-                          @error('descripcion') aria-invalid="true" @enderror>{{ old('descripcion', $area->descripcion) }}</textarea>
+                          @error('descripcion') aria-invalid="true"
+                          @enderror>{{ old('descripcion', $area->descripcion) }}</textarea>
                 @error('descripcion')
                     <span class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</span>
                 @enderror

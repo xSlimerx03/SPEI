@@ -61,35 +61,46 @@
                             <tr>
                                 <td>
                                     <div class="celda-persona">
-                                        <span class="icono-tile" aria-hidden="true"><span class="icono">apartment</span></span>
+                                        <span class="icono-tile"
+                                              aria-hidden="true"><span class="icono">apartment</span></span>
                                         <div class="celda-doble">
                                             <span class="negrita">{{ $area->nombre_area }}</span>
                                             @if ($area->descripcion)
-                                                <span class="celda-doble__secundaria">{{ \Illuminate\Support\Str::limit($area->descripcion, 90) }}</span>
+                                                <span class="celda-doble__secundaria">
+                                                    {{ \Illuminate\Support\Str::limit($area->descripcion, 90) }}
+                                                </span>
                                             @endif
                                         </div>
                                     </div>
                                 </td>
                                 <td>{{ $area->recursos_count }}</td>
                                 <td>
-                                    <span class="insignia {{ $area->activo ? 'insignia--exito' : 'insignia--neutra' }}">{{ $area->activo ? 'Activa' : 'Inactiva' }}</span>
+                                    <span class="insignia {{ $area->activo ? 'insignia--exito' : 'insignia--neutra' }}">
+                                        {{ $area->activo ? 'Activa' : 'Inactiva' }}
+                                    </span>
                                 </td>
                                 <td>
                                     <div class="tabla__acciones">
-                                        <a href="{{ route('areas.edit', $area) }}" class="boton boton--secundario boton--pequeno">
+                                        <a href="{{ route('areas.edit', $area) }}"
+                                           class="boton boton--secundario boton--pequeno">
                                             <span class="icono" aria-hidden="true">edit</span>Editar
                                         </a>
-                                        <form method="POST" action="{{ route('areas.activo', $area) }}" class="formulario-en-linea">
+                                        <form method="POST" action="{{ route('areas.activo', $area) }}"
+                                              class="formulario-en-linea">
                                             @csrf
                                             @method('PATCH')
                                             <input type="hidden" name="activo" value="{{ $area->activo ? 0 : 1 }}">
                                             <button type="submit" class="boton boton--fantasma boton--pequeno">
-                                                <span class="icono" aria-hidden="true">{{ $area->activo ? 'visibility_off' : 'visibility' }}</span>{{ $area->activo ? 'Desactivar' : 'Activar' }}
+                                                <span class="icono" aria-hidden="true">
+                                                    {{ $area->activo ? 'visibility_off' : 'visibility' }}
+                                                </span>{{ $area->activo ? 'Desactivar' : 'Activar' }}
                                             </button>
                                         </form>
                                         @if ($area->recursos_count === 0)
-                                            <form method="POST" action="{{ route('areas.destroy', $area) }}" class="formulario-en-linea"
-                                                  data-confirmar="¿Está seguro de eliminar el área {{ $area->nombre_area }}?">
+                                            <form method="POST" action="{{ route('areas.destroy', $area) }}"
+                                                  class="formulario-en-linea"
+                                                  data-confirmar="{{ '¿Está seguro de eliminar el área '
+                                                      . $area->nombre_area . '?' }}">
                                                 @csrf
                                                 @method('DELETE')
                                                 <button type="submit" class="boton boton--peligro-texto boton--pequeno">

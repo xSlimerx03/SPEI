@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -27,7 +27,8 @@
 <div class="tarjeta kpi">
     <div class="kpi__cabecera">
         <span class="kpi__etiqueta">{{ $etiqueta }}</span>
-        <span class="icono-tile icono-tile--40 {{ $tono }}" aria-hidden="true"><span class="icono">{{ $icono }}</span></span>
+        <span class="icono-tile icono-tile--40 {{ $tono }}"
+              aria-hidden="true"><span class="icono">{{ $icono }}</span></span>
     </div>
     <span class="kpi__valor">{{ $valor }}</span>
     <span class="kpi__detalle {{ $claseDetalle ?? '' }}">{{ $detalle }}</span>

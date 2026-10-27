@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -22,7 +22,7 @@
  *               cancelación de préstamos por institución, propietario y área
  *               asignada (mínimo privilegio, MD 13.1).
  *
- * @requisitos   RF-018, RF-028, RF-029, RF-034, RF-036, RS-006
+ * @requisitos   RF-018, RF-028, RF-029, RF-033, RF-034, RF-036, RF-042, RS-006
  *
  * @see          docs/plan/BBB_MVP_v1.0.md; RED-01 del 25/10/2026 (H-08)
  * ============================================================================
@@ -32,6 +32,7 @@ declare(strict_types=1);
 
 namespace App\Policies;
 
+use App\Enums\EstadoPrestamo;
 use App\Enums\Rol;
 use App\Models\Prestamo;
 use App\Models\Usuario;
@@ -100,6 +101,36 @@ class PrestamoPolicy
     {
         return $usuario->id_institucion === $prestamo->id_institucion
             && $usuario->id_usuario === $prestamo->id_usuario;
+    }
+
+    /**
+     * Cerrar como no devuelto (RF-042): solo el administrador del sistema que opera el ámbito del préstamo; el
+     * asistente no aplica sanciones.
+     *
+     * @param  Usuario  $usuario  Usuario autenticado.
+     * @param  Prestamo  $prestamo  Préstamo solicitado.
+     * @return bool
+     */
+    public function cerrarNoDevuelto(Usuario $usuario, Prestamo $prestamo): bool
+    {
+        return $usuario->rol === Rol::AdminSistema && $this->operar($usuario, $prestamo);
+    }
+
+    /**
+     * Conversar antes de la entrega (RF-033): el propietario o un operador del ámbito, mientras esté pendiente.
+     *
+     * @param  Usuario  $usuario  Usuario autenticado.
+     * @param  Prestamo  $prestamo  Préstamo solicitado.
+     * @return bool
+     */
+    public function conversar(Usuario $usuario, Prestamo $prestamo): bool
+    {
+        if ($prestamo->estado !== EstadoPrestamo::Pendiente->value
+            || $usuario->id_institucion !== $prestamo->id_institucion) {
+            return false;
+        }
+
+        return $usuario->id_usuario === $prestamo->id_usuario || $this->operar($usuario, $prestamo);
     }
 
     /**

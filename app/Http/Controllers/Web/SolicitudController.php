@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -36,11 +36,13 @@ namespace App\Http\Controllers\Web;
 use App\Enums\EstadoPrestamo;
 use App\Http\Controllers\Controller;
 use App\Http\Requests\SolicitarPrestamoRequest;
+use App\Models\Penalizacion;
 use App\Models\Prestamo;
 use App\Models\Recurso;
 use App\Models\Usuario;
 use App\Services\CodigoQrService;
 use App\Services\PrestamoService;
+use App\Services\SancionService;
 use Illuminate\Http\JsonResponse;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\Http\Request;
@@ -61,10 +63,12 @@ class SolicitudController extends Controller
      *
      * @param  PrestamoService  $prestamoService  Dependencia inyectada.
      * @param  CodigoQrService  $codigoQrService  Dependencia inyectada.
+     * @param  SancionService  $sancionService  Dependencia inyectada.
      */
     public function __construct(
         private PrestamoService $prestamoService,
         private CodigoQrService $codigoQrService,
+        private SancionService $sancionService,
     ) {}
 
     /**
@@ -94,6 +98,11 @@ class SolicitudController extends Controller
             'totalCerrados' => (clone $base)
                 ->whereNotIn('estado', [EstadoPrestamo::Pendiente->value, EstadoPrestamo::Activo->value])->count(),
             'estadisticas' => $this->calcularEstadisticas($usuario),
+            // RF-051: el historial personal incluye las sanciones (MBD Tabla 7).
+            'penalizaciones' => Penalizacion::query()->where('id_usuario', $usuario->id_usuario)
+                ->orderByDesc('fecha_creacion')->limit(5)->get(),
+            'umbral' => (int) $this->sancionService->obtenerMatriz($usuario->id_institucion)
+                ->where('activo', true)->min('umbral_bloqueo'),
             'usuario' => $usuario->fresh() ?? $usuario,
         ]);
     }

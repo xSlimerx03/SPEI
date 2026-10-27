@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -21,7 +21,7 @@
  * @description  Listado e invitación de administradores del sistema por el
  *               administrador institucional.
  *
- * @requisitos   RF-008, RS-006
+ * @requisitos   RF-008, RF-019, RS-006
  *
  * @see          docs/requisitos/BBB_CU004_InvitarAdministrador_v1.0.md
  * ============================================================================
@@ -33,12 +33,14 @@ namespace App\Http\Controllers\Web;
 
 use App\Enums\Rol;
 use App\Http\Controllers\Controller;
+use App\Http\Requests\ActualizarAdministradorRequest;
 use App\Http\Requests\InvitarAdministradorRequest;
 use App\Models\Area;
 use App\Models\Institucion;
 use App\Models\Usuario;
 use App\Services\AdministradorService;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 /**
@@ -99,6 +101,54 @@ class AdministradorController extends Controller
         $this->administradorService->invitar($institucion, $request->validated());
 
         return redirect()->route('administradores.index')->with('success', 'Invitación enviada correctamente.');
+    }
+
+    /**
+     * Formulario para asignar o quitar el área (responsable de área, RF-019).
+     *
+     * @param  Usuario  $usuario  Administrador del sistema de la institución.
+     * @return View
+     */
+    public function edit(Usuario $usuario): View
+    {
+        abort_if($usuario->rol !== Rol::AdminSistema, 404);
+
+        return view('administradores.edit', [
+            'administrador' => $usuario,
+            'areas' => Area::query()->activas()->orderBy('nombre_area')->get(),
+        ]);
+    }
+
+    /**
+     * Guarda el área asignada.
+     *
+     * @param  ActualizarAdministradorRequest  $request  Datos validados.
+     * @param  Usuario  $usuario  Administrador del sistema de la institución.
+     * @return RedirectResponse
+     */
+    public function update(ActualizarAdministradorRequest $request, Usuario $usuario): RedirectResponse
+    {
+        abort_if($usuario->rol !== Rol::AdminSistema, 404);
+        $idArea = $request->filled('id_area_asignada') ? $request->integer('id_area_asignada') : null;
+        $this->administradorService->actualizarArea($usuario, $idArea);
+
+        return redirect()->route('administradores.index')->with('success', 'Área asignada actualizada.');
+    }
+
+    /**
+     * Da de baja o reactiva al administrador.
+     *
+     * @param  Request  $request  Valor de "activo".
+     * @param  Usuario  $usuario  Administrador del sistema de la institución.
+     * @return RedirectResponse
+     */
+    public function cambiarActivo(Request $request, Usuario $usuario): RedirectResponse
+    {
+        abort_if($usuario->rol !== Rol::AdminSistema, 404);
+        $activo = $request->boolean('activo');
+        $this->administradorService->cambiarActivo($usuario, $activo);
+
+        return back()->with('success', $activo ? 'Cuenta reactivada.' : 'Cuenta dada de baja.');
     }
 
     /**

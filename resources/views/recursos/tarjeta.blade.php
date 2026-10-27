@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -32,12 +32,16 @@
 <article class="recurso">
     <div class="imagen-pendiente" aria-hidden="true">
         <span class="icono">{{ $esEspacio ? 'meeting_room' : 'devices' }}</span>
-        <span class="insignia {{ $recurso->estado->obtenerClaseInsignia() }} recurso__estado">{{ $recurso->estado->obtenerEtiqueta() }}</span>
+        <span class="insignia {{ $recurso->estado->obtenerClaseInsignia() }} recurso__estado">
+            {{ $recurso->estado->obtenerEtiqueta() }}
+        </span>
         <span class="insignia insignia--blanca recurso__tipo">{{ $recurso->tipo_recurso->obtenerEtiqueta() }}</span>
     </div>
     <div class="recurso__cuerpo">
         <a href="{{ $enlace }}" class="recurso__nombre">{{ $recurso->nombre_recurso }}</a>
-        <span class="recurso__meta">{{ $recurso->area->nombre_area }} · <span class="mono">{{ $recurso->numero_inventario }}</span></span>
+        <span class="recurso__meta">
+            {{ $recurso->area->nombre_area }} · <span class="mono">{{ $recurso->numero_inventario }}</span>
+        </span>
         <span class="visualmente-oculto">Estado: {{ $recurso->estado->obtenerEtiqueta() }}</span>
     </div>
     <div class="recurso__pie">

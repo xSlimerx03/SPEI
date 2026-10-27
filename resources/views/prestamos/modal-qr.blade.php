@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -63,7 +63,11 @@
         <p class="alerta alerta--error" data-qr-error role="alert" hidden></p>
         <div class="alerta alerta--fondo">
             <span class="icono icono--18" aria-hidden="true">shield</span>
-            <span>Muéstralo en el mostrador. Es de un solo uso y expira en {{ max(30, min(60, (int) config('spei.qr.ttl'))) }} segundos por seguridad; si no hay lector, dicta el código de abajo.</span>
+            <span>
+                Muéstralo en el mostrador. Es de un solo uso y expira en
+                {{ max(30, min(60, (int) config('spei.qr.ttl'))) }} segundos por seguridad; si no hay lector, dicta el
+                código de abajo.
+            </span>
         </div>
     </div>
 </dialog>

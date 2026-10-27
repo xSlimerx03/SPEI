@@ -12,8 +12,8 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
- * @version      v1.0.0
+ * @lastModified 2026-10-27
+ * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
  *               Todos los derechos reservados.
@@ -21,9 +21,9 @@
  * @description  Registro de rutas, middleware del SPEI (tenant, rol y
  *               suscripción) y traducción de las excepciones de enlace firmado.
  *
- * @requisitos   RS-006, RNF-001, RN-011, RN-013
+ * @requisitos   RS-006, RNF-001, RN-011, RN-013, RS-003
  *
- * @see          Manual de Desarrollo v1.2, sección 5.3; DT-008
+ * @see          Manual de Desarrollo v1.2, sección 5.3; DT-008, DT-032
  * ============================================================================
  */
 
@@ -57,6 +57,9 @@ return Application::configure(basePath: dirname(__DIR__))
             'rol' => RolMiddleware::class,
             'suscripcion' => SuscripcionMiddleware::class,
         ]);
+        // DT-032: solo se confía en las cabeceras X-Forwarded-* de proxies de la red interna de Docker
+        // (nginx, túnel), para generar enlaces HTTPS y registrar la IP real del cliente.
+        $middleware->trustProxies(at: ['10.0.0.0/8', '172.16.0.0/12', '192.168.0.0/16', '127.0.0.1']);
         $middleware->redirectGuestsTo(fn (): string => route('login'));
         $middleware->redirectUsersTo(fn (): string => route('panel'));
     })

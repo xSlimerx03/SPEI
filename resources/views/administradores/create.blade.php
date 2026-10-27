@@ -30,7 +30,8 @@
 
 @section('contenido')
     <div class="contenedor-720">
-        <form method="POST" action="{{ route('administradores.store') }}" class="tarjeta tarjeta--relleno-24 pila--20 titulos" novalidate>
+        <form method="POST" action="{{ route('administradores.store') }}"
+              class="tarjeta tarjeta--relleno-24 pila--20 titulos" novalidate>
             @csrf
             <div class="pila--4 titulos">
                 <h2 class="subtitulo-pagina">Datos del administrador</h2>
@@ -53,16 +54,23 @@
                 <label for="id_area_asignada" class="campo__etiqueta">Área a cargo (opcional)</label>
                 <div class="selector selector--icono">
                     <span class="icono icono-inicio" aria-hidden="true">apartment</span>
-                    <select id="id_area_asignada" name="id_area_asignada" class="control" aria-describedby="id_area_asignada-ayuda"
+                    <select id="id_area_asignada" name="id_area_asignada" class="control"
+                            aria-describedby="id_area_asignada-ayuda"
                             @error('id_area_asignada') aria-invalid="true" @enderror>
                         <option value="">Todas las áreas</option>
                         @foreach ($areas as $area)
-                            <option value="{{ $area->id_area }}" @selected((int) old('id_area_asignada') === $area->id_area)>{{ $area->nombre_area }}</option>
+                            <option value="{{ $area->id_area }}"
+                                    @selected((int) old('id_area_asignada') === $area->id_area)>
+                                {{ $area->nombre_area }}
+                            </option>
                         @endforeach
                     </select>
                     <span class="icono icono-flecha" aria-hidden="true">expand_more</span>
                 </div>
-                <span id="id_area_asignada-ayuda" class="campo__ayuda">Sin área, administra todo el inventario y las áreas; con área, solo los recursos de esa área.</span>
+                <span id="id_area_asignada-ayuda"
+                      class="campo__ayuda">
+                          Sin área, administra todo el inventario y las áreas; con área, solo los recursos de esa área.
+                      </span>
                 @error('id_area_asignada')
                     <span class="campo__error"><span class="icono" aria-hidden="true">error</span>{{ $message }}</span>
                 @enderror

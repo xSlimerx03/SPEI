@@ -59,7 +59,8 @@
                 </a>
             @endforeach
         </nav>
-            <a href="{{ route('prestamos.exportar', request()->except(['p', 'page'])) }}" class="boton boton--secundario">
+            <a href="{{ route('prestamos.exportar', request()->except(['p', 'page'])) }}"
+               class="boton boton--secundario">
                 <span class="icono" aria-hidden="true">download</span>Exportar CSV
             </a>
         </div>
@@ -74,14 +75,18 @@
                         <span class="icono" aria-hidden="true">search</span>
                         <label for="filtro-texto" class="visualmente-oculto">Buscar por folio o solicitante</label>
                         <input type="search" id="filtro-texto" name="texto" class="control control--compacto"
-                               placeholder="Buscar por folio o solicitante" value="{{ $filtros['texto'] ?? '' }}" maxlength="100">
+                               placeholder="Buscar por folio o solicitante" value="{{ $filtros['texto'] ?? '' }}"
+                               maxlength="100">
                     </div>
                     <div class="selector selector--150">
                         <label for="filtro-area" class="visualmente-oculto">Área</label>
                         <select id="filtro-area" name="id_area" class="control control--compacto" data-autoenvio>
                             <option value="">Todas las áreas</option>
                             @foreach ($areas as $area)
-                                <option value="{{ $area->id_area }}" @selected((int) ($filtros['id_area'] ?? 0) === $area->id_area)>{{ $area->nombre_area }}</option>
+                                <option value="{{ $area->id_area }}"
+                                        @selected((int) ($filtros['id_area'] ?? 0) === $area->id_area)>
+                                    {{ $area->nombre_area }}
+                                </option>
                             @endforeach
                         </select>
                         <span class="icono icono-flecha" aria-hidden="true">expand_more</span>
@@ -119,18 +124,31 @@
                                 @foreach ($prestamos as $prestamo)
                                     @php
                                         $estado = $prestamo->obtenerEstado();
-                                        $enlace = route('prestamos.index', request()->except('p') + ['p' => $prestamo->id_prestamo]);
+                                        $enlace = route('prestamos.index', request()
+                                            ->except('p') + ['p' => $prestamo->id_prestamo]);
                                         $primero = $prestamo->detalles->first()?->recurso;
                                     @endphp
                                     <tr data-href="{{ $enlace }}"
-                                        class="{{ $seleccionado?->id_prestamo === $prestamo->id_prestamo ? 'tabla__fila--seleccionada' : '' }}">
-                                        <td><a href="{{ $enlace }}" class="folio">{{ $prestamo->obtenerFolio() }}</a></td>
+                                        class="{{ $seleccionado?->id_prestamo === $prestamo->id_prestamo
+                                            ? 'tabla__fila--seleccionada' : '' }}">
+                                        <td>
+                                            <a href="{{ $enlace }}" class="folio">{{ $prestamo->obtenerFolio() }}</a>
+                                        </td>
                                         <td>
                                             <div class="celda-persona">
-                                                <span class="avatar avatar--32" aria-hidden="true">{{ \App\Support\Iniciales::de($prestamo->usuario->nombre_completo) }}</span>
+                                                <span class="avatar avatar--32" aria-hidden="true">
+                                                    {{ \App\Support\Iniciales::de(
+                                                        $prestamo->usuario->nombre_completo,
+                                                    ) }}
+                                                </span>
                                                 <div class="celda-doble">
-                                                    <span class="negrita truncar">{{ $prestamo->usuario->nombre_completo }}</span>
-                                                    <span class="celda-doble__secundaria">{{ $prestamo->usuario->rol->obtenerEtiqueta() }} · {{ $primero?->area?->nombre_area }}</span>
+                                                    <span class="negrita truncar">
+                                                        {{ $prestamo->usuario->nombre_completo }}
+                                                    </span>
+                                                    <span class="celda-doble__secundaria">
+                                                        {{ $prestamo->usuario->rol->obtenerEtiqueta() }} ·
+                                                        {{ $primero?->area?->nombre_area }}
+                                                    </span>
                                                 </div>
                                             </div>
                                         </td>
@@ -138,20 +156,31 @@
                                             <div class="celda-doble">
                                                 <span class="truncar">{{ $primero?->nombre_recurso }}</span>
                                                 @if ($prestamo->detalles->count() > 1)
-                                                    <span class="celda-doble__secundaria">+{{ $prestamo->detalles->count() - 1 }} más</span>
+                                                    <span class="celda-doble__secundaria">
+                                                        +{{ $prestamo->detalles->count() - 1 }} más
+                                                    </span>
                                                 @endif
                                             </div>
                                         </td>
                                         <td>
                                             <div class="celda-doble">
-                                                <span class="negrita">{{ \App\Support\FormatoFecha::dia($prestamo->fecha_hora_inicio) }}</span>
-                                                <span class="celda-doble__secundaria sin-salto">{{ $prestamo->fecha_hora_inicio->format('H:i') }} – {{ $prestamo->fecha_hora_fin->format('H:i') }}</span>
+                                                <span class="negrita">
+                                                    {{ \App\Support\FormatoFecha::dia($prestamo->fecha_hora_inicio) }}
+                                                </span>
+                                                <span class="celda-doble__secundaria sin-salto">
+                                                    {{ $prestamo->fecha_hora_inicio->format('H:i') }} –
+                                                    {{ $prestamo->fecha_hora_fin->format('H:i') }}
+                                                </span>
                                             </div>
                                         </td>
                                         <td>
                                             <div class="pila--2 titulos">
-                                                <span class="insignia {{ $estado->obtenerClaseInsignia() }}">{{ $estado->obtenerEtiqueta() }}</span>
-                                                <span class="texto-11 texto-sec sin-salto">{{ $prestamo->obtenerSubestado() }}</span>
+                                                <span class="insignia {{ $estado->obtenerClaseInsignia() }}">
+                                                    {{ $estado->obtenerEtiqueta() }}
+                                                </span>
+                                                <span class="texto-11 texto-sec sin-salto">
+                                                    {{ $prestamo->obtenerSubestado() }}
+                                                </span>
                                             </div>
                                         </td>
                                     </tr>

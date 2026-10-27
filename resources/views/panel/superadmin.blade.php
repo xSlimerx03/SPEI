@@ -89,11 +89,16 @@
                     <span class="icono-tile" aria-hidden="true"><span class="icono">account_balance</span></span>
                     <div class="titulos crece-220">
                         <span class="negrita">{{ $institucion->nombre_institucion }}</span>
-                        <span class="texto-12 texto-sec">Plan {{ $institucion->plan_suscripcion->obtenerEtiqueta() }} · {{ $institucion->dominio_correo }}</span>
+                        <span class="texto-12 texto-sec">
+                            Plan {{ $institucion->plan_suscripcion->obtenerEtiqueta() }} ·
+                            {{ $institucion->dominio_correo }}
+                        </span>
                     </div>
                     <div class="titulos texto-13 alinear-fin">
                         <span class="negrita">{{ \App\Support\FormatoFecha::conAnio($institucion->fecha_corte) }}</span>
-                        <span class="{{ $dias <= 7 ? 'texto-error negrita' : 'texto-sec' }}">{{ $dias >= 0 ? 'En ' . $dias . ' días' : 'Vencida' }}</span>
+                        <span class="{{ $dias <= 7 ? 'texto-error negrita' : 'texto-sec' }}">
+                            {{ $dias >= 0 ? 'En ' . $dias . ' días' : 'Vencida' }}
+                        </span>
                     </div>
                     <span class="insignia {{ $claseDias }}">
                         {{ $institucion->estado_suscripcion->obtenerEtiqueta() }}

@@ -46,7 +46,9 @@
         <div class="encabezado-pagina encabezado-pagina--centro">
             <div class="titulos">
                 <span class="texto-13 texto-claro">Plan actual</span>
-                <h2 id="titulo-plan-actual" class="plan-actual__nombre">{{ $institucion->plan?->nombre ?? $institucion->plan_suscripcion->obtenerEtiqueta() }}</h2>
+                <h2 id="titulo-plan-actual"
+                    class="plan-actual__nombre">{{ $institucion->plan?->nombre
+                        ?? $institucion->plan_suscripcion->obtenerEtiqueta() }}</h2>
             </div>
             <span class="insignia {{ $claseEstado }}">{{ $institucion->estado_suscripcion->obtenerEtiqueta() }}</span>
         </div>
@@ -55,8 +57,10 @@
                 <span>{{ \App\Support\FormatoFecha::conAnio($inicio) }}</span>
                 <span>Corte: {{ \App\Support\FormatoFecha::conAnio($corte) }}</span>
             </div>
-            <div class="progreso progreso--oscuro" role="img" aria-label="{{ $transcurridos }} de {{ $totalDias }} días transcurridos">
-                <div class="progreso__valor progreso__valor--claro" style="width: {{ round($transcurridos * 100 / $totalDias, 1) }}%"></div>
+            <div class="progreso progreso--oscuro" role="img"
+                 aria-label="{{ $transcurridos }} de {{ $totalDias }} días transcurridos">
+                <div class="progreso__valor progreso__valor--claro"
+                     style="width: {{ round($transcurridos * 100 / $totalDias, 1) }}%"></div>
             </div>
             <span class="texto-13 texto-claro-2">{{ $transcurridos }} de {{ $totalDias }} días transcurridos</span>
         </div>
@@ -67,9 +71,13 @@
         @foreach ($barras as [$etiqueta, $usado, $limite])
             @php($porcentaje = min(100, round($usado * 100 / max(1, $limite))))
             <div class="pila--8 titulos">
-                <div class="encabezado-pagina"><span>{{ $etiqueta }}</span><span><strong>{{ $usado }}</strong> de {{ number_format($limite) }}</span></div>
+                <div class="encabezado-pagina">
+                    <span>{{ $etiqueta }}</span><span><strong>{{ $usado }}</strong> de
+                    {{ number_format($limite) }}</span>
+                </div>
                 <div class="progreso" role="img" aria-label="{{ $porcentaje }} % usado">
-                    <div class="progreso__valor {{ $porcentaje >= 90 ? 'progreso__valor--ambar' : '' }}" style="width: {{ $porcentaje }}%"></div>
+                    <div class="progreso__valor {{ $porcentaje >= 90 ? 'progreso__valor--ambar' : '' }}"
+                         style="width: {{ $porcentaje }}%"></div>
                 </div>
             </div>
         @endforeach

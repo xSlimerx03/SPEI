@@ -10,8 +10,8 @@
 | Ejecutor y fecha (12) | Raúl Treviño Licona (ejecución automatizada con Pest 3) · 25/10/2026 |
 | Defectos relacionados (13) | Ninguno abierto. Durante la ejecución se corrigieron: conversión de `p` a entero en `PrestamoController::index`, nombre aleatorio que provocaba una prueba intermitente y, en v1.1, la exportación de auditoría que dependía solo del Global Scope (CP-035; en producción el contexto sigue activo al enviar la descarga, pero la consulta ahora filtra `id_institucion` de forma explícita). |
 
-**Evidencia general (11):** `docker compose exec -T app ./vendor/bin/pest --coverage --min=80` → 63 pruebas, 529 aserciones, 0 fallidas,
-cobertura total 94.1 %; Pint `--test` PASS (142 archivos); PHPStan nivel 6 sin errores (25/10/2026). Archivos:
+**Evidencia general (11):** `docker compose exec -T app ./vendor/bin/pest --coverage --min=80` → 64 pruebas, 536 aserciones, 0 fallidas,
+cobertura total 94.2 %; Pint `--test` PASS (142 archivos); PHPStan nivel 6 sin errores (25/10/2026). Archivos:
 `tests/Feature/InterfazPrototipoTest.php`, `tests/Feature/AlcancePrestamosTest.php`, `tests/Feature/BloqueATest.php`,
 `tests/Feature/PantallasPublicasTest.php`, `tests/Feature/EntornoTest.php`; escenarios compartidos en `tests/Pest.php`.
 
@@ -49,6 +49,7 @@ cobertura total 94.1 %; Pint `--test` PASS (142 archivos); PHPStan nivel 6 sin e
 | CP-033 Permiso de cancelación | RF-028, RF-029, CU-013 | Seguridad | 1. Administrador institucional y asistente cancelan una reserva. 2. Operador abre el panel. 3. Alumno abre "Mis préstamos". | 403 en ambos; panel con "Cancelar reserva" sin "prioridad institucional" ni marcas; "Cuenta activa" sin marcas. | Igual al esperado. | Aprobado |
 | CP-034 CSV sin fórmulas | RF-058, CU-014 | Seguridad | Exportar préstamos cuyo motivo empieza con `=`. | CSV UTF-8 con BOM; el valor aparece como `'=…`. | Igual al esperado. | Aprobado |
 | CP-035 Aislamiento de auditoría y reportes | RF-052, RF-053, RF-054, RS-006, CU-015 | Seguridad | Dos instituciones con préstamos activos: reporte de 7 días por servicio y por pantalla, auditoría y su CSV. | Total 1 y solo "Proyector Epson" en más prestados; sin la cámara ni el usuario de la otra institución en pantalla ni en el CSV. | Igual al esperado tras agregar el filtro explícito por `id_institucion`. | Aprobado |
+| CP-036 Reservas serializadas | RF-025, RF-026, CU-011 CA3, MD 5.6 | Concurrencia | 1. Otra operación retiene el lock de la institución y el alumno solicita. 2. Se libera; el alumno reserva. 3. Un docente solicita el mismo recurso y horario. | 1: "Hay otra operación en curso…" tras 5 s sin crear nada. 3: "Uno de los recursos ya no está disponible…"; un solo préstamo y el recurso `bloqueado`. | Igual al esperado. La prueba simula la contención en un proceso; la carga con procesos paralelos queda para las pruebas de rendimiento. | Aprobado |
 | CP-028 a CP-031 Bloque A previo | RF-001, RF-002, RF-008, RNF-001 | Regresión | Pruebas existentes de `PantallasPublicasTest` y `EntornoTest` sobre la interfaz nueva. | Mismo comportamiento que antes del rediseño. | 28 pruebas en verde. | Aprobado |
 
 ## Revisión visual

@@ -31,7 +31,8 @@
 
 @php
     $estadoActual = $filtros['estado'] ?? null;
-    $consulta = array_filter(\Illuminate\Support\Arr::except($filtros, ['estado', 'page']), fn (mixed $v): bool => $v !== null && $v !== '')
+    $consulta = array_filter(\Illuminate\Support\Arr::except($filtros, ['estado', 'page']),
+        fn (mixed $v): bool => $v !== null && $v !== '')
         + ($vistaLista ? ['vista' => 'lista'] : []);
     $chips = [
         '' => ['Todos', 'todos'],
@@ -96,10 +97,14 @@
         <dialog id="modal-codigo" class="modal" aria-labelledby="modal-codigo-titulo">
             <form method="GET" action="{{ route('recursos.buscar') }}" class="modal__contenido">
                 <div class="modal__cabecera">
-                    <span class="icono-tile icono-tile--44 icono-tile--azul" aria-hidden="true"><span class="icono">barcode_scanner</span></span>
+                    <span class="icono-tile icono-tile--44 icono-tile--azul"
+                          aria-hidden="true"><span class="icono">barcode_scanner</span></span>
                     <div class="pila--4 titulos crece">
                         <h2 id="modal-codigo-titulo" class="modal__titulo">Escanear código</h2>
-                        <p class="modal__descripcion">Coloca el cursor en el campo y escanea la etiqueta con el lector. Si el código no existe, abrimos el alta con el número precargado.</p>
+                        <p class="modal__descripcion">
+                            Coloca el cursor en el campo y escanea la etiqueta con el lector. Si el código no existe,
+                            abrimos el alta con el número precargado.
+                        </p>
                     </div>
                     <button type="button" class="modal__cerrar" data-cerrar-modal aria-label="Cerrar">
                         <span class="icono" aria-hidden="true">close</span>
@@ -112,7 +117,8 @@
                     'atributos' => 'maxlength="100" autocomplete="off" autofocus',
                 ])
                 <div class="acciones acciones--fin">
-                    <button type="button" class="boton boton--secundario boton--grande" data-cerrar-modal>Cancelar</button>
+                    <button type="button" class="boton boton--secundario boton--grande"
+                            data-cerrar-modal>Cancelar</button>
                     <button type="submit" class="boton boton--primario boton--grande">
                         <span class="icono" aria-hidden="true">search</span>Buscar
                     </button>

@@ -33,7 +33,8 @@
     <meta name="csrf-token" content="{{ csrf_token() }}">
     <title>@yield('titulo') · SPEI</title>
     <link rel="icon" type="image/png" href="{{ asset('img/logo-bigbitbyte.png') }}">
-    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2" crossorigin>
+    <link rel="preload" href="{{ asset('fonts/material-symbols-outlined.woff2') }}" as="font" type="font/woff2"
+          crossorigin>
     <link rel="stylesheet" href="{{ asset('css/spei.css') }}?v={{ filemtime(public_path('css/spei.css')) }}">
     <script src="{{ asset('js/spei.js') }}?v={{ filemtime(public_path('js/spei.js')) }}" defer></script>
 </head>

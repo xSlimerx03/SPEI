@@ -27,7 +27,8 @@
 @forelse ($agenda as $movimiento)
     @php
         $detalles = $movimiento['prestamo']->detalles;
-        $que = $detalles->first()?->recurso?->nombre_recurso . ($detalles->count() > 1 ? ' + ' . ($detalles->count() - 1) : '');
+        $que = $detalles->first()?->recurso?->nombre_recurso
+            . ($detalles->count() > 1 ? ' + ' . ($detalles->count() - 1) : '');
     @endphp
     <div class="fila-lista fila-lista--12 {{ $conIcono ? '' : 'fila-lista--arriba' }}">
         <span class="hora">
@@ -37,7 +38,8 @@
             @endunless
         </span>
         @if ($conIcono)
-            <span class="icono-tile icono-tile--32" aria-hidden="true"><span class="icono">{{ $movimiento['icono'] }}</span></span>
+            <span class="icono-tile icono-tile--32"
+                  aria-hidden="true"><span class="icono">{{ $movimiento['icono'] }}</span></span>
         @endif
         <div class="pila--2 titulos crece">
             <span class="negrita">{{ $movimiento['prestamo']->usuario->nombre_completo }}</span>

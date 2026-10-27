@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.1.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -80,5 +80,15 @@ class DetallePrestamo extends Model
     public function recurso(): BelongsTo
     {
         return $this->belongsTo(Recurso::class, 'id_recurso', 'id_recurso');
+    }
+
+    /**
+     * Préstamo al que pertenece.
+     *
+     * @return BelongsTo<Prestamo, $this>
+     */
+    public function prestamo(): BelongsTo
+    {
+        return $this->belongsTo(Prestamo::class, 'id_prestamo', 'id_prestamo');
     }
 }

@@ -25,10 +25,13 @@
  * ============================================================================
 --}}
 <div class="barra-apilada" role="img"
-     aria-label="{{ collect(\App\Enums\EstadoRecurso::cases())->map(fn (\App\Enums\EstadoRecurso $e): string => $e->obtenerEtiqueta() . ' ' . $inventario[$e->value])->implode(', ') }}">
+     aria-label="{{ collect(\App\Enums\EstadoRecurso::cases())
+         ->map(fn (\App\Enums\EstadoRecurso $e): string => $e->obtenerEtiqueta() . ' ' . $inventario[$e->value])
+         ->implode(', ') }}">
     @foreach (\App\Enums\EstadoRecurso::cases() as $estado)
         @if ($inventario[$estado->value] > 0)
-            <div class="color-{{ $estado->value }}" style="width: {{ round($inventario[$estado->value] * 100 / $total, 2) }}%"></div>
+            <div class="color-{{ $estado->value }}"
+                 style="width: {{ round($inventario[$estado->value] * 100 / $total, 2) }}%"></div>
         @endif
     @endforeach
 </div>

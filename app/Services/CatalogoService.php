@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-18
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -74,8 +74,14 @@ class CatalogoService
     {
         $consulta = Recurso::query()
             ->with('area')
-            ->when($actor->esResponsableDeArea(), fn (Builder $q): Builder => $q->where('id_area', $actor->id_area_asignada))
-            ->when($filtros['estado'] ?? null, fn (Builder $q, string $estado): Builder => $q->where('estado', $estado));
+            ->when(
+                $actor->esResponsableDeArea(),
+                fn (Builder $q): Builder => $q->where('id_area', $actor->id_area_asignada),
+            )
+            ->when(
+                $filtros['estado'] ?? null,
+                fn (Builder $q, string $estado): Builder => $q->where('estado', $estado),
+            );
 
         return $this->aplicarFiltros($consulta, $filtros)
             ->orderBy('nombre_recurso')
@@ -93,7 +99,10 @@ class CatalogoService
     public function contarInventario(Usuario $actor, array $filtros): array
     {
         $consulta = Recurso::query()
-            ->when($actor->esResponsableDeArea(), fn (Builder $q): Builder => $q->where('id_area', $actor->id_area_asignada));
+            ->when(
+                $actor->esResponsableDeArea(),
+                fn (Builder $q): Builder => $q->where('id_area', $actor->id_area_asignada),
+            );
         $porEstado = $this->aplicarFiltros($consulta, $filtros)
             ->toBase()
             ->selectRaw('estado, COUNT(*) AS total')
@@ -124,7 +133,13 @@ class CatalogoService
                     ->orWhere('marca', 'like', $patron)
                     ->orWhere('numero_inventario', 'like', $patron));
             })
-            ->when($filtros['tipo_recurso'] ?? null, fn (Builder $q, string $tipo): Builder => $q->where('tipo_recurso', $tipo))
-            ->when($filtros['id_area'] ?? null, fn (Builder $q, int|string $area): Builder => $q->where('id_area', (int) $area));
+            ->when(
+                $filtros['tipo_recurso'] ?? null,
+                fn (Builder $q, string $tipo): Builder => $q->where('tipo_recurso', $tipo),
+            )
+            ->when(
+                $filtros['id_area'] ?? null,
+                fn (Builder $q, int|string $area): Builder => $q->where('id_area', (int) $area),
+            );
     }
 }

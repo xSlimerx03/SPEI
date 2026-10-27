@@ -41,14 +41,17 @@
         @if ($esSoloLectura)
             <div class="alerta alerta--advertencia alerta--grande" role="status">
                 <span class="icono" aria-hidden="true">lock_clock</span>
-                <span class="crece"><strong>Tu suscripción venció el {{ \App\Support\FormatoFecha::conAnio($institucion->fecha_corte) }}.</strong>
+                <span class="crece">
+                    <strong>Tu suscripción venció el
+                        {{ \App\Support\FormatoFecha::conAnio($institucion->fecha_corte) }}.</strong>
                     La institución está en modo solo lectura hasta que BigBitByte registre la renovación.</span>
             </div>
         @elseif ($dias <= 30)
             <div class="alerta alerta--info alerta--grande" role="status">
                 <span class="icono" aria-hidden="true">notifications_active</span>
                 <span class="crece"><strong>Tu plan vence en {{ $dias }} {{ $dias === 1 ? 'día' : 'días' }}.</strong>
-                    Solicita la renovación antes del {{ \App\Support\FormatoFecha::conAnio($institucion->fecha_corte) }} para evitar el modo solo lectura.</span>
+                    Solicita la renovación antes del {{ \App\Support\FormatoFecha::conAnio($institucion->fecha_corte) }}
+                    para evitar el modo solo lectura.</span>
             </div>
         @endif
 
@@ -73,12 +76,24 @@
                                 <span class="insignia insignia--activo">Plan actual</span>
                             @endif
                         </div>
-                        <span><span class="plan-opcion__precio">${{ number_format((float) $plan->monto_mensual, 2) }}</span>
+                        <span>
+                            <span class="plan-opcion__precio">
+                                ${{ number_format((float) $plan->monto_mensual, 2) }}
+                            </span>
                             <span class="texto-13 texto-sec">MXN / mes</span></span>
                         <div class="pila--8 titulos">
-                            <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ $plan->limite_areas }} áreas</span>
-                            <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ number_format($plan->limite_recursos) }} recursos</span>
-                            <span class="plan-opcion__caracteristica"><span class="icono" aria-hidden="true">check</span>{{ $plan->duracion_dias }} días por periodo</span>
+                            <span class="plan-opcion__caracteristica">
+                                <span class="icono" aria-hidden="true">check</span>{{ $plan->limite_areas }} áreas
+                            </span>
+                            <span class="plan-opcion__caracteristica">
+                                <span class="icono"
+                                      aria-hidden="true">check</span>{{ number_format($plan->limite_recursos) }}
+                                recursos
+                            </span>
+                            <span class="plan-opcion__caracteristica">
+                                <span class="icono" aria-hidden="true">check</span>{{ $plan->duracion_dias }} días por
+                                periodo
+                            </span>
                         </div>
                         @unless ($esActual)
                             <form method="POST" action="{{ route('suscripcion.plan') }}">
@@ -87,12 +102,14 @@
                                 <input type="hidden" name="plan" value="{{ $plan->clave->value }}">
                                 <button type="submit" class="boton boton--secundario boton--bloque" @disabled(! $cabe)
                                         aria-label="Cambiar al plan {{ $plan->nombre }}"
-                                        @unless ($cabe) aria-describedby="plan-{{ $plan->clave->value }}-ayuda" @endunless>
+                                        @unless ($cabe) aria-describedby="plan-{{ $plan->clave->value }}-ayuda"
+                                        @endunless>
                                     Cambiar plan
                                 </button>
                             </form>
                             @unless ($cabe)
-                                <span id="plan-{{ $plan->clave->value }}-ayuda" class="campo__ayuda">No admite las áreas o recursos ya registrados.</span>
+                                <span id="plan-{{ $plan->clave->value }}-ayuda"
+                                      class="campo__ayuda">No admite las áreas o recursos ya registrados.</span>
                             @endunless
                         @endunless
                     </div>
@@ -120,7 +137,8 @@
             @endforelse
             @if ($administradores->count() > 5)
                 <div class="desplegable__pie">
-                    <a href="{{ route('administradores.index') }}" class="texto-13 negrita">Ver todos ({{ $administradores->count() }})</a>
+                    <a href="{{ route('administradores.index') }}"
+                       class="texto-13 negrita">Ver todos ({{ $administradores->count() }})</a>
                 </div>
             @endif
         </section>

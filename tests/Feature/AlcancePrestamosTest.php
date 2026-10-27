@@ -12,7 +12,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-25
- * @lastModified 2026-10-25
+ * @lastModified 2026-10-27
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -31,13 +31,17 @@
 
 declare(strict_types=1);
 
+use App\Enums\EstadoRecurso;
 use App\Enums\Rol;
+use App\Exceptions\ReglaNegocioException;
 use App\Models\Area;
 use App\Models\Prestamo;
 use App\Models\Recurso;
 use App\Models\Usuario;
+use App\Services\PrestamoService;
 use App\Services\ReporteService;
 use App\Support\MenuNavegacion;
+use Illuminate\Support\Facades\Cache;
 use Tests\TestCase;
 
 beforeEach(function (): void {
@@ -112,7 +116,7 @@ it('permite cancelar solo al propietario y al administrador del sistema', functi
     $this->actingAs($e->operador)->get(route('prestamos.index', ['p' => $prestamo->id_prestamo]))->assertOk()
         ->assertSee('Cancelar reserva')->assertDontSee('prioridad institucional')->assertDontSee('de 3 marcas');
     $this->actingAs($e->alumno)->get(route('prestamos.mis'))->assertOk()
-        ->assertSee('Cuenta activa')->assertDontSee('marcas');
+        ->assertSee('Cuenta activa')->assertSee('0 de 3 marcas');
     expect($prestamo->fresh()->estado)->toBe('pendiente');
 });
 
@@ -127,6 +131,72 @@ it('neutraliza fórmulas al exportar préstamos a CSV', function (): void {
 
     expect($csv)->toStartWith("\xEF\xBB\xBF")->toContain("'=HIPERVINCULO");
     expect($csv)->not->toContain(',=HIPERVINCULO');
+});
+
+it('serializa las reservas: un recurso no se reserva dos veces y el lock ocupado rechaza', function (): void {
+    /** @var TestCase $this */
+    $e = crearEscenario();
+    $docente = Usuario::factory()->deInstitucion($e->institucion)->conRol(Rol::Docente)->create();
+    $datos = [
+        'recursos' => [$e->recurso->id_recurso],
+        'fecha_hora_inicio' => today()->setTime(10, 0)->toDateTimeString(),
+        'fecha_hora_fin' => today()->setTime(12, 0)->toDateTimeString(),
+        'motivo' => 'Práctica de laboratorio.',
+    ];
+
+    // Simula una operación simultánea de la misma institución que retiene el lock de Redis.
+    // NOTE: block() mide su espera con now(); el reloj se libera para que el timeout de 5 s transcurra.
+    $momento = now();
+    $this->travelBack();
+    $candado = Cache::lock('prestamos:institucion:' . $e->institucion->id_institucion, 30);
+    expect($candado->get())->toBeTrue();
+    expect(fn (): Prestamo => app(PrestamoService::class)->solicitar($e->alumno, $datos))
+        ->toThrow(ReglaNegocioException::class, 'Hay otra operación en curso.');
+    $candado->release();
+    $this->travelTo($momento);
+
+    $otroAlumno = Usuario::factory()->deInstitucion($e->institucion)->conRol(Rol::Alumno)->create();
+    $primero = app(PrestamoService::class)->solicitar($e->alumno, $datos);
+    expect(fn (): Prestamo => app(PrestamoService::class)->solicitar($otroAlumno, $datos))
+        ->toThrow(ReglaNegocioException::class, 'Uno de los recursos ya está reservado en ese horario.');
+    expect(Prestamo::query()->count())->toBe(1)
+        ->and($e->recurso->fresh()->estado)->toBe(EstadoRecurso::Disponible);
+
+    // RN-008 dentro de la ventana de concurrencia: el docente desplaza la reserva del alumno.
+    $segundo = app(PrestamoService::class)->solicitar($docente, $datos);
+    expect($primero->fresh()->estado)->toBe('cancelado')
+        ->and($primero->fresh()->motivo_cancelacion)->toContain('RN-008')
+        ->and($segundo->estado)->toBe('pendiente');
+});
+
+it('aplica RN-008 solo a solicitudes concurrentes y reserva periodos sin traslape', function (): void {
+    /** @var TestCase $this */
+    $e = crearEscenario();
+    $docente = Usuario::factory()->deInstitucion($e->institucion)->conRol(Rol::Docente)->create();
+    $alumnoConMarcas = Usuario::factory()->deInstitucion($e->institucion)->conRol(Rol::Alumno)
+        ->create(['marcas_acumuladas' => 2]);
+    $periodo = fn (int $inicio, int $fin): array => [
+        'recursos' => [$e->recurso->id_recurso],
+        'fecha_hora_inicio' => today()->setTime($inicio, 0)->toDateTimeString(),
+        'fecha_hora_fin' => today()->setTime($fin, 0)->toDateTimeString(),
+        'motivo' => 'Práctica de laboratorio.',
+    ];
+    $servicio = app(PrestamoService::class);
+
+    // Mejor historial: con el mismo rol gana quien tiene menos marcas.
+    $conMarcas = $servicio->solicitar($alumnoConMarcas, $periodo(10, 12));
+    $sinMarcas = $servicio->solicitar($e->alumno, $periodo(11, 13));
+    expect($conMarcas->fresh()->estado)->toBe('cancelado')->and($sinMarcas->estado)->toBe('pendiente');
+
+    // Fuera de la ventana de concurrencia se respeta la reserva aunque el docente tenga prioridad.
+    $this->travel((int) config('spei.prestamos.ventana_prioridad_minutos') + 1)->minutes();
+    expect(fn (): Prestamo => $servicio->solicitar($docente, $periodo(12, 14)))
+        ->toThrow(ReglaNegocioException::class, 'ya está reservado');
+
+    // Periodos contiguos del mismo recurso no chocan.
+    $tarde = $servicio->solicitar($docente, $periodo(13, 15));
+    expect($tarde->estado)->toBe('pendiente')
+        ->and(Prestamo::query()->whereIn('estado', ['pendiente'])->count())->toBe(2);
 });
 
 it('aísla auditoría y reportes entre instituciones', function (): void {

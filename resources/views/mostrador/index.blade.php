@@ -10,7 +10,7 @@
  *
  * @author       Raúl Treviño Licona <raul.trevino@institucion.edu.mx>
  * @date         2026-10-23
- * @lastModified 2026-10-23
+ * @lastModified 2026-10-25
  * @version      v1.0.0
  *
  * @license      Propietario - BigBitByte / Institución Educativa
@@ -36,14 +36,18 @@
         <div class="barra-filtros barra-filtros--tarjeta">
             <span class="texto-13 texto-apoyo en-linea en-linea--8">
                 <span class="icono icono--18 icono--azul" aria-hidden="true">shield</span>
-                Los códigos son de un solo uso y vencen a los {{ max(30, min(60, (int) config('spei.qr.ttl'))) }} segundos.
+                Los códigos son de un solo uso y vencen a los {{ max(30, min(60, (int) config('spei.qr.ttl'))) }}
+                segundos.
             </span>
         </div>
 
         @if ($sinArea)
             <div class="alerta alerta--advertencia alerta--grande" role="status">
                 <span class="icono" aria-hidden="true">info</span>
-                <span>Tu cuenta de asistente aún no tiene un área asignada. Pide al administrador del sistema que te asigne una para operar entregas.</span>
+                <span>
+                    Tu cuenta de asistente aún no tiene un área asignada. Pide al administrador del sistema que te
+                    asigne una para operar entregas.
+                </span>
             </div>
         @endif
 
@@ -73,7 +77,8 @@
                 <form method="POST" action="{{ route('mostrador.validar') }}" class="en-linea en-linea--8 sin-envolver">
                     @csrf
                     <label for="codigo" class="visualmente-oculto">Código del QR</label>
-                    <input type="text" id="codigo" name="codigo" class="control control--oscuro crece" data-escaner-campo
+                    <input type="text" id="codigo" name="codigo" class="control control--oscuro crece"
+                           data-escaner-campo
                            placeholder="O ingresa el código del QR manualmente" maxlength="64" autocomplete="off"
                            spellcheck="false" required @if (! $resultado) autofocus @endif>
                     <button type="submit" class="boton boton--grande boton--oscuro-contorno">Validar</button>
@@ -103,7 +108,9 @@
                     <div class="tarjeta__cabecera">
                         <div class="titulos">
                             <h2 id="titulo-agenda" class="tarjeta__titulo">Agenda de hoy</h2>
-                            <span class="tarjeta__subtitulo">{{ count($agenda) }} {{ count($agenda) === 1 ? 'movimiento' : 'movimientos' }}</span>
+                            <span class="tarjeta__subtitulo">
+                                {{ count($agenda) }} {{ count($agenda) === 1 ? 'movimiento' : 'movimientos' }}
+                            </span>
                         </div>
                     </div>
                     @include('mostrador.agenda', ['agenda' => $agenda, 'conIcono' => true])

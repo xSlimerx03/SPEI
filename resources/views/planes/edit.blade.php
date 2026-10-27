@@ -30,7 +30,8 @@
 
 @section('contenido')
     <div class="contenedor-720">
-        <form method="POST" action="{{ route('planes.update', $plan) }}" class="tarjeta tarjeta--relleno-24 pila--20 titulos" novalidate>
+        <form method="POST" action="{{ route('planes.update', $plan) }}"
+              class="tarjeta tarjeta--relleno-24 pila--20 titulos" novalidate>
             @csrf
             @method('PUT')
             @include('partials.campo', [
@@ -80,7 +81,10 @@
             </label>
             <div class="alerta alerta--info">
                 <span class="icono" aria-hidden="true">info</span>
-                <span>Los límites nuevos se aplican a todas las instituciones con este plan y el cambio queda en auditoría.</span>
+                <span>
+                    Los límites nuevos se aplican a todas las instituciones con este plan y el cambio queda en
+                    auditoría.
+                </span>
             </div>
             <div class="pie-pasos">
                 <a href="{{ route('planes.index') }}" class="boton boton--fantasma boton--grande">Cancelar</a>
