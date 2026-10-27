@@ -2,9 +2,9 @@
 
 | Campo | Valor |
 |---|---|
-| Documento | BBB_CP01_UsuariosSancionesReportes_v1.1 |
+| Documento | BBB_CP01_UsuariosSancionesReportes_v1.2 |
 | Formato | CP-01 (Manual de Desarrollo v1.2, Anexo G, Tabla 36) |
-| Versión | 1.1 |
+| Versión | 1.2 |
 | Fecha | 27/10/2026 |
 | Ambiente y versión (4) | Desarrollo · Docker Compose (PHP 8.3, MySQL 8.4 base `spei_testing`, Redis 7) · ejecución en árbol de trabajo del 27/10/2026, antes del commit `d2acc13`; en ese momento la rama se llamaba `feature/RF-011-gestion-prestamos` |
 | Ejecutor y fecha (12) | Raúl Treviño Licona (ejecución automatizada con Pest 3) · 27/10/2026 |
@@ -15,7 +15,7 @@
 `tests/Feature/UsuariosTest.php`, `tests/Feature/SancionesNotificacionesTest.php`, `tests/Feature/AlcancePrestamosTest.php`.
 Los resultados corresponden al árbol previo al commit, no a una ejecución repetida sobre `d2acc13`.
 
-**Precondiciones comunes (5):** las de `BBB_CP01_InterfazYBloqueA_v1.0` (base migrada y limpia por prueba, reloj fijado en un día
+**Precondiciones comunes (5):** las de `BBB_CP01_InterfazYBloqueA_v1.2` (base migrada y limpia por prueba, reloj fijado en un día
 hábil a las 9:00, `MAIL_MAILER=array`, `QUEUE_CONNECTION=sync`), más `Mail::fake()` donde se verifica el correo y el disco
 `spei.historial.disco` falso (`Storage::fake`) en CP-053.
 **Datos de prueba (6):** factories (`Institucion`, `Area`, `Recurso`, `Usuario`) y CSV generados en la prueba; ningún dato real.
@@ -45,6 +45,6 @@ hábil a las 9:00, `MAIL_MAILER=array`, `QUEUE_CONNECTION=sync`), más `Mail::fa
 
 ## Regresión actualizada
 
-Las reservas por periodo (DT-033) cambiaron dos resultados esperados de `BBB_CP01_InterfazYBloqueA_v1.0`: en CP-002 el recurso
-sigue `disponible` hasta su ventana de recogida, y en CP-036 la segunda solicitud se rechaza con "Uno de los recursos ya está
-reservado en ese horario." y un docente dentro de la ventana desplaza al alumno. Ambos casos se ejecutaron con el resultado nuevo.
+Las reservas por periodo (DT-033) cambiaron dos resultados esperados de `BBB_CP01_InterfazYBloqueA_v1.2`: en CP-002 el recurso
+sigue `disponible` hasta su ventana de recogida, y en CP-036 el segundo alumno se rechaza con "Uno de los recursos ya está
+reservado en ese horario." y un docente dentro de la ventana desplaza al primer alumno. Ambos casos se ejecutaron con el resultado nuevo.

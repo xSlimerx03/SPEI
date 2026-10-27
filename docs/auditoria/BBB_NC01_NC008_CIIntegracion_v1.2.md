@@ -2,8 +2,8 @@
 
 | Control documental | Valor |
 |---|---|
-| Documento | BBB_NC01_NC008_CIIntegracion_v1.1 |
-| Versión | 1.1 |
+| Documento | BBB_NC01_NC008_CIIntegracion_v1.2 |
+| Versión | 1.2 |
 | Fecha | 27/10/2026 |
 | Elaboración | Responsable de documentación del SPEI, a partir del reporte de seguimiento de `spei-auditor`; no autor del cambio revisado. |
 | Aprobación del registro | Pendiente; propuesta sin ratificación ni cierre. |
@@ -56,7 +56,7 @@ definitiva requiere análisis y contraste con la configuración y los registros 
    commit y resultado de cada job.
 2. Si el workflow falla, corregir por el proceso controlado y repetirlo; no marcar el CI como aprobado
    hasta un resultado verde.
-3. Abrir PR a `develop`, comprobar la protección de ramas y obtener revisión independiente/aprobación;
+3. Abrir PR en borrador a `develop`, comprobar la protección de ramas y obtener revisión independiente/aprobación;
    no integrar mientras falten los controles requeridos.
 4. Integrar únicamente mediante el proceso autorizado una vez satisfechos los controles, y registrar
    la aceptación correspondiente sin retrofecharla.
@@ -93,3 +93,4 @@ como hipótesis y la eficacia no ha sido verificada.
 | Versión | Fecha | Descripción |
 |---|---|---|
 | 1.1 | 27/10/2026 | Se distingue la existencia de ramas de la falta de PR, protección, CI verde y aprobación. |
+| 1.2 | 27/10/2026 | Se especifica que el PR se abrirá en borrador para validar CI, sin autorizar integración. |
