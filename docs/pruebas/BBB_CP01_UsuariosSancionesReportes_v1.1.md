@@ -2,17 +2,18 @@
 
 | Campo | Valor |
 |---|---|
-| Documento | BBB_CP01_UsuariosSancionesReportes_v1.0 |
+| Documento | BBB_CP01_UsuariosSancionesReportes_v1.1 |
 | Formato | CP-01 (Manual de Desarrollo v1.2, Anexo G, Tabla 36) |
-| Versión | 1.0 |
+| Versión | 1.1 |
 | Fecha | 27/10/2026 |
-| Ambiente y versión (4) | Desarrollo · Docker Compose (PHP 8.3, MySQL 8.4 base `spei_testing`, Redis 7) · rama `feature/RF-011-gestion-prestamos` sin etiqueta, código del 27/10/2026 |
+| Ambiente y versión (4) | Desarrollo · Docker Compose (PHP 8.3, MySQL 8.4 base `spei_testing`, Redis 7) · ejecución en árbol de trabajo del 27/10/2026, antes del commit `d2acc13`; en ese momento la rama se llamaba `feature/RF-011-gestion-prestamos` |
 | Ejecutor y fecha (12) | Raúl Treviño Licona (ejecución automatizada con Pest 3) · 27/10/2026 |
 | Defectos relacionados (13) | Ninguno abierto. Corregidos durante la ejecución: cierres `fn (): void` que devolvían valor (error fatal) en `SancionService::levantarVencidas` y `HistorialService::comprimirMes`; una baja con invitación vieja respondía 403 en lugar de "registro completado" (CP-044). |
 
 **Evidencia general (11):** `docker compose exec -T app ./vendor/bin/pest --coverage --min=80` → 85 pruebas, 774 aserciones,
 0 fallidas, cobertura total 94.5 %; Pint `--test` PASS (182 archivos); PHPStan nivel 6 sin errores (27/10/2026). Archivos:
 `tests/Feature/UsuariosTest.php`, `tests/Feature/SancionesNotificacionesTest.php`, `tests/Feature/AlcancePrestamosTest.php`.
+Los resultados corresponden al árbol previo al commit, no a una ejecución repetida sobre `d2acc13`.
 
 **Precondiciones comunes (5):** las de `BBB_CP01_InterfazYBloqueA_v1.0` (base migrada y limpia por prueba, reloj fijado en un día
 hábil a las 9:00, `MAIL_MAILER=array`, `QUEUE_CONNECTION=sync`), más `Mail::fake()` donde se verifica el correo y el disco

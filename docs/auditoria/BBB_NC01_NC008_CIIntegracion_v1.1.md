@@ -2,14 +2,14 @@
 
 | Control documental | Valor |
 |---|---|
-| Documento | BBB_NC01_NC008_CIIntegracion |
-| Versión | 1.0 |
+| Documento | BBB_NC01_NC008_CIIntegracion_v1.1 |
+| Versión | 1.1 |
 | Fecha | 27/10/2026 |
 | Elaboración | Responsable de documentación del SPEI, a partir del reporte de seguimiento de `spei-auditor`; no autor del cambio revisado. |
 | Aprobación del registro | Pendiente; propuesta sin ratificación ni cierre. |
 | Clasificación | Propuesta de no conformidad y acción correctiva |
 | Base normativa | MC BBB-CA-001 v1.2; MD BBB-MD-002 v1.2; flujo operativo del proyecto |
-| Alcance | CI y controles de integración de `feature/RF-011-gestion-prestamos` |
+| Alcance | CI y controles de integración de `feature/RF-022-gestion-prestamos` |
 
 | Campo | Valor |
 |---|---|
@@ -18,15 +18,18 @@
 | Detectado por (3) | `spei-auditor`, según reporte de seguimiento independiente |
 | Ámbito / Proceso (4) | CI, control de configuración e integración de cambios |
 | Severidad propuesta | Mayor |
-| Registro relacionado | RED-01-RF011-20261027; LV-01-RF011-20261027; seguimiento CI / H-01 |
+| Registro relacionado | RED-01-RF022-20261027; LV-01-RF022-20261027; seguimiento CI / H-01 |
 
 ## Descripción de la no conformidad (5)
 
-El reporte indica que las ejecuciones de CI GitHub en `main`/`develop` fallaron en Pest porque
+Las ejecuciones de CI GitHub en `main`/`develop` fallaron en Pest (run `40600406552` en `main`;
+run `40600406625` en `develop`) porque
 `phpunit.xml` apuntaba al directorio `tests/Unit`, que no existe. La referencia fue corregida en el árbol
-de trabajo, pero no hay una ejecución remota posterior con esa corrección. El reporte también deja pendientes
-las ramas, los PR, la protección de ramas y la integración. Por tanto, no existe evidencia de CI verde
-posterior a la corrección ni de integración autorizada para este entregable.
+de trabajo, pero no hay una ejecución remota posterior con esa corrección para `d2acc13`. `main`, `develop`
+y la rama feature correcta `feature/RF-022-gestion-prestamos` existen; GitHub informa `protected: false`
+para `main` y `develop`. No hay PR ni integración. La referencia remota previa
+`feature/RF-011-gestion-prestamos` se conserva
+temporalmente para eliminarla después del merge.
 
 ## Requisito incumplido (6)
 
@@ -43,10 +46,9 @@ Conservar los fallos previos como antecedente y distinguirlos del resultado pend
 ## Análisis de causa raíz (8)
 
 **Hipótesis por confirmar mediante análisis de causa:** la configuración de Pest que referencia un
-directorio inexistente no fue detectada antes de ejecutar el workflow, y la validación del arreglo no se
-cerró con una ejecución remota. Los controles de ramas/PR/protección aún no están demostrados en el
-expediente. La causa raíz definitiva requiere análisis y contraste con la configuración del repositorio y
-los registros de GitHub; no se considera confirmada por el resumen disponible.
+directorio inexistente no fue detectada antes de ejecutar el workflow y la validación del arreglo no se
+cerró con una ejecución remota. La protección y el flujo PR aún no están acreditados. La causa raíz
+definitiva requiere análisis y contraste con la configuración y los registros de GitHub.
 
 ## Acción correctiva (9)
 
@@ -54,8 +56,8 @@ los registros de GitHub; no se considera confirmada por el resumen disponible.
    commit y resultado de cada job.
 2. Si el workflow falla, corregir por el proceso controlado y repetirlo; no marcar el CI como aprobado
    hasta un resultado verde.
-3. Completar y documentar ramas, PR, protección y reglas de integración requeridas, incluyendo la
-   revisión independiente y las verificaciones obligatorias.
+3. Abrir PR a `develop`, comprobar la protección de ramas y obtener revisión independiente/aprobación;
+   no integrar mientras falten los controles requeridos.
 4. Integrar únicamente mediante el proceso autorizado una vez satisfechos los controles, y registrar
    la aceptación correspondiente sin retrofecharla.
 5. Verificar eficacia: una ejecución remota verde sobre el commit corregido y evidencia verificable de
@@ -69,7 +71,8 @@ los registros de GitHub; no se considera confirmada por el resumen disponible.
 
 ## Verificación de la eficacia (11)
 
-Pendiente. Requiere ejecución remota posterior al arreglo y evidencia de ramas/PR/protección/integración.
+Pendiente. Requiere ejecución remota posterior al arreglo, PR con aprobación, evidencia de protección
+de ramas e integración conforme al flujo.
 El auditor independiente deberá comprobar los resultados antes de proponer cierre. No hay verificación de
 eficacia registrada.
 
@@ -89,4 +92,4 @@ como hipótesis y la eficacia no ha sido verificada.
 
 | Versión | Fecha | Descripción |
 |---|---|---|
-| 1.0 | 27/10/2026 | Propuesta inicial de NC-01 por CI remoto y controles de integración pendientes. |
+| 1.1 | 27/10/2026 | Se distingue la existencia de ramas de la falta de PR, protección, CI verde y aprobación. |

@@ -2,14 +2,14 @@
 
 | Control documental | Valor |
 |---|---|
-| Documento | BBB_NC01_NC007_DDLBloqueA |
-| Versión | 1.0 |
+| Documento | BBB_NC01_NC007_DDLBloqueA_v1.1 |
+| Versión | 1.1 |
 | Fecha | 27/10/2026 |
 | Elaboración | Responsable de documentación del SPEI, a partir del reporte de seguimiento de `spei-auditor`; no autor del cambio revisado. |
 | Aprobación del registro | Pendiente; propuesta sin ratificación ni cierre. |
 | Clasificación | Propuesta de no conformidad y acción correctiva |
 | Base normativa | MC BBB-CA-001 v1.2; MD BBB-MD-002 v1.2; plan de desarrollo vigente |
-| Alcance | Control y aceptación de los DDL del bloque A en `feature/RF-011-gestion-prestamos` |
+| Alcance | Control y aceptación de los DDL del bloque A en `feature/RF-022-gestion-prestamos` |
 
 | Campo | Valor |
 |---|---|
@@ -18,7 +18,7 @@
 | Detectado por (3) | `spei-auditor`, según reporte de seguimiento independiente |
 | Ámbito / Proceso (4) | Base de datos / control y aceptación de los DDL del bloque A |
 | Severidad propuesta | Mayor |
-| Registro relacionado | RED-01-RF011-20261027; LV-01-RF011-20261027; H-05 |
+| Registro relacionado | RED-01-RF022-20261027; LV-01-RF022-20261027; H-05 |
 
 ## Descripción de la no conformidad (5)
 
@@ -82,4 +82,4 @@ como hipótesis y la eficacia no ha sido verificada.
 
 | Versión | Fecha | Descripción |
 |---|---|---|
-| 1.0 | 27/10/2026 | Propuesta inicial de NC-01 por ejecución/aceptación formal pendiente del DDL del bloque A. |
+| 1.1 | 27/10/2026 | Se actualiza la rama y la referencia a los registros de seguimiento. |
