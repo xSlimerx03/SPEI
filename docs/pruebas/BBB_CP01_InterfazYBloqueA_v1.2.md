@@ -5,8 +5,8 @@
 | Documento | BBB_CP01_InterfazYBloqueA_v1.2 |
 | Formato | CP-01 (Manual de Desarrollo v1.2, Anexo G, Tabla 36) |
 | Versión | 1.2 (27/10/2026: precisión del escenario de concurrencia CP-036 conforme a DT-033 y `AlcancePrestamosTest`) |
-| Fecha | 25/10/2026 |
-| Ambiente y versión (4) | Desarrollo · Docker Compose (PHP 8.3, MySQL 8.4 base `spei_testing`, Redis 7) · rama de trabajo sin etiqueta, código del 25/10/2026 |
+| Fecha | 27/10/2026 (actualización v1.2; ejecución inicial 25/10/2026) |
+| Ambiente y versión (4) | Desarrollo · Docker Compose (PHP 8.3, MySQL 8.4 base `spei_testing`, Redis 7) · ejecución inicial en árbol de trabajo sin etiqueta el 25/10/2026; repetición de CP-036 el 27/10/2026, antes del commit `d2acc13` |
 | Ejecutor y fecha (12) | Raúl Treviño Licona (ejecución automatizada con Pest 3; CP-036 repetido el 27/10/2026) |
 | Defectos relacionados (13) | Ninguno abierto. Durante la ejecución se corrigieron: conversión de `p` a entero en `PrestamoController::index`, nombre aleatorio que provocaba una prueba intermitente y, en v1.1, la exportación de auditoría que dependía solo del Global Scope (CP-035; en producción el contexto sigue activo al enviar la descarga, pero la consulta ahora filtra `id_institucion` de forma explícita). |
 
